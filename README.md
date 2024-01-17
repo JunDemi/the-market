@@ -1,6 +1,6 @@
 ### `The Market`
 
-SNS, 당근마켓, 블로그, 채팅서비스
+NextJS Argon / Material Dashboard
 
 ## `사용 라이브러리`
 - Next.JS
