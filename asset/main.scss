@@ -11,9 +11,11 @@
     color: #ecf0f1;
     padding: 12px 24px;
     transition: background-color .3s;
+
     &:hover {
         background-color: #27ae60;
     }
+
     &:before {
         content: "";
         position: absolute;
@@ -26,21 +28,26 @@
         background-color: rgba(236, 240, 241, .3);
         transform: translate(-50%, -50%);
     }
+
     &:active:before {
         width: 120%;
         padding-top: 120%;
         transition: width .2s ease-out, padding-top .2s ease-out;
     }
 }
-/*app/Page.tsx*/
-.main-container{
+
+/*메뉴와 메인 모두를 감싼 컨테이너*/
+.main-container {
     display: flex;
     justify-content: start;
     align-items: start;
-}
-.main-dashboard{
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100dvh;
+    overflow: hidden;
+}
+/*메뉴를 제외한 메인*/
+.main-dashboard {
+    overflow-y: scroll;
+    background-color: #f0f0f0;
+    width: 100%;
+    height: 100%;
 }
