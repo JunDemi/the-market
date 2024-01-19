@@ -1,3 +1,5 @@
+'use client'
+
 import "../asset/main.scss";
 import styled from "styled-components";
 
