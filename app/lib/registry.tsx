@@ -1,5 +1,5 @@
 'use client'
- 
+ //Style Components 초기 세팅 레지스트리
 import React, { useState } from 'react'
 import { useServerInsertedHTML } from 'next/navigation'
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components'

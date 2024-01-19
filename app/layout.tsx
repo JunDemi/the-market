@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Metadata } from "next";
-import StyledComponentsRegistry from "./lib/registry";
+import StyledComponentsRegistry from "./lib/registry"; //모든 항목에 styled components가 적용하게
 
 export const metadata: Metadata = {
   title: {

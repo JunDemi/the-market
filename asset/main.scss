@@ -32,6 +32,12 @@
         transition: width .2s ease-out, padding-top .2s ease-out;
     }
 }
+/*app/Page.tsx*/
+.main-container{
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}
 .main-dashboard{
     display: flex;
     justify-content: center;
