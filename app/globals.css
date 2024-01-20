@@ -114,7 +114,10 @@ body {
 	line-height: 1;
 	/*font-family: 'NEXON Lv1 Gothic OTF';*/
 }
-
+a{
+	text-decoration: none;
+	cursor: pointer;
+}
 ol,
 ul {
 	list-style: none;

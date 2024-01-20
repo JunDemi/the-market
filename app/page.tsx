@@ -5,10 +5,9 @@ import "../asset/main.scss";
 export default function Home() {
   return (
     <>
-      <div className="main-container">
-        <NavBar />
-        <div className="main-dashboard">Hello</div>
-      </div>
+        <div className="main-dashboard">
+          Hello
+        </div>
     </>
   );
 }
