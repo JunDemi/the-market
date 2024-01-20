@@ -1,20 +1,13 @@
 /*Material Design Button*/
-.btn {
+.material-btn {
     position: relative;
     display: block;
     overflow: hidden;
     border-width: 0;
     outline: none;
-    border-radius: 2px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
-    background-color: #2ecc71;
-    color: #ecf0f1;
     padding: 12px 24px;
     transition: background-color .3s;
 
-    &:hover {
-        background-color: #27ae60;
-    }
 
     &:before {
         content: "";
@@ -44,6 +37,7 @@
     height: 100dvh;
     overflow: hidden;
 }
+
 /*메뉴를 제외한 메인*/
 .main-dashboard {
     overflow-y: scroll;
