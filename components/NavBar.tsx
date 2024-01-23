@@ -91,10 +91,51 @@ const MenuContainer = styled.div`
         }
       }
     }
-    &:nth-child(1):hover div{background-color: #b52b2b}
-    &:nth-child(2):hover div{background-color: #36b733}
-    &:nth-child(3):hover div{background-color: #d7c659}
-    &:nth-child(4):hover div{background-color: #0ba3ea}
+    &:nth-child(1):hover div {
+      background-color: #b52b2b;
+    }
+    &:nth-child(2):hover div {
+      background-color: #36b733;
+    }
+    &:nth-child(3):hover div {
+      background-color: #d7c659;
+    }
+    &:nth-child(4):hover div {
+      background-color: #0ba3ea;
+    }
+  }
+`;
+const LoginDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  position: absolute;
+  bottom: 5rem;
+  gap: 1rem;
+  a {
+    color: #565656;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    transition: all.2s;
+    svg {
+      fill: #999999;
+      stroke: #999999;
+      stroke-width: 2px;
+      width: 1.5rem;
+      height: 1.5rem;
+      transition: all.2s;
+    }
+    &:hover{
+      color: #818181;
+      svg{
+        fill: #bfbfbf;
+        stroke: #bfbfbf;
+      }
+    }
   }
 `;
 //스타일 컴포넌트 끝
@@ -127,11 +168,11 @@ export default function NavBar() {
         </Link>
         <hr />
         <MenuContainer>
-          <Link href="/search">
+          <Link href="/">
             <div
               className="material-btn"
               style={
-                pathname === "/search"
+                pathname === "/"
                   ? {
                       backgroundColor: "#b52b2b",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -144,9 +185,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/search"
-                    ? { fill: "white", stroke: "white" }
-                    : {}
+                  pathname === "/" ? { fill: "white", stroke: "white" } : {}
                 }
               >
                 <path
@@ -164,17 +203,17 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/search" ? { color: "white" } : {}}
+                style={pathname === "/" ? { color: "white" } : {}}
               >
                 Dashboard
               </motion.p>
             </div>
           </Link>
-          <Link href="/search">
+          <Link href="/market">
             <div
               className="material-btn"
               style={
-                pathname === "/search"
+                pathname === "/market"
                   ? {
                       backgroundColor: "#36b733",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -187,7 +226,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/search"
+                  pathname === "/market"
                     ? { fill: "white", stroke: "white" }
                     : {}
                 }
@@ -207,17 +246,17 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/search" ? { color: "white" } : {}}
+                style={pathname === "/market" ? { color: "white" } : {}}
               >
                 Market
               </motion.p>
             </div>
           </Link>
-          <Link href="/search">
+          <Link href="/talk">
             <div
               className="material-btn"
               style={
-                pathname === "/search"
+                pathname === "/talk"
                   ? {
                       backgroundColor: "#d7c659",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -230,9 +269,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/search"
-                    ? { fill: "white", stroke: "white" }
-                    : {}
+                  pathname === "/talk" ? { fill: "white", stroke: "white" } : {}
                 }
               >
                 <path
@@ -250,17 +287,17 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/search" ? { color: "white" } : {}}
+                style={pathname === "/talk" ? { color: "white" } : {}}
               >
                 Chat
               </motion.p>
             </div>
           </Link>
-          <Link href="/search">
+          <Link href="/blog">
             <div
               className="material-btn"
               style={
-                pathname === "/search"
+                pathname === "/blog"
                   ? {
                       backgroundColor: "#0ba3ea",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -273,9 +310,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/search"
-                    ? { fill: "white", stroke: "white" }
-                    : {}
+                  pathname === "/blog" ? { fill: "white", stroke: "white" } : {}
                 }
               >
                 <path
@@ -293,14 +328,63 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/search" ? { color: "white" } : {}}
+                style={pathname === "/blog" ? { color: "white" } : {}}
               >
                 Blog
               </motion.p>
             </div>
           </Link>
         </MenuContainer>
-
+        <LoginDiv>
+          <Link href="/login">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+              />
+            </svg>
+            <motion.p
+                initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
+                animate={
+                  toggle
+                    ? { display: "block", opacity: 1, paddingRight: "2rem" }
+                    : { display: "none", opacity: 0 }
+                }
+                transition={{ duration: 0.6 }}
+              >
+                Sign In
+              </motion.p>
+          </Link>
+          <Link href="/register">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+              />
+            </svg>
+            <motion.p
+                initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
+                animate={
+                  toggle
+                    ? { display: "block", opacity: 1, paddingRight: "2rem" }
+                    : { display: "none", opacity: 0 }
+                }
+                transition={{ duration: 0.6 }}
+              >
+                Sign Up
+              </motion.p>
+          </Link>
+        </LoginDiv>
         <ToggleButton>
           <Hamburger
             size={25}
