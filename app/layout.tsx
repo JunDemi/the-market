@@ -15,14 +15,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html>
       <body>
-
-      <div className="main-container">
-      <NavBar/>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <div className="container">
+          <NavBar />
+          <div className="main-container">
+            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          </div>
         </div>
       </body>
     </html>

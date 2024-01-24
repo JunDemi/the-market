@@ -1,13 +1,21 @@
-'use client'
+"use client";
 import NavBar from "@/components/NavBar";
-import "../asset/main.scss";
+import Dashboard from "@/components/dashboard/DashBoard";
+import styled from "styled-components";
+
+const DashboardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
 
 export default function Home() {
   return (
     <>
-        <div className="main-dashboard">
-          Hello
-        </div>
+    <DashboardContainer>
+      <Dashboard />
+    </DashboardContainer>
     </>
   );
 }

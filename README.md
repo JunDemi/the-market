@@ -11,3 +11,4 @@ NextJS Argon / Material Dashboard
 - Styled Component
 - SASS, SCSS
 - Framer Motion
+- Apex Charts

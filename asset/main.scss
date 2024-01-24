@@ -30,18 +30,18 @@
 }
 
 /*메뉴와 메인 모두를 감싼 컨테이너*/
-.main-container {
+.container {
     display: flex;
     justify-content: start;
     align-items: start;
     height: 100dvh;
     overflow: hidden;
 }
-
 /*메뉴를 제외한 메인*/
-.main-dashboard {
-    overflow-y: scroll;
-    background-color: #f0f0f0;
+.main-container {
     width: 100%;
     height: 100%;
+    background-color: #f0f0f0;
+    padding: 2rem;
+    overflow-y: scroll;
 }

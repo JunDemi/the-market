@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 //스타일 컴포넌트 시작
 const NavContainer = styled(motion.div)`
   overflow-x: hidden;
-  height: 100dvh;
+  height: 100%;
   padding: 2rem 0;
   background-image: url("https://wallpapers.com/images/hd/white-pattern-background-nnqjxiito1qd9475.jpg");
   background-size: cover;

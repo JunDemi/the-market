@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function Market() {
   return (
     <>
-      <div className="main-dashboard">search</div>
+      Market
     </>
   );
 }

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function Talk() {
   return (
     <>
-      <div className="main-dashboard">search</div>
+      Chat
     </>
   );
 }
