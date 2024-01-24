@@ -9,64 +9,62 @@ const ChartContainer = styled.div`
   padding: 2rem;
 `;
 export default function MarketDashBoard() {
+  const option = {
+    colors: ["#f4a3d4"],
+    chart: {
+      offsetY: 0,
+      type: "line" as "line",
+      zoom: {
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
+      },
+    
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth" as "smooth"
+    },
+    title: {
+      text: "월별 판매 수",
+      align: "left" as "left",
+      style: {
+        color: "#6d6d6d",
+        fontWeight: "thin",
+        fontSize: "14px",
+      },
+    },
+    grid: {
+      row: {
+        colors: ["#fff"],
+      },
+    },
+    xaxis: {
+      categories: ["1월", "2월", "3월", "4월", "5월", "6월"],
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 150,
+      tickAmount: 3,
+    },
+  }
+  const series = [{
+    name: "판매 수",
+    data: [10, 41, 35, 69, 91, 148],
+  }]
   return (
     <>
       <ChartContainer>
-        <ApexChart
-          series={[
-            {
-              name: "판매 수",
-              data: [10, 41, 35, 69, 91, 148],
-            },
-          ]}
-          options={{
-            colors: ["#f4a3d4"],
-            chart: {
-              offsetY: 0,
-              type: "line",
-              zoom: {
-                enabled: false,
-              },
-              toolbar: {
-                show: false,
-              },
-            },
-            dataLabels: {
-              enabled: false,
-            },
-            stroke: {
-              curve: "monotoneCubic",
-            },
-            title: {
-              text: "월별 판매 수",
-              align: "left",
-              style: {
-                color: "#6d6d6d",
-                fontWeight: "thin",
-                fontSize: "14px",
-              },
-            },
-            grid: {
-              row: {
-                colors: ["#fff"],
-              },
-            },
-            xaxis: {
-              categories: ["1월", "2월", "3월", "4월", "5월", "6월"],
-              axisBorder: {
-                show: false,
-              },
-              axisTicks: {
-                show: false,
-              },
-            },
-            yaxis: {
-              min: 0,
-              max: 150,
-              tickAmount: 3,
-            },
-          }}
-        />
+      <ApexChart type="line" options={option} series={series} height={250} width={"100%"} />
       </ChartContainer>
     </>
   );
