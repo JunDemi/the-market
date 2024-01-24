@@ -15,6 +15,8 @@ export default function Dashboard() {
       <ChartContainer>
         <MarketDashBoard/>
         <ChatDashBoard />
+        <MarketDashBoard/>
+        <ChatDashBoard />
       </ChartContainer>
     </>
   );
