@@ -2,7 +2,10 @@
 
 import "@/asset/main.scss";
 import styled from "styled-components";
-import MarketDashBoard from "./MarketDashBoard";
+import LineChart from "./LineChart";
+import DonutChart from "./DonutChart";
+import BarChart from "./BarChart";
+import AreaChart from "./AreaChart";
 
 const ChartContainer = styled.div`
   display: grid;
@@ -14,7 +17,10 @@ export default function Dashboard() {
   return (
     <>
       <ChartContainer>
-        <MarketDashBoard/>
+        <LineChart/>
+        <DonutChart/>
+        <BarChart/>
+        <AreaChart/>
       </ChartContainer>
     </>
   );

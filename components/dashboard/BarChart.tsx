@@ -8,12 +8,12 @@ const ChartContainer = styled.div`
   width: 25rem;
   padding: 2rem;
 `;
-export default function MarketDashBoard() {
+export default function BarChart() {
   const option = {
-    colors: ["#f4a3d4"],
+    colors: ["#0b806d"],
     chart: {
       offsetY: 0,
-      type: "line" as "line",
+      type: "bar" as "bar",
       zoom: {
         enabled: false,
       },
@@ -24,9 +24,6 @@ export default function MarketDashBoard() {
     },
     dataLabels: {
       enabled: false,
-    },
-    stroke: {
-      curve: "smooth" as "smooth"
     },
     title: {
       text: "월별 판매 수",
@@ -64,7 +61,7 @@ export default function MarketDashBoard() {
   return (
     <>
       <ChartContainer>
-      <ApexChart type="line" options={option} series={series} height={250} width={"100%"} />
+      <ApexChart type="bar" options={option} series={series} height={250} width={"100%"} />
       </ChartContainer>
     </>
   );
