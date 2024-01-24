@@ -1,3 +1,5 @@
+'use client'
+
 import "@/asset/main.scss";
 import styled from "styled-components";
 import MarketDashBoard from "./MarketDashBoard";
@@ -14,9 +16,6 @@ export default function Dashboard() {
     <>
       <ChartContainer>
         <MarketDashBoard/>
-        <ChatDashBoard />
-        <MarketDashBoard/>
-        <ChatDashBoard />
       </ChartContainer>
     </>
   );

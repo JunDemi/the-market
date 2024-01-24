@@ -1,7 +1,7 @@
 import "@/asset/main.scss";
-import ApexChart from "react-apexcharts";
 import styled from "styled-components";
-
+import dynamic from "next/dynamic";
+const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const ChartContainer = styled.div`
   background-color: white;
   box-shadow: 5px 5px 10px 0 #7b7b7b;
@@ -9,67 +9,24 @@ const ChartContainer = styled.div`
   padding: 2rem;
 `;
 
+
 export default function MarketDashBoard() {
+  const option = {
+    chart: {
+      id: 'apexchart-example'
+    },
+    xaxis: {
+      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+    }
+  }
+  const series = [{
+    name: 'series-1',
+    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+  }]
   return (
     <>
       <ChartContainer>
-        <ApexChart
-          series={[
-            {
-              name: "판매 수",
-              data: [10, 41, 35, 69, 91, 148],
-            },
-          ]}
-          options={{
-            colors: ["#f4a3d4"],
-            chart: {
-              offsetY: 0,
-              type: "line",
-              zoom: {
-                enabled: false,
-              },
-              toolbar: {
-                show: false,
-              },
-            
-            },
-            dataLabels: {
-              enabled: false,
-            },
-            stroke: {
-              curve: "monotoneCubic",
-            },
-            title: {
-              text: "월별 판매 수",
-              align: "left",
-              style:{
-                color: "#6d6d6d",
-                fontWeight: "thin",
-                fontSize: "14px"
-              }
-            },
-            grid: {
-              row: {
-                colors: ["#fff"]
-              },
-            },
-            xaxis: {
-              categories: ["1월", "2월", "3월", "4월", "5월", "6월"],
-              axisBorder: {
-                show: false
-              },
-              axisTicks:{
-                show: false
-              }
-            },
-            yaxis:{
-              min: 0,
-              max: 150,
-              tickAmount: 3
-            }
-            
-          }}
-        />
+      <ApexChart type="line" options={option} series={series} height={200} width={500} />
       </ChartContainer>
     </>
   );
