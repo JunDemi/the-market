@@ -13,12 +13,8 @@ export default function Dashboard() {
   return (
     <>
       <ChartContainer>
-        {/* <MarketDashBoard />
+        <MarketDashBoard/>
         <ChatDashBoard />
-        <MarketDashBoard />
-        <ChatDashBoard />
-        <MarketDashBoard />
-        <ChatDashBoard /> */}
       </ChartContainer>
     </>
   );
