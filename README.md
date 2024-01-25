@@ -7,7 +7,6 @@ NextJS Argon / Material Dashboard
 - TypeScript
 - React Query, React Hook Form, Recoil
 - Firebase
-- Prisma
 - Styled Component
 - SASS, SCSS
 - Framer Motion

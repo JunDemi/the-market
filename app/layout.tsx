@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import StyledComponentsRegistry from "./lib/registry"; //모든 항목에 styled components가 적용하게
 import NavBar from "@/components/NavBar";
 import RecoilRootProvider from "./RecoilRootProvider";
+import AuthProvider from "@/provider/AuthProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -19,14 +20,16 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <RecoilRootProvider>
-        <div className="container">
-          <NavBar />
-          <div className="main-container">
-            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-          </div>
-        </div>
-        </RecoilRootProvider>
+        <AuthProvider>
+          <RecoilRootProvider>
+            <div className="container">
+              <NavBar />
+              <div className="main-container">
+                <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+              </div>
+            </div>
+          </RecoilRootProvider>
+        </AuthProvider>
       </body>
     </html>
   );

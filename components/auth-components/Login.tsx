@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import InputField from "./InputField";
 import {auth} from "@/services/firebase";
 import { LoginValidation } from "@/validationSchema/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 
 //스타일 컴포넌트 시작
 const SignContainer = styled.div`
@@ -94,13 +96,26 @@ const LoginForm = styled.div`
     }
   }
 `;
+const ErrorMessage = styled.p`
+    color: #fc5b5b;
+    font-size: 12px;
+    padding: 10px 0 20px 1rem;
+`;
 //스타일 컴포넌트 끝
 export default function Login() {
   const [signToggle, set_signToggle] = useRecoilState(signState);
   const {handleSubmit, register, formState:{errors}, reset} = LoginValidation();
+  const [loginFailed, set_loginFailed] = useState<boolean>(false);
+  const [loading, set_loading] = useState<boolean>(false);
 
-  const submitLogin = (values: object) => {
-
+  const submitLogin = async(values: any) => {
+    set_loginFailed(false);
+    set_loading(true);
+    await signInWithEmailAndPassword(auth, values.email, values.password).then(응답=> (
+      set_signToggle("off")
+    )).catch(에러 => set_loginFailed(true));
+    reset();
+    set_loading(false);
   }
   return (
     <>
@@ -125,7 +140,8 @@ export default function Login() {
           <form onSubmit={handleSubmit(submitLogin)}>
            <InputField type="email" name="email" placeholder="이메일" register={register} error={errors.email}/>
            <InputField type="password" name="password" placeholder="비밀번호" register={register} error={errors.password}/>
-            <button className="material-btn" type="submit">로그인</button>
+            <button className="material-btn" type="submit">{loading ? "로딩중..." : "로그인"}</button>
+            {loginFailed && <ErrorMessage>이메일 또는 비밀번호가 올바르지 않습니다.</ErrorMessage>}
           </form>
           <div>
             계정이 없으신가요?
