@@ -1,7 +1,7 @@
 /*fonts*/
 @font-face {
-    font-family: 'KOTRA_GOTHIC';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/KOTRA_GOTHIC.woff') format('woff');
+    font-family: 'Arita-dotum-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Arita-dotum-Medium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -109,7 +109,7 @@ section {
 
 body {
 	line-height: 0;
-	font-family: 'KOTRA_GOTHIC';
+	font-family: 'Arita-dotum-Medium';
 }
 body::-webkit-scrollbar{
     display: none;
