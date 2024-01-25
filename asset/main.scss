@@ -50,3 +50,14 @@
     font-size: 27px;
     font-weight: bold;
 }
+/*InputField.tsx*/
+.login-focus{
+    &:focus{
+        background-color: #eaf0ff;
+    }
+}
+.register-focus{
+    &:focus{
+        background-color: #fff1ea;
+    }
+}

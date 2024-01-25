@@ -2,7 +2,11 @@ import { useRecoilState } from "recoil";
 import { signState } from "@/app/atom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import InputField from "./InputField";
+import {auth} from "@/services/firebase";
+import { LoginValidation } from "@/validationSchema/auth";
 
+//스타일 컴포넌트 시작
 const SignContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -90,8 +94,14 @@ const LoginForm = styled.div`
     }
   }
 `;
+//스타일 컴포넌트 끝
 export default function Login() {
   const [signToggle, set_signToggle] = useRecoilState(signState);
+  const {handleSubmit, register, formState:{errors}, reset} = LoginValidation();
+
+  const submitLogin = (values: object) => {
+
+  }
   return (
     <>
       <SignContainer>
@@ -112,10 +122,10 @@ export default function Login() {
         </SignImage>
         <LoginForm>
           <h1>Sign In</h1>
-          <form>
-            <input type="email" placeholder="이메일" />
-            <input type="password" placeholder="비밀번호" />
-            <button className="material-btn">로그인</button>
+          <form onSubmit={handleSubmit(submitLogin)}>
+           <InputField type="email" name="email" placeholder="이메일" register={register} error={errors.email}/>
+           <InputField type="password" name="password" placeholder="비밀번호" register={register} error={errors.password}/>
+            <button className="material-btn" type="submit">로그인</button>
           </form>
           <div>
             계정이 없으신가요?
