@@ -10,6 +10,9 @@ import { usePathname } from "next/navigation";
 import Sign from "./auth-components/Sign";
 import { useRecoilState } from "recoil";
 import { signState } from "@/app/atom";
+import { AuthContext } from "@/provider/AuthProvider";
+import { signOut } from "firebase/auth";
+import { auth } from "@/services/firebase";
 //스타일 컴포넌트 시작
 const NavContainer = styled(motion.div)`
   overflow-x: hidden;
@@ -108,7 +111,12 @@ const MenuContainer = styled.div`
     }
   }
 `;
-const LoginDiv = styled.div` //로그인 관련 버튼 부분
+const LoginDiv = styled.div`
+  //로그인 관련 버튼 부분
+  background-color: rgba(255,255,255,0.6);
+  padding: 1rem;
+  box-shadow: 3px 3px 6px 0 #7b7b7b;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -126,28 +134,29 @@ const LoginDiv = styled.div` //로그인 관련 버튼 부분
     font-size: 14px;
     transition: all.2s;
     svg {
-      fill: #999999;
       stroke: #999999;
-      stroke-width: 2px;
+      fill: none;
+      stroke-width: 1.5px;
       width: 1.5rem;
       height: 1.5rem;
       transition: all.2s;
     }
-    &:hover{
+    &:hover {
       color: #818181;
-      svg{
+      svg {
         fill: #bfbfbf;
         stroke: #bfbfbf;
       }
     }
   }
 `;
-const ModalOverlay = styled(motion.div)` //로그인 or 회원가입 창 오버레이
+const ModalOverlay = styled(motion.div)`
+  //로그인 or 회원가입 창 오버레이
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -160,7 +169,13 @@ export default function NavBar() {
   const [signModal, set_signModal] = useRecoilState(signState);
   const pathname = usePathname();
 
-  const isLogin = false;
+  const { user }: any = AuthContext(); //로그인 상태
+  const logOut = () => {
+    //로그아웃 메소드
+    signOut(auth)
+      .then((응답) => console.log(응답))
+      .catch((에러) => console.log(에러.message));
+  };
 
   return (
     <>
@@ -169,6 +184,11 @@ export default function NavBar() {
         animate={toggle ? { width: "20rem" } : { width: "7rem" }}
         transition={{ duration: 0.2 }}
       >
+        {user?.isLogin && (
+          <p className="name-tag">
+            {user?.user.email.substring(0, user?.user.email.indexOf("@"))}
+          </p>
+        )}
         <Link href="/">
           <Logo>
             <Image src="/logo.png" alt="" width={35} height={35} />
@@ -186,7 +206,9 @@ export default function NavBar() {
             </motion.p>
           </Logo>
         </Link>
+
         <hr />
+
         <MenuContainer>
           <Link href="/">
             <div
@@ -194,9 +216,9 @@ export default function NavBar() {
               style={
                 pathname === "/"
                   ? {
-                    backgroundColor: "#b52b2b",
-                    boxShadow: "0px 3px 8px -3px gray",
-                  }
+                      backgroundColor: "#b52b2b",
+                      boxShadow: "0px 3px 8px -3px gray",
+                    }
                   : {}
               }
             >
@@ -235,9 +257,9 @@ export default function NavBar() {
               style={
                 pathname === "/market"
                   ? {
-                    backgroundColor: "#36b733",
-                    boxShadow: "0px 3px 8px -3px gray",
-                  }
+                      backgroundColor: "#36b733",
+                      boxShadow: "0px 3px 8px -3px gray",
+                    }
                   : {}
               }
             >
@@ -278,9 +300,9 @@ export default function NavBar() {
               style={
                 pathname === "/talk"
                   ? {
-                    backgroundColor: "#d7c659",
-                    boxShadow: "0px 3px 8px -3px gray",
-                  }
+                      backgroundColor: "#d7c659",
+                      boxShadow: "0px 3px 8px -3px gray",
+                    }
                   : {}
               }
             >
@@ -319,9 +341,9 @@ export default function NavBar() {
               style={
                 pathname === "/blog"
                   ? {
-                    backgroundColor: "#0ba3ea",
-                    boxShadow: "0px 3px 8px -3px gray",
-                  }
+                      backgroundColor: "#0ba3ea",
+                      boxShadow: "0px 3px 8px -3px gray",
+                    }
                   : {}
               }
             >
@@ -355,16 +377,28 @@ export default function NavBar() {
             </div>
           </Link>
         </MenuContainer>
+
         <LoginDiv>
-          {isLogin ?
+          {user?.isLogin ? (
             <>
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+              <span onClick={logOut}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                  />
                 </svg>
 
                 <motion.p
-                  initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
+                  initial={{
+                    display: "block",
+                    opacity: 1,
+                    paddingRight: "3rem",
+                  }}
                   animate={
                     toggle
                       ? { display: "block", opacity: 1, paddingRight: "2rem" }
@@ -376,7 +410,7 @@ export default function NavBar() {
                 </motion.p>
               </span>
             </>
-            :
+          ) : (
             <>
               <span onClick={() => set_signModal("login")}>
                 <svg
@@ -391,7 +425,11 @@ export default function NavBar() {
                   />
                 </svg>
                 <motion.p
-                  initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
+                  initial={{
+                    display: "block",
+                    opacity: 1,
+                    paddingRight: "3rem",
+                  }}
                   animate={
                     toggle
                       ? { display: "block", opacity: 1, paddingRight: "2rem" }
@@ -415,7 +453,11 @@ export default function NavBar() {
                   />
                 </svg>
                 <motion.p
-                  initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
+                  initial={{
+                    display: "block",
+                    opacity: 1,
+                    paddingRight: "3rem",
+                  }}
                   animate={
                     toggle
                       ? { display: "block", opacity: 1, paddingRight: "2rem" }
@@ -427,8 +469,7 @@ export default function NavBar() {
                 </motion.p>
               </span>
             </>
-          }
-
+          )}
         </LoginDiv>
         <ToggleButton>
           <Hamburger
@@ -441,16 +482,19 @@ export default function NavBar() {
           />
         </ToggleButton>
       </NavContainer>
-      {signModal !== "off" &&
-        <ModalOverlay
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+      {signModal !== "off" && (
+        <ModalOverlay initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "end",
+            }}
           >
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "end" }}> 
             <Sign />
           </div>
         </ModalOverlay>
-      }
+      )}
     </>
   );
 }

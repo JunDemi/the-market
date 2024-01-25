@@ -119,6 +119,7 @@ export default function Register() {
     set_loading(true);
     await createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((응답) => {
+        auth.signOut();
         set_registSuccess(true); //회원가입이 성공하면 팝업이 뜨게
       })
       .catch((에러) => set_registFailed(true)); //회원가입이 실패하면 메세지가 뜨게

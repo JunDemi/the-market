@@ -7,10 +7,9 @@ NextJS Argon / Material Dashboard
 - TypeScript
 - React Query, React Hook Form, Recoil
 - Firebase
-- Prisma
 - Styled Component
 - SASS, SCSS
 - Framer Motion
 - Apex Charts
 
-### [배포 사이트](the-market-omega.vercel.app)
+### [배포 사이트](https://the-market-omega.vercel.app/)

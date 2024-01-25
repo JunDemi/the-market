@@ -65,7 +65,17 @@
         background-color: #fff1ea;
     }
 }
-
+/*로그인 시 메뉴에 있는 이름표*/
+.name-tag{
+    color: white;
+    background: linear-gradient(90deg, #0094fe, #0033ff);
+    padding: 0.6rem;
+    font-size: 10.5px;
+    border-radius: 30px;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    box-shadow: 3px 3px 6px 0 #7b7b7b;
+}
 /*로그인,회원가입 성공 시 등장하는 팝업*/
 .sign-popup-overlay {
     position: fixed;
