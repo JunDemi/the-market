@@ -156,11 +156,11 @@ const ModalOverlay = styled(motion.div)` //로그인 or 회원가입 창 오버�
 //스타일 컴포넌트 끝
 export default function NavBar() {
   const [toggle, set_toggle] = useState(true); //메뉴 크기 토글
-  const [signModal, set_signModal] = useRecoilState<"login" | "register" | "off">(signState);
+  const [signModal, set_signModal] = useRecoilState(signState);
   const pathname = usePathname();
 
   const isLogin = false;
-  
+
   return (
     <>
       <NavContainer
