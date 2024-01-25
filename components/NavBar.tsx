@@ -152,6 +152,7 @@ const ModalOverlay = styled(motion.div)` //로그인 or 회원가입 창 오버�
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 `;
 //스타일 컴포넌트 끝
 export default function NavBar() {
@@ -445,10 +446,7 @@ export default function NavBar() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="white" style={{ width: "30px", height: "30px", cursor: "pointer" }} onClick={() => set_signModal("off")}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "end" }}> 
             <Sign />
           </div>
         </ModalOverlay>
