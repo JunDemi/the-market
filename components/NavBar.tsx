@@ -147,7 +147,7 @@ const ModalOverlay = styled(motion.div)` //로그인 or 회원가입 창 오버�
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgba(0,0,0,0.8);
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -445,7 +445,7 @@ export default function NavBar() {
         <ModalOverlay
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}>
+          >
           <div style={{ display: "flex", flexDirection: "column", alignItems: "end" }}> 
             <Sign />
           </div>

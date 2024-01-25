@@ -6,7 +6,8 @@ import InputField from "./InputField";
 import { RegisterValidation } from "@/validationSchema/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/services/firebase";
-
+import { useState } from "react";
+//스타일 컴포넌트
 const SignContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -94,18 +95,40 @@ const RegisterForm = styled.div`
     }
   }
 `;
+const ErrorMessage = styled.p`
+    color: #fc5b5b;
+    font-size: 12px;
+    padding: 10px 0 20px 1rem;
+`;
+//스타일 컴포넌트
 export default function Register() {
   const [signToggle, set_signToggle] = useRecoilState(signState); //로그인 혹은 회원가입 패이지
+  const [registSuccess, set_registSuccess] = useState<boolean>(false);
+  const [registFailed, set_registFailed] = useState<boolean>(false);
+  const [loading, set_loading] = useState<boolean>(false);
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset,
-  } = RegisterValidation(); 
-  const submitRegist = (values:any) => { //Submit 이벤트
-    createUserWithEmailAndPassword(auth, values.email, values.password).then(응답 => {
-      console.log("Firebase user: ", 응답)
-    }).catch(에러=> console.log("Catch Errors: ", 에러.message));
+  } = RegisterValidation();
+
+  const submitRegist = async (values: any) => {
+    //Submit 이벤트
+    set_registFailed(false);
+    set_loading(true);
+    await createUserWithEmailAndPassword(auth, values.email, values.password)
+      .then((응답) => {
+        set_registSuccess(true); //회원가입이 성공하면 팝업이 뜨게
+      })
+      .catch((에러) => set_registFailed(true)); //회원가입이 실패하면 메세지가 뜨게
+    reset();
+    set_loading(false);
+  };
+
+  const successConfirm = () => {
+    set_registSuccess(false);
+    set_signToggle("login");
   };
   return (
     <>
@@ -134,9 +157,10 @@ export default function Register() {
               register={register}
               error={errors.password_check}
             />
-            <button type="submit" className="material-btn">
-              회원가입
+            <button type="submit" className="material-btn" disabled={loading}>
+              {loading ? "로딩중..." : "회원가입"}
             </button>
+            {registFailed && <ErrorMessage>이미 사용된 계정이거나 유효하지 않은 이메일입니다.</ErrorMessage>}
           </form>
           <div>
             이미 계정이 있으신가요?
@@ -159,6 +183,21 @@ export default function Register() {
           </motion.button>
         </SignImage>
       </SignContainer>
+      {registSuccess && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="sign-popup-overlay"
+        >
+          <motion.div 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="sign-popup">
+            회원가입에 성공했습니다!
+            <button className="material-btn" onClick={successConfirm}>확인</button>
+          </motion.div>
+        </motion.div>
+      )}
     </>
   );
 }

@@ -37,6 +37,7 @@
     height: 100dvh;
     overflow: hidden;
 }
+
 /*메뉴를 제외한 메인*/
 .main-container {
     width: 100%;
@@ -45,19 +46,55 @@
     padding: 2rem;
     overflow-y: scroll;
 }
+
 /*유틸리티 css*/
-.banner-title{
+.banner-title {
     font-size: 27px;
     font-weight: bold;
 }
+
 /*InputField.tsx*/
-.login-focus{
-    &:focus{
+.login-focus {
+    &:focus {
         background-color: #eaf0ff;
     }
 }
-.register-focus{
-    &:focus{
+
+.register-focus {
+    &:focus {
         background-color: #fff1ea;
+    }
+}
+
+/*로그인,회원가입 성공 시 등장하는 팝업*/
+.sign-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 12;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    .sign-popup{
+        background-color: white;
+        padding: 2rem 5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        gap:4rem;
+        button{
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            background: linear-gradient(90deg, #ffa85b, #ff0000);
+            color: white;
+            font-size: 14px;
+        }
     }
 }
