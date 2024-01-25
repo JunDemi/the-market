@@ -1,5 +1,4 @@
 "use client";
-import NavBar from "@/components/NavBar";
 import Dashboard from "@/components/dashboard/DashBoard";
 import styled from "styled-components";
 
