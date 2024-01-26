@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 import Sign from "./auth-components/Sign";
 import { useRecoilState } from "recoil";
 import { signState } from "@/app/atom";
-import { AuthContext } from "@/provider/AuthProvider";
+import { AuthContext } from "@/app/lib/AuthProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "@/services/firebase";
 //스타일 컴포넌트 시작
