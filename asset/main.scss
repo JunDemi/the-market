@@ -108,3 +108,21 @@
         }
     }
 }
+/*글 작성하기 페이지로 이동하는 버튼*/
+.go-write-btn{
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    background: white;
+    padding: 1.2rem;
+    border-radius: 50%;
+    box-shadow: 2px 2px 4px 0 #676767;
+    svg{
+        stroke: #ff6d1f;
+    }
+    &:hover{
+        svg{
+            stroke: red;
+        }
+    }
+}

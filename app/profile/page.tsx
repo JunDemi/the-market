@@ -1,14 +1,13 @@
 import { Metadata } from "next";
 import "../../asset/main.scss";
-import Products from "@/components/market-components/Products";
 export const metadata: Metadata = {
-  title: "마켓",
+  title: "채팅",
 };
 
-export default function Market() {
+export default function Profile() {
   return (
     <>
-     <Products/>
+     Profile
     </>
   );
 }

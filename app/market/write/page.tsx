@@ -1,13 +1,12 @@
 import { Metadata } from "next";
-import "../../asset/main.scss";
 export const metadata: Metadata = {
-  title: "채팅",
+  title: "상품등록",
 };
 
-export default function Talk() {
+export default function MarketWrite() {
   return (
     <>
-      Chat
+     상품등록
     </>
   );
 }

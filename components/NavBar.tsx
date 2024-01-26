@@ -3,10 +3,10 @@ import Image from "next/image";
 import "../asset/main.scss";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Hamburger from "hamburger-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Sign from "./auth-components/Sign";
 import { useRecoilState } from "recoil";
 import { signState } from "@/app/atom";
@@ -104,10 +104,10 @@ const MenuContainer = styled.div`
       background-color: #36b733;
     }
     &:nth-child(3):hover div {
-      background-color: #d7c659;
+      background-color: #0ba3ea;
     }
     &:nth-child(4):hover div {
-      background-color: #0ba3ea;
+      background-color: #d7c659;
     }
   }
 `;
@@ -168,6 +168,7 @@ export default function NavBar() {
   const [toggle, set_toggle] = useState(true); //메뉴 크기 토글
   const [signModal, set_signModal] = useRecoilState(signState);
   const pathname = usePathname();
+  const router = useRouter();
 
   const { user }: any = AuthContext(); //로그인 상태
   const logOut = () => {
@@ -176,7 +177,14 @@ export default function NavBar() {
       .then((응답) => console.log(응답))
       .catch((에러) => console.log(에러.message));
   };
-
+  useEffect(()=> {
+    if(pathname !== '/'){
+      if(!user.user){
+        alert('로그인 후 이용가능합니다.');
+        router.push('/');
+      }
+    }
+  },[pathname]);
   return (
     <>
       <NavContainer
@@ -255,7 +263,7 @@ export default function NavBar() {
             <div
               className="material-btn"
               style={
-                pathname === "/market"
+                pathname.startsWith("/market")
                   ? {
                       backgroundColor: "#36b733",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -268,7 +276,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/market"
+                  pathname.startsWith("/market")
                     ? { fill: "white", stroke: "white" }
                     : {}
                 }
@@ -288,53 +296,13 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/market" ? { color: "white" } : {}}
+                style={pathname.startsWith("/market") ? { color: "white" } : {}}
               >
                 Market
               </motion.p>
             </div>
           </Link>
-          <Link href="/talk">
-            <div
-              className="material-btn"
-              style={
-                pathname === "/talk"
-                  ? {
-                      backgroundColor: "#d7c659",
-                      boxShadow: "0px 3px 8px -3px gray",
-                    }
-                  : {}
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                style={
-                  pathname === "/talk" ? { fill: "white", stroke: "white" } : {}
-                }
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                />
-              </svg>
-
-              <motion.p
-                initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
-                animate={
-                  toggle
-                    ? { display: "block", opacity: 1, paddingRight: "2rem" }
-                    : { display: "none", opacity: 0 }
-                }
-                transition={{ duration: 0.6 }}
-                style={pathname === "/talk" ? { color: "white" } : {}}
-              >
-                Chat
-              </motion.p>
-            </div>
-          </Link>
+         
           <Link href="/blog">
             <div
               className="material-btn"
@@ -376,6 +344,47 @@ export default function NavBar() {
               </motion.p>
             </div>
           </Link>
+          <Link href="/profile">
+            <div
+              className="material-btn"
+              style={
+                pathname === "/profile"
+                  ? {
+                      backgroundColor: "#d7c659",
+                      boxShadow: "0px 3px 8px -3px gray",
+                    }
+                  : {}
+              }
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                style={
+                  pathname === "/profile" ? { fill: "white", stroke: "white" } : {}
+                }
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                />
+              </svg>
+
+              <motion.p
+                initial={{ display: "block", opacity: 1, paddingRight: "3rem" }}
+                animate={
+                  toggle
+                    ? { display: "block", opacity: 1, paddingRight: "2rem" }
+                    : { display: "none", opacity: 0 }
+                }
+                transition={{ duration: 0.6 }}
+                style={pathname === "/profile" ? { color: "white" } : {}}
+              >
+                My Profile
+              </motion.p>
+            </div>
+          </Link>
         </MenuContainer>
 
         <LoginDiv>
@@ -387,8 +396,8 @@ export default function NavBar() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
                   />
                 </svg>
