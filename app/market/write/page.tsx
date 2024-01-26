@@ -1,3 +1,4 @@
+import CreateProduct from "@/components/market-components/CreateProduct";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "상품등록",
@@ -6,7 +7,9 @@ export const metadata: Metadata = {
 export default function MarketWrite() {
   return (
     <>
-     상품등록
+    <div>
+      <CreateProduct/>
+      </div>
     </>
   );
 }

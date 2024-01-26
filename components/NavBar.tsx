@@ -480,6 +480,7 @@ export default function NavBar() {
             </>
           )}
         </LoginDiv>
+
         <ToggleButton>
           <Hamburger
             size={25}
@@ -490,6 +491,7 @@ export default function NavBar() {
             duration={0.6}
           />
         </ToggleButton>
+        
       </NavContainer>
       {signModal !== "off" && (
         <ModalOverlay initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
