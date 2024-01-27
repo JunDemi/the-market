@@ -7,9 +7,7 @@ export const metadata: Metadata = {
 export default function MarketWrite() {
   return (
     <>
-    <div>
       <CreateProduct/>
-      </div>
     </>
   );
 }

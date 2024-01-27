@@ -74,6 +74,7 @@ const ProductItem = styled(motion.div)`
     flex-direction: column;
     gap: 1.5rem;
     h1 {
+      font-weight: bold;
       font-size: 20px;
       letter-spacing: -0.06rem;
     }

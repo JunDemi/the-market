@@ -88,6 +88,8 @@ time,
 mark,
 audio,
 video {
+	box-sizing: border-box;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
@@ -147,8 +149,14 @@ input:focus {
 
 textarea {
 	resize: none;
+	&:focus{
+		outline: none;
+	}
 }
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
 /*scroll bar*/
 ::-webkit-scrollbar {
 	width: 8px;

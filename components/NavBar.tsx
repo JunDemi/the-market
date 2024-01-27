@@ -176,6 +176,7 @@ export default function NavBar() {
     signOut(auth)
       .then((응답) => console.log(응답))
       .catch((에러) => console.log(에러.message));
+      router.push('/');
   };
   useEffect(()=> {
     if(pathname !== '/'){
