@@ -65,8 +65,9 @@
         background-color: #fff1ea;
     }
 }
+
 /*로그인 시 메뉴에 있는 이름표*/
-.name-tag{
+.name-tag {
     color: white;
     background: linear-gradient(90deg, #0094fe, #0033ff);
     padding: 0.6rem;
@@ -76,6 +77,7 @@
     margin-bottom: 1.5rem;
     box-shadow: 3px 3px 6px 0 #7b7b7b;
 }
+
 /*로그인,회원가입 성공 시 등장하는 팝업*/
 .sign-popup-overlay {
     position: fixed;
@@ -89,7 +91,8 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    .sign-popup{
+
+    .sign-popup {
         background-color: white;
         padding: 2rem 5rem;
         display: flex;
@@ -97,8 +100,9 @@
         justify-content: center;
         align-items: center;
         font-size: 18px;
-        gap:4rem;
-        button{
+        gap: 4rem;
+
+        button {
             border: none;
             padding: 1rem 2.5rem;
             border-radius: 30px;
@@ -108,8 +112,9 @@
         }
     }
 }
+
 /*글 작성하기 페이지로 이동하는 버튼*/
-.go-write-btn{
+.go-write-btn {
     position: fixed;
     right: 2rem;
     bottom: 2rem;
@@ -117,12 +122,53 @@
     padding: 1.2rem;
     border-radius: 50%;
     box-shadow: 2px 2px 4px 0 #676767;
-    svg{
+
+    svg {
         stroke: #ff6d1f;
     }
-    &:hover{
-        svg{
+
+    &:hover {
+        svg {
             stroke: red;
+        }
+    }
+}
+
+/*이미지 첨부 프리뷰 섹션*/
+.image-preview-basic {
+    border: 4px dashed #bebebe;
+
+    svg {
+        width: 2rem;
+        height: 2rem;
+        stroke: #bebebe;
+        transition: 0.2s;
+    }
+
+    &:hover {
+        border-color: #fc9d4a;
+
+        svg {
+            stroke: #fc9d4a;
+        }
+    }
+}
+
+.image-preview-error {
+    border: 6px dashed #fc5b5b;
+
+    svg {
+        width: 2rem;
+        height: 2rem;
+        stroke: #fc5b5b;
+        transition: 0.2s;
+    }
+
+    &:hover {
+        border-color: #fc9d4a;
+
+        svg {
+            stroke: #fc9d4a;
         }
     }
 }

@@ -1,8 +1,21 @@
 "use client";
+import { AuthContext } from "@/app/lib/AuthProvider";
+import { db } from "@/services/firebase";
+import { currentDate } from "@/services/getDay";
+import { addDoc, collection } from "firebase/firestore";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-
+interface IProductCreate {
+  productImg: any;
+  productName: string;
+  price: number;
+  description: string;
+}
+//스타일 컴포넌트
 const WriteTitle = styled.h1`
   margin: 3rem 0 1.5rem 0;
   font-size: 22px;
@@ -26,27 +39,20 @@ const ImageAndName = styled.div`
   align-items: end;
   gap: 1rem;
   label {
+    position: relative;
     cursor: pointer;
-    padding: 10rem 15rem;
-    border: 4px dashed #bebebe;
+    width: 70rem;
+    height: 25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: 0.2s;
-    svg {
-      width: 2rem;
-      height: 2rem;
-      stroke: #bebebe;
-      transition: 0.2s;
-    }
-    &:hover {
-      border-color: #fc9d4a;
-      svg {
-        stroke: #fc9d4a;
-      }
-    }
+
   }
   div {
     width: 100%;
     letter-spacing: -0.07rem;
-    p {
+    h4 {
       font-size: 14px;
       color: #ff963a;
       margin: 25px 0 10px 0;
@@ -70,6 +76,11 @@ const ImageAndName = styled.div`
       padding: 5px;
       height: 10rem;
     }
+    P {
+      color: #fc5b5b;
+    font-size: 12px;
+    padding: 10px 0;
+    }
   }
 `;
 const ApplyButtons = styled.div`
@@ -84,48 +95,121 @@ const ApplyButtons = styled.div`
     color: white;
   }
 `;
+
+//스타일 컴포넌트
 export default function CreateProduct() {
+  const { user }: any = AuthContext(); //로그인 상태
+  const [preview, set_preview] = useState<string | null>(null);
+  const [loading, set_loading] = useState<boolean>(false);
+  const router = useRouter();
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm<IProductCreate>({mode: "onSubmit"});
 
+  const getPreview = (files: any) => { //이미지 프리뷰 함수
+    if (files) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        set_preview(reader.result as string);
+      };
+      reader.readAsDataURL(files);
+    } else {
+      set_preview(null);
+    }
+  };
+  const onValid = async({productName, price, description}: IProductCreate) => { //Firebase에 삽입
+    set_loading(true);
+    await addDoc(collection(db, "product"), {
+      userId: user.user.uid,
+      userEmail: user.user.email,
+      productName: productName,
+      productPrice: price,
+      productDescription: description,
+      productImg: String(preview),
+      createAt: currentDate,
+      updateAt: currentDate
+    })
+    .then(응답=> (
+      router.push('/market')
+    )).catch(에러 => console.log(에러.message)); //나중에 에러 처리 구현할 것 (용량 초과 이슈)
+    set_loading(true);
+    reset();
+  };
   return (
     <>
       <WriteTitle>상품 등록</WriteTitle>
-      <form>
+      <form onSubmit={handleSubmit(onValid)}>
         <WriteContainer>
           <ImageAndName>
-            <label>
-              <svg fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                <path
-                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                  strokeWidth={4}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+            <label className={errors.productImg ? "image-preview-error" : "image-preview-basic"}>
+              {preview ? (
+                <Image
+                  src={preview as string}
+                  alt=""
+                  width={0}
+                  height={0}
+                  fill
                 />
-              </svg>
-              <input type="file" style={{ display: "none" }} accept="image/*" />
+              ) : (
+                <svg fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth={4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+              <input
+                type="file"
+                style={{ display: "none" }}
+                accept="image/*"
+                {...register("productImg", {
+                  required: true,
+                })}
+                onChange={({ target }: any) => {
+                  if (target === undefined) getPreview(null);
+                  if (target) getPreview(target.files[0]);
+                }}
+              />
             </label>
             <div>
-              <p>상품명</p>
-              <input type="text" {...register('productName', {
-                required: "상품명을 적어주세요."
-              })}/>
-              <p>가격 (원)</p>
-              <input type="number" {...register('price', {
-                required: "가격을 적어주세요."
-              })}/>
-              <p>상품 설명</p>
-              <textarea></textarea>
+              <h4>상품명</h4>
+              <input
+                type="text"
+                {...register("productName", {
+                  required: "상품명을 적어주세요.",
+                })}
+                autoComplete="off"
+              />
+              {errors.productName && <p>{errors.productName?.message}</p>}
+              <h4>가격 (원)</h4>
+              <input
+                type="number"
+                {...register("price", {
+                  required: "가격을 적어주세요.",
+                })}
+                autoComplete="off"
+              />
+              {errors.price && <p>{errors.price?.message}</p>}
+              <h4>상품 설명</h4>
+              <textarea
+                {...register("description", {
+                  required: "가격을 적어주세요.",
+                })}
+                autoComplete="off"
+              ></textarea>
+              {errors.description && <p>{errors.description?.message}</p>}
             </div>
           </ImageAndName>
         </WriteContainer>
         <ApplyButtons>
           <motion.button
-          type="submit"
+            disabled={loading}
+            type="submit"
             className="material-btn"
             initial={{
               background: "linear-gradient(90deg, #ffc965, #ff6106)",
@@ -134,11 +218,10 @@ export default function CreateProduct() {
               background: "linear-gradient(90deg, #fad590, #ff8b48)",
             }}
           >
-            등록
+            {loading ? "로딩중..." : "등록하기"}
           </motion.button>
         </ApplyButtons>
       </form>
     </>
   );
 }
-//id, userId, userName, productName, productImg, description, price, heart, createAt, updateAt
