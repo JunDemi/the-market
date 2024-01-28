@@ -1,4 +1,4 @@
-//현재 날짜를 YYYY-MM-DD로
+//YYYY-MM-DD 포매터
 const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();

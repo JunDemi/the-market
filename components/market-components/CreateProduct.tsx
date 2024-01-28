@@ -1,7 +1,6 @@
 "use client";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { db } from "@/services/firebase";
-import { currentDate } from "@/services/getDay";
 import { addDoc, collection } from "firebase/firestore";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -9,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+
 interface IProductCreate {
   productImg: any;
   productName: string;
@@ -120,22 +120,22 @@ export default function CreateProduct() {
       set_preview(null);
     }
   };
-  const onValid = async({productName, price, description}: IProductCreate) => { //Firebase에 삽입
+
+  const onValid = async({productName, price, description}: IProductCreate) => { 
     set_loading(true);
-    await addDoc(collection(db, "product"), {
-      userId: user.user.uid,
-      userEmail: user.user.email,
+    await addDoc(collection(db, "product"), {//Firebase에 삽입
+      userId: user?.user.uid,
+      userEmail: user?.user.email,
       productName: productName,
       productPrice: price,
       productDescription: description,
       productImg: String(preview),
-      createAt: currentDate,
-      updateAt: currentDate
-    })
-    .then(응답=> (
-      router.push('/market')
-    )).catch(에러 => console.log(에러.message)); //나중에 에러 처리 구현할 것 (용량 초과 이슈)
-    set_loading(true);
+      createAt: Date.now(),
+      updateAt: Date.now(),
+      heart: 0
+    }).then((응답) => router.push('/market'))
+    .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
+    set_loading(false);
     reset();
   };
   return (

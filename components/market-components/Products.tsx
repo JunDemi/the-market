@@ -3,6 +3,24 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
+import { readProduct } from "@/services/firebaseCRUD";
+import { useQuery } from "react-query";
+import Image from "next/image";
+
+type IProducts =[
+  productId: string,
+  productInfo:{
+    userId: string;
+    userEmail: string;
+    productName: string;
+    productImg: string;
+    productPrice: number;
+    productDescription: number;
+    createAt: number;
+    updateAt: number;
+    heart: number;
+  }
+]
 //스타일 컴포넌트
 const SearchBar = styled.div`
   //검색 창
@@ -62,9 +80,8 @@ const ProductItem = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  div:nth-child(1) {
-    background-size: cover;
-    background-repeat: no-repeat;
+  div:nth-child(1){
+    position: relative;
     width: 100%;
     height: 12rem;
   }
@@ -106,7 +123,15 @@ const GoDetailButton = styled(motion.button)`
 `;
 //스타일 컴포넌트
 export default function Products() {
-    const [c, sc] = useState(false);
+  //상품 목록 불러오기
+  const { data: productData } = useQuery<IProducts[]>(
+    ["product_list"],
+    () => readProduct(),
+    {
+      staleTime: 10000,
+    }
+  );
+  const [c, sc] = useState(false);
    const change = () => {
     sc(prev => !prev)
    }
@@ -133,23 +158,25 @@ export default function Products() {
         </div>
       </SearchBar>
       <ProductList>
-        {[...Array(60)].map((data, number) => (
-          <>
+        {productData?.map((data) => (
             <ProductItem
-              key={number}
+              key={data[0]}
               whileHover={{ scale: 1.05 }}
               transition={{ delay: 0.1, duration: 0.3 }}
             >
-              <div
-                style={{
-                  backgroundImage:
-                    "url('https://i.pcmag.com/imagery/roundups/01WOu4NbEnv3pJ54qp7j50k-16.fit_lim.size_1050x.jpg')",
-                }}
-              />
               <div>
-                <h1>Samsung Galaxy S{number}</h1>
-                <p>jungwook3176@gmail.com</p>
-                <h2>20,000원</h2>
+              <Image
+                src={data[1].productImg as string}
+                alt=""
+                width={0}
+                height={0}
+                fill
+              />
+              </div>
+              <div>
+                <h1>{data[1].productName}</h1>
+                <p>{data[1].userEmail}</p>
+                <h2>{Number(data[1].productPrice).toLocaleString()}원</h2>
                 <span>
                   <button onClick={change}>
                     <svg
@@ -181,7 +208,6 @@ export default function Products() {
                 </GoDetailButton>
               </div>
             </ProductItem>
-          </>
         ))}
       </ProductList>
       <WriteButton to="market"/>

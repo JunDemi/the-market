@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@tanstack/react-query": "^5.17.19",
     "apexcharts": "^3.45.2",
     "firebase": "^10.7.2",
     "framer-motion": "^10.18.0",
@@ -19,6 +20,7 @@
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",
+    "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "sass": "^1.70.0",
     "styled-components": "^6.1.8",
