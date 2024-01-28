@@ -132,7 +132,7 @@ export default function CreateProduct() {
       productImg: String(preview),
       createAt: Date.now(),
       updateAt: Date.now(),
-      heart: 0
+      heart: "0"
     }).then((응답) => router.push('/market'))
     .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
     set_loading(false);

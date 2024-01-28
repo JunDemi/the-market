@@ -181,7 +181,6 @@ export default function NavBar() {
   useEffect(()=> {
     if(pathname !== '/'){
       if(!user.user){
-        alert('로그인 후 이용가능합니다.');
         router.push('/');
       }
     }
