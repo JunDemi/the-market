@@ -250,8 +250,8 @@ export default function ProductsList({keyword}: IKeyword) {
                 {productData?.map((data) => (
                   <ProductItem
                     key={data[0]}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ delay: 0.1, duration: 0.3 }}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <div>
                       <Image
