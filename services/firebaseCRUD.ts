@@ -22,7 +22,8 @@ export const readProduct = async (pageParam: number, keyword?: string | null) =>
       orderBy("productName"),
       where("productName", ">=", keyword.toLowerCase()),
       where("productName", "<=", keyword.toLowerCase() + "\uf8ff"), //키워드
-      orderBy("createAt", "desc")
+      orderBy("createAt", "desc"),
+      limit(pageParam * 12),
     );
     const result = await getDocs(productQuery); //문서화
     result.docs.map((data) => {

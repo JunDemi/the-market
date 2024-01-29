@@ -186,8 +186,7 @@ export default function ProductsList({ keyword }: IKeyword) {
     queryFn: ({ pageParam = 1 }) => readProduct(pageParam, keyword), //첫 페이지 당 12개의 데이터 -> DB호출에서 12를 곱할 예정
     getNextPageParam: (lastPage, allPages) => {
       return allPages.length + 1 // 마지막 페이지가 될 때까지 / 1 * 12 -> 2 * 12 -> 3 * 12 ...
-    },
-    staleTime: Infinity,
+    }
   });
   //검색
   const productSearch = async (value: { keyword?: string | null }) => {
