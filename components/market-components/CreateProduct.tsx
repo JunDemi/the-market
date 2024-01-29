@@ -198,7 +198,7 @@ export default function CreateProduct() {
               <h4>상품 설명</h4>
               <textarea
                 {...register("description", {
-                  required: "가격을 적어주세요.",
+                  required: "상품설명을 적어주세요.",
                 })}
                 autoComplete="off"
               ></textarea>

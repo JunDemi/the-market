@@ -109,7 +109,7 @@ const ProductItem = styled(motion.div)`
   div:nth-child(1) {
     position: relative;
     width: 100%;
-    height: 12rem;
+    height: 13rem;
   }
   div:nth-child(2) {
     padding: 0.5rem 1rem;
