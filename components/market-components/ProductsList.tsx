@@ -1,17 +1,18 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
 import { productHeart, readProduct } from "@/services/firebaseCRUD";
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import Image from "next/image";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useInView } from "react-intersection-observer";
 
-type IProducts = [
-  productId: string,
+interface IProduct {
+  productId: string;
   productInfo: {
     userId: string;
     userEmail: string;
@@ -22,10 +23,10 @@ type IProducts = [
     createAt: number;
     updateAt: number;
     heart: string;
-  }
-];
+  };
+}
 interface IKeyword {
-    keyword?: string | null;
+  keyword?: string | null;
 }
 //스타일 컴포넌트
 const SearchBar = styled.div`
@@ -160,18 +161,34 @@ const HeartPopup = styled(motion.div)`
   left: 50%;
   transform: translateX(-50%);
 `;
+const InfiniteScrollDiv = styled.div`
+margin: auto;
+display: flex;
+justify-content: center;
+`;
 //스타일 컴포넌트
-export default function ProductsList({keyword}: IKeyword) {
+export default function ProductsList({ keyword }: IKeyword) {
   const { user }: any = AuthContext();
   const [myHeart, set_myHeart] = useState(false);
   const router = useRouter();
   const { handleSubmit, register, reset } = useForm({ mode: "onSubmit" });
+  const {ref, inView} = useInView();
   //상품 목록 불러오기
   const {
     isLoading,
-    data: productData,
+    data: pData,
     refetch,
-  } = useQuery<IProducts[]>(["product_list"], () => readProduct(keyword));
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage
+  } = useInfiniteQuery({
+    queryKey: ["product_list"],
+    queryFn: ({ pageParam = 1 }) => readProduct(pageParam, keyword), //첫 페이지 당 12개의 데이터 -> DB호출에서 12를 곱할 예정
+    getNextPageParam: (lastPage, allPages) => {
+      return allPages.length + 1 // 마지막 페이지가 될 때까지 / 1 * 12 -> 2 * 12 -> 3 * 12 ...
+    },
+    staleTime: Infinity,
+  });
   //검색
   const productSearch = async (value: { keyword?: string | null }) => {
     router.push(`/market/${value.keyword}`);
@@ -186,7 +203,11 @@ export default function ProductsList({keyword}: IKeyword) {
       set_myHeart(false);
     }, 2500);
   };
-
+  useEffect(()=> {
+    if(inView && hasNextPage){
+      fetchNextPage();
+    }
+  },[inView, hasNextPage, fetchNextPage]);
   return (
     <>
       {user.isLogin ? (
@@ -247,84 +268,102 @@ export default function ProductsList({keyword}: IKeyword) {
           {!isLoading ? (
             <>
               <ProductList>
-                {productData?.map((data) => (
-                  <ProductItem
-                    key={data[0]}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div>
-                      <Image
-                        src={data[1].productImg as string}
-                        alt=""
-                        width={0}
-                        height={0}
-                        fill
-                      />
-                    </div>
-                    <div>
-                      <h1>
-                        {
-                          data[1].productName.replace(/\b\w/g, (match) =>
-                            match.toUpperCase()
-                          ) /*각 단어 첫번째 글자 대문자로*/
-                        }
-                      </h1>
-                      <p>{data[1].userEmail}</p>
-                      <h2>{Number(data[1].productPrice).toLocaleString()}원</h2>
-                      <span>
-                        <button
-                          onClick={() => 찜하기(data[0], user.user.uid)}
-                          disabled={user?.user.uid === data[1].userId}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill={
-                              data[1].heart === user.user.uid
-                                ? "#fc7676"
-                                : "none"
+                {pData?.pages[pData.pages.length - 1].map((data: IProduct,) =>
+                      <ProductItem
+                        key={data.productId}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div>
+                          <Image
+                            src={data.productInfo.productImg as string}
+                            alt=""
+                            width={0}
+                            height={0}
+                            fill
+                          />
+                        </div>
+                        <div>
+                          <h1>
+                            {data.productInfo.productName.replace(
+                              /\b\w/g,
+                              (match) => match.toUpperCase()
+                            )}
+                          </h1>
+                          <p>{data.productInfo.userEmail}</p>
+                          <h2>
+                            {Number(
+                              data.productInfo.productPrice
+                            ).toLocaleString()}
+                            원
+                          </h2>
+                          <span>
+                            <button
+                              onClick={() =>
+                                찜하기(data.productId, user.user.uid)
+                              }
+                              disabled={
+                                user?.user.uid === data.productInfo.userId
+                              }
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill={
+                                  data.productInfo.heart === user.user.uid
+                                    ? "#fc7676"
+                                    : "none"
+                                }
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.2"
+                                stroke={
+                                  data.productInfo.userId === user.user.uid
+                                    ? "#bebebe"
+                                    : "#fc7676"
+                                }
+                                style={{ width: "2rem", height: "2rem" }}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                                />
+                              </svg>
+                            </button>
+                          </span>
+                          <Link
+                            href={
+                              user?.user.uid === data.productInfo.userId
+                                ? "/profile"
+                                : `/market/detailPage/${data.productId}`
                             }
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.2"
-                            stroke={
-                              data[1].userId === user.user.uid
-                                ? "#bebebe"
-                                : "#fc7676"
-                            }
-                            style={{ width: "2rem", height: "2rem" }}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                            />
-                          </svg>
-                        </button>
-                      </span>
-                      <Link href={user?.user.uid === data[1].userId
-                            ? "/profile"
-                            : `/market/detailPage/${data[0]}`}>
-                        <GoDetailButton
-                          className="material-btn"
-                          initial={{
-                            background:
-                              "linear-gradient(90deg, #ffc965, #ff6106)",
-                          }}
-                          whileHover={{
-                            background:
-                              "linear-gradient(90deg, #fad590, #ff8b48)",
-                          }}
-                        >
-                          {user?.user.uid === data[1].userId
-                            ? "수정하기"
-                            : "정보 보기"}
-                        </GoDetailButton>
-                      </Link>
-                    </div>
-                  </ProductItem>
-                ))}
+                            <GoDetailButton
+                              className="material-btn"
+                              initial={{
+                                background:
+                                  "linear-gradient(90deg, #ffc965, #ff6106)",
+                              }}
+                              whileHover={{
+                                background:
+                                  "linear-gradient(90deg, #fad590, #ff8b48)",
+                              }}
+                            >
+                              {user?.user.uid === data.productInfo.userId
+                                ? "수정하기"
+                                : "정보 보기"}
+                            </GoDetailButton>
+                          </Link>
+                        </div>
+                      </ProductItem>
+                )}
               </ProductList>
               <WriteButton to="market" />
+
+              <InfiniteScrollDiv ref={ref}>
+                {isFetchingNextPage ? hasNextPage ? 
+                <Image src="/loading.gif" alt="loading..." width={280} height={180}/>
+                : "" : ""}
+              </InfiniteScrollDiv>
             </>
           ) : (
             <div className="loading-gif">

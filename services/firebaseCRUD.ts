@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   getDocs,
+  limit,
   orderBy,
   query,
   updateDoc,
@@ -12,7 +13,7 @@ import { db } from "./firebase";
 const productsRef = collection(db, "product");
 
 //상품 목록 불러오기
-export const readProduct = async (keyword?: string | null) => {
+export const readProduct = async (pageParam: number, keyword?: string | null) => {
   const resultArray: any = [];
   if (keyword) { //검색을 했을 경우
     const productQuery = query(
@@ -21,22 +22,23 @@ export const readProduct = async (keyword?: string | null) => {
       orderBy("productName"),
       where("productName", ">=", keyword.toLowerCase()),
       where("productName", "<=", keyword.toLowerCase() + "\uf8ff"), //키워드
-      orderBy("createAt", "desc"),
+      orderBy("createAt", "desc")
     );
     const result = await getDocs(productQuery); //문서화
     result.docs.map((data) => {
-      resultArray.push([data.id, data.data()]); //필드 고유의 id값과 필드 내용을 배열에 담기
+      resultArray.push({productId: data.id, productInfo: data.data()}); //필드 고유의 id값과 필드 내용을 배열에 담기
     });
     return resultArray;
   } else { //검색을 하지 않은 기본 페이지
     const productQuery = query(
       productsRef,
       where("heart", "==", "0"),
-      orderBy("createAt", "desc")
+      orderBy("createAt", "desc"),
+      limit(pageParam * 12),
     );
     const result = await getDocs(productQuery); //문서화
     result.docs.map((data) => {
-      resultArray.push([data.id, data.data()]); //필드 고유의 id값과 필드 내용을 배열에 담기
+      resultArray.push({productId: data.id, productInfo: data.data()}); //필드 고유의 id값과 필드 내용을 배열에 담기
     });
     return resultArray;
   }
