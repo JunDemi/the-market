@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 import Image from "next/image";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 type IProducts = [
@@ -138,8 +138,7 @@ const ProductItem = styled(motion.div)`
   }
 `;
 const GoDetailButton = styled(motion.button)`
-  cursor: pointer;
-  border: none;
+    cursor: pointer;
   padding: 0.7rem;
   border-radius: 30px;
   color: white;
@@ -159,20 +158,29 @@ const HeartPopup = styled(motion.div)`
   transform: translateX(-50%);
 `;
 //스타일 컴포넌트
-export default function Products() {
+export default function ProductSearch() {
   const { user }: any = AuthContext();
   const [myHeart, set_myHeart] = useState(false);
   const router = useRouter();
-  const { handleSubmit, register, reset } = useForm({ mode: "onSubmit" });
+  const pathname = usePathname();
+  const keyword = decodeURIComponent(pathname).split('/').pop();
+  const {
+    handleSubmit,
+    register,
+    reset,
+  } = useForm({ mode: "onSubmit" });
   //상품 목록 불러오기
   const {
     isLoading,
     data: productData,
     refetch,
-  } = useQuery<IProducts[]>(["product_list"], () => readProduct());
+  } = useQuery<IProducts[]>(
+    ["product_list"],
+    () => readProduct(keyword),
+  );
   //검색
-  const productSearch = async (value: { keyword?: string | null }) => {
-    router.push(`/market/${value.keyword}`);
+  const productSearch = async(value: {keyword?: string | null}) => {
+    router.push(`/market/${value.keyword}`)
     reset();
   };
   //찜하기
@@ -261,13 +269,7 @@ export default function Products() {
                       />
                     </div>
                     <div>
-                      <h1>
-                        {
-                          data[1].productName.replace(/\b\w/g, (match) =>
-                            match.toUpperCase()
-                          ) /*각 단어 첫번째 글자 대문자로*/
-                        }
-                      </h1>
+                      <h1>{data[1].productName.replace(/\b\w/g, match => match.toUpperCase()) /*각 단어 첫글자마다 대문자*/}</h1>
                       <p>{data[1].userEmail}</p>
                       <h2>{Number(data[1].productPrice).toLocaleString()}원</h2>
                       <span>
@@ -302,21 +304,21 @@ export default function Products() {
                       <Link href={user?.user.uid === data[1].userId
                             ? ""
                             : "/blog"}>
-                        <GoDetailButton
-                          className="material-btn"
-                          initial={{
-                            background:
-                              "linear-gradient(90deg, #ffc965, #ff6106)",
-                          }}
-                          whileHover={{
-                            background:
-                              "linear-gradient(90deg, #fad590, #ff8b48)",
-                          }}
-                        >
-                          {user?.user.uid === data[1].userId
-                            ? "수정하기"
-                            : "정보 보기"}
-                        </GoDetailButton>
+                      <GoDetailButton
+                        className="material-btn"
+                        initial={{
+                          background:
+                            "linear-gradient(90deg, #ffc965, #ff6106)",
+                        }}
+                        whileHover={{
+                          background:
+                            "linear-gradient(90deg, #fad590, #ff8b48)",
+                        }}
+                      >
+                        {user?.user.uid === data[1].userId
+                          ? "수정하기"
+                          : "정보 보기"}
+                      </GoDetailButton>
                       </Link>
                     </div>
                   </ProductItem>

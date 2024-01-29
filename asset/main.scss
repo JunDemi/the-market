@@ -52,7 +52,13 @@
     font-size: 27px;
     font-weight: bold;
 }
-
+.loading-gif{
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /*InputField.tsx*/
 .login-focus {
     &:focus {
@@ -153,7 +159,7 @@
         }
     }
 }
-
+/*이미지 프리뷰 에러*/
 .image-preview-error {
     border: 6px dashed #fc5b5b;
 

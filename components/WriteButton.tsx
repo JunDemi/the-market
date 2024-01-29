@@ -6,7 +6,7 @@ interface LinkType{
 export default function WriteButton({to}:LinkType) {
   return (
     <>
-      <Link href={`/${to}/write`} className="go-write-btn">
+      <Link href={`/${to}/writePage`} className="go-write-btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

@@ -126,7 +126,7 @@ export default function CreateProduct() {
     await addDoc(collection(db, "product"), {//Firebase에 삽입
       userId: user?.user.uid,
       userEmail: user?.user.email,
-      productName: productName,
+      productName: productName.toLowerCase(),
       productPrice: price,
       productDescription: description,
       productImg: String(preview),

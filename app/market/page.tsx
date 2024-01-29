@@ -5,10 +5,11 @@ export const metadata: Metadata = {
   title: "마켓",
 };
 
+export const dynamic = 'force-dynamic'
 export default function Market() {
   return (
     <>
-     <Products/>
+        <Products />
     </>
   );
 }
