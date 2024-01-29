@@ -1,6 +1,5 @@
-"use client";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
 import { productHeart, readProduct } from "@/services/firebaseCRUD";
@@ -25,6 +24,9 @@ type IProducts = [
     heart: string;
   }
 ];
+interface IKeyword {
+    keyword?: string | null;
+}
 //스타일 컴포넌트
 const SearchBar = styled.div`
   //검색 창
@@ -159,7 +161,7 @@ const HeartPopup = styled(motion.div)`
   transform: translateX(-50%);
 `;
 //스타일 컴포넌트
-export default function Products() {
+export default function ProductsList({keyword}: IKeyword) {
   const { user }: any = AuthContext();
   const [myHeart, set_myHeart] = useState(false);
   const router = useRouter();
@@ -169,7 +171,7 @@ export default function Products() {
     isLoading,
     data: productData,
     refetch,
-  } = useQuery<IProducts[]>(["product_list"], () => readProduct());
+  } = useQuery<IProducts[]>(["product_list"], () => readProduct(keyword));
   //검색
   const productSearch = async (value: { keyword?: string | null }) => {
     router.push(`/market/${value.keyword}`);
@@ -300,8 +302,8 @@ export default function Products() {
                         </button>
                       </span>
                       <Link href={user?.user.uid === data[1].userId
-                            ? ""
-                            : "/blog"}>
+                            ? "/profile"
+                            : `/market/detailPage/${data[0]}`}>
                         <GoDetailButton
                           className="material-btn"
                           initial={{
