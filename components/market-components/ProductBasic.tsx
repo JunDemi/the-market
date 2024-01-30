@@ -2,7 +2,7 @@
 
 import ProductsList from "./ProductsList";
 
-export default function Products() {
+export default function ProductBasic() {
   return (
     <>
      <ProductsList/>

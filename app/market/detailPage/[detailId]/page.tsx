@@ -1,4 +1,4 @@
-import ProductSearch from "@/components/market-components/ProductSearch";
+import ProductDetail from "@/components/market-components/ProductDetail";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "상품정보",
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function MarketDetail() {
   return (
     <>
-       Detail
+       <ProductDetail/>
     </>
   );
 }

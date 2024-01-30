@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  documentId,
   getDocs,
   limit,
   orderBy,
@@ -51,3 +52,16 @@ export const productHeart = async (productId: string, userId: string) => {
     heart: userId,
   });
 };
+//상품 상세
+export const productDetail = async(keyword?: string) => {
+  const resultData:any = {};
+  const productQuery = query(
+    productsRef,
+    where(documentId(), "==", keyword),
+  );
+  const result = await getDocs(productQuery); //문서화
+  result.docs.map((data) => {
+    resultData.info = data.data()
+  })
+  return resultData;
+}

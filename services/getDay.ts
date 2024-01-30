@@ -1,12 +1,14 @@
 //YYYY-MM-DD 포매터
-const getCurrentDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, 두 자리로 포맷
-    const day = String(today.getDate()).padStart(2, '0'); // 두 자리로 포맷
-  
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
+export const getDateTimeFormat = (datetime?: number) => {
+  if (datetime) {
+    const date = new Date(datetime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1, 두 자리로 포맷
+    const day = String(date.getDate()).padStart(2, "0"); // 두 자리로 포맷
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    const formattedTime = `${year}-${month}-${day} ( ${hours}시${minutes}분 )`;
+    return formattedTime;
   }
-  
-export const currentDate = getCurrentDate();
+};

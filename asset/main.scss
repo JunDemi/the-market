@@ -178,3 +178,13 @@
         }
     }
 }
+/*이미 찜한 상품을 표시하기 위한 버튼 디자인*/
+.heart-basic-btn{
+    background: linear-gradient(45deg, #faa9d4, #ff00a2);
+}
+.heart-already-btn{
+    background: linear-gradient(45deg, #b7b7b7, #7c7c7c);
+}
+.buy-btn{
+    background: linear-gradient(45deg, #7bcafb, #0062ff);
+}
