@@ -1,7 +1,8 @@
 "use client";
 import { AuthContext } from "@/app/lib/AuthProvider";
-import { db } from "@/services/firebase";
+import { db, storage } from "@/services/firebase";
 import { addDoc, collection } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -47,7 +48,6 @@ const ImageAndName = styled.div`
     justify-content: center;
     align-items: center;
     transition: 0.2s;
-
   }
   div {
     width: 100%;
@@ -78,8 +78,8 @@ const ImageAndName = styled.div`
     }
     P {
       color: #fc5b5b;
-    font-size: 12px;
-    padding: 10px 0;
+      font-size: 12px;
+      padding: 10px 0;
     }
   }
 `;
@@ -107,9 +107,10 @@ export default function CreateProduct() {
     register,
     formState: { errors },
     reset,
-  } = useForm<IProductCreate>({mode: "onSubmit"});
+  } = useForm<IProductCreate>({ mode: "onSubmit" });
 
-  const getPreview = (files: any) => { //이미지 프리뷰 함수
+  const getPreview = (files: any) => {
+    //이미지 프리뷰 함수
     if (files) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -121,22 +122,38 @@ export default function CreateProduct() {
     }
   };
 
-  const onValid = async({productName, price, description}: IProductCreate) => { 
+  const onValid = async ({
+    productName,
+    price,
+    description,
+    productImg,
+  }: IProductCreate) => {
     set_loading(true);
-    await addDoc(collection(db, "product"), {//Firebase에 삽입
-      userId: user?.user.uid,
-      userEmail: user?.user.email,
-      productName: productName.toLowerCase(),
-      productPrice: price,
-      productDescription: description,
-      productImg: String(preview),
-      createAt: Date.now(),
-      updateAt: Date.now(),
-      heart: "0"
-    }).then((응답) => router.push('/market'))
-    .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
+    //console.log(productImg[0].name);
+    const imageRef = ref(
+      storage,
+      `product-image/${user.user.uid + productImg[0].name}`
+    );
+    await uploadBytes(imageRef, productImg[0]).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        console.log(url)
+      });
+    });
+    // await addDoc(collection(db, "product"), {
+    //   //Firebase에 삽입
+    //   userId: user?.user.uid,
+    //   userEmail: user?.user.email,
+    //   productName: productName.toLowerCase(),
+    //   productPrice: price,
+    //   productDescription: description,
+    //   productImg: user.user.uid + productImg[0].name,
+    //   createAt: Date.now(),
+    //   updateAt: Date.now(),
+    //   heart: "0",
+    // })
+    //   .then((응답) => router.push("/market"))
+    //   .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
     set_loading(false);
-    reset();
   };
   return (
     <>
@@ -144,7 +161,14 @@ export default function CreateProduct() {
       <form onSubmit={handleSubmit(onValid)}>
         <WriteContainer>
           <ImageAndName>
-            <label className={errors.productImg ? "image-preview-error" : "image-preview-basic"}>
+            <label
+              className={
+                errors.productImg
+                  ? "image-preview-error"
+                  : "image-preview-basic"
+              }
+              htmlFor="pImg"
+            >
               {preview ? (
                 <Image
                   src={preview as string}
@@ -163,9 +187,11 @@ export default function CreateProduct() {
                   />
                 </svg>
               )}
+            </label>
+            <div>
               <input
                 type="file"
-                style={{ display: "none" }}
+                style={{ opacity: 0, width: "0.1px" }}
                 accept="image/*"
                 {...register("productImg", {
                   required: true,
@@ -174,9 +200,8 @@ export default function CreateProduct() {
                   if (target === undefined) getPreview(null);
                   if (target) getPreview(target.files[0]);
                 }}
+                id="pImg"
               />
-            </label>
-            <div>
               <h4>상품명</h4>
               <input
                 type="text"

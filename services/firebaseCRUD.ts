@@ -46,11 +46,13 @@ export const readProduct = async (pageParam: number, keyword?: string | null) =>
   }
 };
 //찜 하기
-export const productHeart = async (productId: string, userId: string) => {
-  const getHeart = doc(db, "product", productId);
-  await updateDoc(getHeart, {
-    heart: userId,
-  });
+export const productHeart = async (productId?: string, userId?: string) => {
+  if(productId && userId){
+    const getHeart = doc(db, "product", productId);
+    await updateDoc(getHeart, {
+      heart: userId,
+    });
+  }
 };
 //상품 상세
 export const productDetail = async(keyword?: string) => {

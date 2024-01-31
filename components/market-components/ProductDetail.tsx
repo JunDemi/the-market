@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { AuthContext } from "@/app/lib/AuthProvider";
-import { productDetail } from "@/services/firebaseCRUD";
+import { productDetail, productHeart } from "@/services/firebaseCRUD";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -112,7 +112,7 @@ const ButtonContainer = styled.div`
     border: none;
     color: white;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     gap: 1rem;
     align-items: center;
   }
@@ -123,13 +123,28 @@ export default function ProductDetail() {
   const pathname = usePathname();
   const keyword = decodeURIComponent(pathname).split("/").pop();
   const [detailData, set_detailData] = useState<IProductDetail>();
+  const [heart, setHeart] = useState(false);
+  const [isLoading, set_isLoading] = useState(false);
 
   useEffect(() => {
     //pathname = 문서ID를 가진 데이터 불러오기
     productDetail(keyword)
       .then((response) => set_detailData(response))
       .catch((error) => console.log(error.message));
-  }, [keyword]);
+  }, [keyword, heart]);
+
+  const 찜하기 = async () => {
+    set_isLoading(true);
+    if (!heart) {
+      await productHeart(keyword, user?.user.uid);
+      setHeart(true);
+    } else {
+      await productHeart(keyword, "0");
+      setHeart(false);
+    }
+    set_isLoading(false);
+  };
+
   return (
     <>
       {user?.isLogin ? (
@@ -138,7 +153,7 @@ export default function ProductDetail() {
           <WriteContainer>
             <div>
               <Image
-                src={detailData?.info.productImg as string}
+                src={`${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_URL}product-image%2F${detailData?.info.productImg}?alt=media`}
                 alt=""
                 width={0}
                 height={0}
@@ -147,8 +162,9 @@ export default function ProductDetail() {
             </div>
             <div>
               <p>
-                작성일: {getDateTimeFormat(detailData?.info.createAt)}&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
-                최근수정일: {getDateTimeFormat(detailData?.info.updateAt)}
+                작성일: {getDateTimeFormat(detailData?.info.createAt)}
+                &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
+                {getDateTimeFormat(detailData?.info.updateAt)}
               </p>
               <Link href="/blog">
                 <motion.span
@@ -174,7 +190,15 @@ export default function ProductDetail() {
             </div>
           </WriteContainer>
           <ButtonContainer>
-            <button className="heart-basic-btn material-btn">
+            <button
+              className={
+                detailData?.info.heart === user.user.uid
+                  ? "heart-already-btn material-btn"
+                  : "heart-basic-btn material-btn"
+              }
+              onClick={() => 찜하기()}
+              disabled={isLoading}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="white"
@@ -189,7 +213,9 @@ export default function ProductDetail() {
                   d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                 />
               </svg>
-              찜 목록에 추가
+              {detailData?.info.heart === user.user.uid
+                ? "찜하기 완료"
+                : "찜 목록에 추가"}
             </button>
             <button className="buy-btn material-btn">
               <svg
