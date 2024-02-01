@@ -1,9 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
 import { AuthContext } from "@/app/lib/AuthProvider";
-import { productDetail, productHeart } from "@/services/firebaseCRUD";
+import { buyProduct, deleteProduct, productDetail, productHeart } from "@/services/firebaseCRUD";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
@@ -16,11 +16,21 @@ interface IProductDetail {
     productName: string;
     productImg: string;
     productPrice: number;
-    productDescription: number;
+    productDescription: string;
     createAt: number;
     updateAt: number;
     heart: string;
   };
+}
+interface IBuyData {
+  pName: string;
+  pPrice: number;
+  pImg: string;
+  pDesc: string;
+  buyerId: string;
+  buyerEmail: string;
+  sellerId: string;
+  sellerEmail: string
 }
 //스타일 컴포넌트
 const WriteTitle = styled.h1`
@@ -121,6 +131,7 @@ const ButtonContainer = styled.div`
 export default function ProductDetail() {
   const { user }: any = AuthContext();
   const pathname = usePathname();
+  const router = useRouter();
   const keyword = decodeURIComponent(pathname).split("/").pop();
   const [detailData, set_detailData] = useState<IProductDetail>();
   const [heart, setHeart] = useState(false);
@@ -145,6 +156,13 @@ export default function ProductDetail() {
     set_isLoading(false);
   };
 
+  const 구매하기 = async (buyData:IBuyData) => {
+    set_isLoading(true);
+    await buyProduct(buyData);
+    await deleteProduct(keyword);
+    set_isLoading(false);
+    router.push('/profile');
+  };
   return (
     <>
       {user?.isLogin ? (
@@ -193,61 +211,77 @@ export default function ProductDetail() {
                       ₩{Number(detailData.info.productPrice).toLocaleString()}
                     </h3>
                     <h4>상품 설명</h4>
-                    
-                      <textarea
-                        readOnly
-                        value={String(detailData.info.productDescription)}
-                      />
+
+                    <textarea
+                      readOnly
+                      value={String(detailData.info.productDescription)}
+                    />
                   </div>
                 </>
               </WriteContainer>
               <ButtonContainer>
-                
-                  <>
-                    <button
-                      className={
-                        detailData?.info.heart === user.user.uid
-                          ? "heart-already-btn material-btn"
-                          : "heart-basic-btn material-btn"
-                      }
-                      onClick={() => 찜하기()}
-                      disabled={isLoading}
+                <>
+                  <button
+                    className={
+                      detailData?.info.heart === user.user.uid
+                        ? "heart-already-btn material-btn"
+                        : "heart-basic-btn material-btn"
+                    }
+                    onClick={() => 찜하기()}
+                    disabled={isLoading}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.2"
+                      stroke="white"
+                      style={{ width: "1.5rem", height: "1.5rem" }}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="white"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.2"
-                        stroke="white"
-                        style={{ width: "1.5rem", height: "1.5rem" }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                        />
-                      </svg>
-                      {detailData?.info.heart === user.user.uid
-                        ? "찜하기 완료"
-                        : "찜 목록에 추가"}
-                    </button>
-                    <button className="buy-btn material-btn">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        strokeWidth="1.2"
-                        stroke="white"
-                        style={{ width: "1.5rem", height: "1.5rem" }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                        />
-                      </svg>
-                      구매하기
-                    </button>
-                  </>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                      />
+                    </svg>
+                    {detailData?.info.heart === user.user.uid
+                      ? "찜하기 완료"
+                      : "찜 목록에 추가"}
+                  </button>
+                  <button
+                    className="buy-btn material-btn"
+                    disabled={isLoading}
+                    onClick={() =>
+                      구매하기({
+                        pName: detailData.info.productName,
+                        pPrice: detailData.info.productPrice,
+                        pImg: detailData.info.productImg,
+                        pDesc: detailData.info.productDescription,
+                        buyerId: user.user.uid,
+                        buyerEmail: user.user.email,
+                        sellerId: detailData.info.userId,
+                        sellerEmail: detailData.info.userEmail
+                      }
+                       
+                      )
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      strokeWidth="1.2"
+                      stroke="white"
+                      style={{ width: "1.5rem", height: "1.5rem" }}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+                      />
+                    </svg>
+                    구매하기
+                  </button>
+                </>
               </ButtonContainer>
             </>
           )}

@@ -1,7 +1,7 @@
 "use client";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { db, storage } from "@/services/firebase";
-import { productDetail, updateProduct } from "@/services/firebaseCRUD";
+import { deleteProduct, productDetail, updateProduct } from "@/services/firebaseCRUD";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { motion } from "framer-motion";
@@ -99,9 +99,10 @@ const ImageAndName = styled.div`
   }
 `;
 const ApplyButtons = styled.div`
-  margin-top: 1rem;
+  margin-top: 3rem;
   display: flex;
-  justify-content: end;
+  justify-content: center;
+  gap: 2rem;
   button {
     cursor: pointer;
     padding: 1rem 4rem;
@@ -147,7 +148,7 @@ export default function UpdateProduct() {
     }
   };
 
-  const onValid = async ({
+  const onValid = async ({ //수정 메소드
     productName,
     price,
     description,
@@ -171,6 +172,13 @@ export default function UpdateProduct() {
     router.push('/market');
     //reset();
   };
+
+  const onDelete = async() => {
+    set_loading(true);
+    await deleteProduct(keyword);
+    set_loading(false)
+    router.push('/market');
+  }
   return (
     <>
       <WriteTitle>상품 수정</WriteTitle>
@@ -189,7 +197,7 @@ export default function UpdateProduct() {
                 {preview ? (
                   preview === "default" ? (
                     <Image
-                      src={detailData?.info.productImg}
+                      src={detailData.info.productImg}
                       alt=""
                       width={0}
                       height={0}
@@ -265,13 +273,26 @@ export default function UpdateProduct() {
               type="submit"
               className="material-btn"
               initial={{
-                background: "linear-gradient(90deg, #ffc965, #ff6106)",
+                background: "linear-gradient(90deg, #65d8ff, #0659ff)",
               }}
               whileHover={{
-                background: "linear-gradient(90deg, #fad590, #ff8b48)",
+                background: "linear-gradient(90deg, #8fe0fb, #4884fc)",
               }}
             >
-              {loading ? "로딩중..." : "수정하기"}
+              {loading ? "로딩중..." : "수정"}
+            </motion.button>
+            <motion.button
+              disabled={loading}
+              onClick={onDelete}
+              className="material-btn"
+              initial={{
+                background: "linear-gradient(90deg, #ff6565, #d60202)",
+              }}
+              whileHover={{
+                background: "linear-gradient(90deg, #fa9292, #fe2f2f)",
+              }}
+            >
+              {loading ? "로딩중..." : "삭제"}
             </motion.button>
           </ApplyButtons>
         </form>

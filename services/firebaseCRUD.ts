@@ -1,5 +1,7 @@
 import {
+  addDoc,
   collection,
+  deleteDoc,
   doc,
   documentId,
   getDocs,
@@ -10,6 +12,17 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./firebase";
+//types
+interface IBuyData {
+  pName: string;
+  pPrice: number;
+  pImg: string;
+  pDesc: string;
+  buyerId: string;
+  buyerEmail: string;
+  sellerId: string;
+  sellerEmail: string
+}
 //Firestore 테이블 불러오기
 const productsRef = collection(db, "product");
 
@@ -53,8 +66,8 @@ export const readProduct = async (
 //찜 하기
 export const productHeart = async (productId?: string, userId?: string) => {
   if (productId && userId) {
-    const getHeart = doc(db, "product", productId);
-    await updateDoc(getHeart, {
+    const updateRef = doc(db, "product", productId);
+    await updateDoc(updateRef, {
       heart: userId,
     });
   }
@@ -78,9 +91,9 @@ export const updateProduct = async (
   img?: string
 ) => {
   if (productId && productName) {
-    const getUpdate = doc(db, "product", productId);
+    const updateRef = doc(db, "product", productId);
     if(img){//이미지를 변경했으면
-      await updateDoc(getUpdate, {
+      await updateDoc(updateRef, {
         productImg: img,
         productName: productName,
         productPrice: price,
@@ -88,7 +101,7 @@ export const updateProduct = async (
         updateAt: Date.now()
       });
     }else{//이미지를 변경하지 않았으면
-      await updateDoc(getUpdate, {
+      await updateDoc(updateRef, {
         productName: productName,
         productPrice: price,
         productDescription: description,
@@ -97,3 +110,22 @@ export const updateProduct = async (
     } 
   }
 };
+//상품 삭제
+export const deleteProduct = async(productId?: string) => {
+  if(productId){
+    await deleteDoc(doc(db, "product", productId));
+  }
+}
+//상품 구매 & 판매
+export const buyProduct = async(buyData: IBuyData) => {
+  await addDoc(collection(db, "buy"), {
+    productName: buyData.pName,
+    productPrice: buyData.pPrice,
+    productImg: buyData.pImg,
+    productDescription: buyData.pDesc,
+    buyerId: buyData.buyerId,
+    buyerEmail: buyData.buyerEmail,
+    sellerId: buyData.sellerId,
+    sellerEmail: buyData.sellerEmail
+  })
+}

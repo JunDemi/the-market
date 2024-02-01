@@ -85,9 +85,9 @@ const ImageAndName = styled.div`
   }
 `;
 const ApplyButtons = styled.div`
-  margin-top: 1rem;
+  margin-top: 3rem;
   display: flex;
-  justify-content: end;
+  justify-content: center;
   button {
     cursor: pointer;
     padding: 1rem 4rem;
@@ -244,7 +244,7 @@ export default function CreateProduct() {
               background: "linear-gradient(90deg, #fad590, #ff8b48)",
             }}
           >
-            {loading ? "로딩중..." : "등록하기"}
+            {loading ? "로딩중..." : "등록"}
           </motion.button>
         </ApplyButtons>
       </form>
