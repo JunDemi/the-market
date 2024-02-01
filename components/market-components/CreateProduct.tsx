@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { v4 as uuid } from 'uuid';
 
 interface IProductCreate {
   productImg: any;
@@ -132,7 +133,7 @@ export default function CreateProduct() {
     set_loading(true);
     const imageRef = ref(
       storage,
-      `product-image/${user.user.uid + productImg[0].name}`
+      `product-image/${user.user.uid + uuid() + productImg[0].name}`
     );
     await uploadBytes(imageRef, productImg[0]).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
