@@ -45,7 +45,7 @@ const WriteContainer = styled.div`
       rgba(255, 255, 255, 0.7),
       rgba(255, 255, 255, 0.7)
     ),
-    url("white-pattern-background-nnqjxiito1qd9475.jpg");
+    url("/white-pattern-background-nnqjxiito1qd9475.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   width: 45rem;

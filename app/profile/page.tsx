@@ -1,13 +1,14 @@
 import { Metadata } from "next";
-import "../../asset/main.scss";
+import "@/asset/main.scss";
+import DefaultProfile from "@/components/profile-components/DefaultProfile";
 export const metadata: Metadata = {
-  title: "채팅",
+  title: "내 프로필",
 };
 
 export default function Profile() {
   return (
-    <>
-     Profile
-    </>
+    <div className="profile-container">
+     <DefaultProfile/>
+    </div>
   );
 }

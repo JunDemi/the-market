@@ -2,7 +2,6 @@
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { db, storage } from "@/services/firebase";
 import { deleteProduct, productDetail, updateProduct } from "@/services/firebaseCRUD";
-import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -43,7 +42,7 @@ const WriteContainer = styled.div`
       rgba(255, 255, 255, 0.7),
       rgba(255, 255, 255, 0.7)
     ),
-    url("white-pattern-background-nnqjxiito1qd9475.jpg");
+    url("/white-pattern-background-nnqjxiito1qd9475.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   border: 1px solid #bebebe;
