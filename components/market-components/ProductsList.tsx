@@ -360,17 +360,17 @@ export default function ProductsList({ keyword }: IKeyword) {
 
               <InfiniteScrollDiv ref={ref}>
                 {isFetchingNextPage ? hasNextPage ? 
-                <Image src="/loading.gif" alt="loading..." width={280} height={180}/>
-                : "" : ""}
+                <Image src="/loading2.gif" alt="loading..." width={60} height={60}/>
+                : "" : <div style={{height: "40px"}}/> }
               </InfiniteScrollDiv>
             </>
           ) : (
             <div className="loading-gif">
               <Image
-                src="/loading.gif"
+                src="/loading2.gif"
                 alt="로딩중..."
-                width={450}
-                height={300}
+                width={100}
+                height={100}
               />
             </div>
           )}
