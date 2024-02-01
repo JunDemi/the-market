@@ -159,7 +159,7 @@ export default function ProductDetail() {
   const 구매하기 = async (buyData:IBuyData) => {
     set_isLoading(true);
     await buyProduct(buyData);
-    await deleteProduct(keyword);
+    await deleteProduct(keyword); //구매를 하여 상품목록에 제거
     set_isLoading(false);
     router.push('/profile');
   };

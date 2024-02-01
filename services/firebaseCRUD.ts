@@ -126,6 +126,7 @@ export const buyProduct = async(buyData: IBuyData) => {
     buyerId: buyData.buyerId,
     buyerEmail: buyData.buyerEmail,
     sellerId: buyData.sellerId,
-    sellerEmail: buyData.sellerEmail
+    sellerEmail: buyData.sellerEmail,
+    buyDate: Date.now()
   })
 }
