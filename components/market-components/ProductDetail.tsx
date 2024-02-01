@@ -150,98 +150,113 @@ export default function ProductDetail() {
       {user?.isLogin ? (
         <>
           <WriteTitle>상품 정보</WriteTitle>
-          <WriteContainer>
-            {detailData && (
-              <>
-                <div>
-                  <Image
-                    src={String(detailData.info.productImg)}
-                    alt=""
-                    width={0}
-                    height={0}
-                    fill
-                  />
-                </div>
-                <div>
-                  <p>
-                    작성일: {getDateTimeFormat(detailData.info.createAt)}
-                    &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
-                    {getDateTimeFormat(detailData.info.updateAt)}
-                  </p>
-                  <Link href="/blog">
-                    <motion.span
-                      initial={{
-                        background: "linear-gradient(90deg, #ffc965, #ff6106)",
-                      }}
-                      whileHover={{
-                        background: "linear-gradient(90deg, #90f6fa, #4876ff)",
-                      }}
+          {detailData && (
+            <>
+              <WriteContainer>
+                <>
+                  <div>
+                    <Image
+                      src={String(detailData.info.productImg)}
+                      alt=""
+                      width={0}
+                      height={0}
+                      fill
+                    />
+                  </div>
+                  <div>
+                    <p>
+                      작성일: {getDateTimeFormat(detailData.info.createAt)}
+                      &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
+                      {getDateTimeFormat(detailData.info.updateAt)}
+                    </p>
+                    <Link href="/blog">
+                      <motion.span
+                        initial={{
+                          background:
+                            "linear-gradient(90deg, #ffc965, #ff6106)",
+                        }}
+                        whileHover={{
+                          background:
+                            "linear-gradient(90deg, #90f6fa, #4876ff)",
+                        }}
+                      >
+                        {detailData?.info.userEmail}
+                      </motion.span>
+                    </Link>
+                    <hr />
+                    <h1>
+                      {detailData?.info.productName.replace(/\b\w/g, (match) =>
+                        match.toUpperCase()
+                      )}
+                    </h1>
+                    <h3>
+                      ₩{Number(detailData.info.productPrice).toLocaleString()}
+                    </h3>
+                    <h4>상품 설명</h4>
+                    
+                      <textarea
+                        readOnly
+                        value={String(detailData.info.productDescription)}
+                      />
+                  </div>
+                </>
+              </WriteContainer>
+              <ButtonContainer>
+                
+                  <>
+                    <button
+                      className={
+                        detailData?.info.heart === user.user.uid
+                          ? "heart-already-btn material-btn"
+                          : "heart-basic-btn material-btn"
+                      }
+                      onClick={() => 찜하기()}
+                      disabled={isLoading}
                     >
-                      {detailData?.info.userEmail}
-                    </motion.span>
-                  </Link>
-                  <hr />
-                  <h1>
-                    {detailData?.info.productName.replace(/\b\w/g, (match) =>
-                      match.toUpperCase()
-                    )}
-                  </h1>
-                  <h3>
-                    ₩{Number(detailData.info.productPrice).toLocaleString()}
-                  </h3>
-                  <h4>상품 설명</h4>
-                  <textarea readOnly>{String(detailData.info.productDescription)}</textarea>
-                </div>
-              </>
-            )}
-          </WriteContainer>
-          <ButtonContainer>
-            <button
-              className={
-                detailData?.info.heart === user.user.uid
-                  ? "heart-already-btn material-btn"
-                  : "heart-basic-btn material-btn"
-              }
-              onClick={() => 찜하기()}
-              disabled={isLoading}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="white"
-                viewBox="0 0 24 24"
-                strokeWidth="1.2"
-                stroke="white"
-                style={{ width: "1.5rem", height: "1.5rem" }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                />
-              </svg>
-              {detailData?.info.heart === user.user.uid
-                ? "찜하기 완료"
-                : "찜 목록에 추가"}
-            </button>
-            <button className="buy-btn material-btn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                strokeWidth="1.2"
-                stroke="white"
-                style={{ width: "1.5rem", height: "1.5rem" }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                />
-              </svg>
-              구매하기
-            </button>
-          </ButtonContainer>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="white"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.2"
+                        stroke="white"
+                        style={{ width: "1.5rem", height: "1.5rem" }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                        />
+                      </svg>
+                      {detailData?.info.heart === user.user.uid
+                        ? "찜하기 완료"
+                        : "찜 목록에 추가"}
+                    </button>
+                    <button className="buy-btn material-btn">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        strokeWidth="1.2"
+                        stroke="white"
+                        style={{ width: "1.5rem", height: "1.5rem" }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+                        />
+                      </svg>
+                      구매하기
+                    </button>
+                  </>
+              </ButtonContainer>
+            </>
+          )}
         </>
-      ) : null}
+      ) : (
+        <div className="loading-gif">
+          <Image src="/loading2.gif" alt="로딩중..." width={100} height={100} />
+        </div>
+      )}
     </>
   );
 }

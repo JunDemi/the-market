@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
 import { productHeart, readProduct } from "@/services/firebaseCRUD";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import Image from "next/image";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { useForm } from "react-hook-form";
@@ -332,7 +332,7 @@ export default function ProductsList({ keyword }: IKeyword) {
                           <Link
                             href={
                               user?.user.uid === data.productInfo.userId
-                                ? "/profile"
+                                ? `/market/updatePage/${data.productId}`
                                 : `/market/detailPage/${data.productId}`
                             }
                           >
