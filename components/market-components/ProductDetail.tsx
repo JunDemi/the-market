@@ -86,12 +86,12 @@ const WriteContainer = styled.div`
         font-size: 14px;
         color: #909090;
       }
-      div {
+      textarea {
         border: 1px solid #d1d1d1;
+        background: none;
         height: 20rem;
-        padding: 1.5rem 1rem;
+        padding: 1rem;
         font-size: 15px;
-        overflow-y: scroll;
       }
     }
   }
@@ -151,43 +151,49 @@ export default function ProductDetail() {
         <>
           <WriteTitle>상품 정보</WriteTitle>
           <WriteContainer>
-            <div>
-              <Image
-                src={`${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_URL}product-image%2F${detailData?.info.productImg}?alt=media`}
-                alt=""
-                width={0}
-                height={0}
-                fill
-              />
-            </div>
-            <div>
-              <p>
-                작성일: {getDateTimeFormat(detailData?.info.createAt)}
-                &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
-                {getDateTimeFormat(detailData?.info.updateAt)}
-              </p>
-              <Link href="/blog">
-                <motion.span
-                  initial={{
-                    background: "linear-gradient(90deg, #ffc965, #ff6106)",
-                  }}
-                  whileHover={{
-                    background: "linear-gradient(90deg, #90f6fa, #4876ff)",
-                  }}
-                >
-                  {detailData?.info.userEmail}
-                </motion.span>
-              </Link>
-              <hr />
-              <h1>
-                {detailData?.info.productName.replace(/\b\w/g, (match) =>
-                  match.toUpperCase()
-                )}
-              </h1>
-              <h3>₩{Number(detailData?.info.productPrice).toLocaleString()}</h3>
-              <h4>상품 설명</h4>
-              <div>{detailData?.info.productDescription}</div>
-            </div>
+            {detailData && (
+              <>
+                <div>
+                  <Image
+                    src={String(detailData.info.productImg)}
+                    alt=""
+                    width={0}
+                    height={0}
+                    fill
+                  />
+                </div>
+                <div>
+                  <p>
+                    작성일: {getDateTimeFormat(detailData.info.createAt)}
+                    &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
+                    {getDateTimeFormat(detailData.info.updateAt)}
+                  </p>
+                  <Link href="/blog">
+                    <motion.span
+                      initial={{
+                        background: "linear-gradient(90deg, #ffc965, #ff6106)",
+                      }}
+                      whileHover={{
+                        background: "linear-gradient(90deg, #90f6fa, #4876ff)",
+                      }}
+                    >
+                      {detailData?.info.userEmail}
+                    </motion.span>
+                  </Link>
+                  <hr />
+                  <h1>
+                    {detailData?.info.productName.replace(/\b\w/g, (match) =>
+                      match.toUpperCase()
+                    )}
+                  </h1>
+                  <h3>
+                    ₩{Number(detailData.info.productPrice).toLocaleString()}
+                  </h3>
+                  <h4>상품 설명</h4>
+                  <textarea readOnly>{String(detailData.info.productDescription)}</textarea>
+                </div>
+              </>
+            )}
           </WriteContainer>
           <ButtonContainer>
             <button

@@ -148,6 +148,8 @@ input:focus {
 }
 
 textarea {
+	white-space: pre-wrap;
+	font-family: 'Arita-dotum-Medium';
 	resize: none;
 	&:focus{
 		outline: none;

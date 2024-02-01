@@ -101,6 +101,7 @@ export default function CreateProduct() {
   const { user }: any = AuthContext(); //로그인 상태
   const [preview, set_preview] = useState<string | null>(null);
   const [loading, set_loading] = useState<boolean>(false);
+  const [imgURL, set_imgURL] = useState<string>("");
   const router = useRouter();
   const {
     handleSubmit,
@@ -129,31 +130,33 @@ export default function CreateProduct() {
     productImg,
   }: IProductCreate) => {
     set_loading(true);
-    //console.log(productImg[0].name);
     const imageRef = ref(
       storage,
       `product-image/${user.user.uid + productImg[0].name}`
     );
     await uploadBytes(imageRef, productImg[0]).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
-        console.log(url)
       });
     });
-    // await addDoc(collection(db, "product"), {
-    //   //Firebase에 삽입
-    //   userId: user?.user.uid,
-    //   userEmail: user?.user.email,
-    //   productName: productName.toLowerCase(),
-    //   productPrice: price,
-    //   productDescription: description,
-    //   productImg: user.user.uid + productImg[0].name,
-    //   createAt: Date.now(),
-    //   updateAt: Date.now(),
-    //   heart: "0",
-    // })
-    //   .then((응답) => router.push("/market"))
-    //   .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
+    const imgSnap = await uploadBytes(imageRef, productImg[0]);
+    const imgpath = await getDownloadURL(imgSnap.ref);
+    
+    await addDoc(collection(db, "product"), {
+      //Firebase에 삽입
+      userId: user?.user.uid,
+      userEmail: user?.user.email,
+      productName: productName.toLowerCase(),
+      productPrice: price,
+      productDescription: description.replace("\\n", "\n"),
+      productImg: String(imgpath),
+      createAt: Date.now(),
+      updateAt: Date.now(),
+      heart: "0",
+    })
+      .then((응답) => router.push("/market"))
+      .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
     set_loading(false);
+    //reset();
   };
   return (
     <>

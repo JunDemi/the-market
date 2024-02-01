@@ -275,7 +275,7 @@ export default function ProductsList({ keyword }: IKeyword) {
                       >
                         <div>
                           <Image
-                            src={`${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_URL}product-image%2F${data.productInfo.productImg}?alt=media`}
+                            src={data.productInfo.productImg}
                             alt=""
                             width={0}
                             height={0}
