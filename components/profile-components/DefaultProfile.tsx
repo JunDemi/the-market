@@ -3,6 +3,7 @@ import { AuthContext } from "@/app/lib/AuthProvider";
 import { getDateTimeFormat } from "@/services/getDay";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import CountUp from "react-countup";
 import styled from "styled-components";
 //스타일 컴포넌트
 const ProfileInfoDiv = styled.div`
@@ -28,15 +29,11 @@ const ProfileInfoDiv = styled.div`
     font-weight: bold;
     border: none;
     border-radius: 30px;
-    background-color: white;
+    background-color: #0059ff;
     font-size: 12px;
-    color: #020254;
+    color: white;
     cursor: pointer;
     transition: 0.2s;
-    &:hover {
-      background-color: #d7e6f2;
-      color: #181893;
-    }
   }
 `;
 const ProfileImage = styled.div`
@@ -81,7 +78,7 @@ const ContentsInfo = styled.div`
   margin: 7rem auto 2rem auto;
   width: 61rem;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   column-gap: 2rem;
   div {
     padding: 5rem 0 2.5rem 0;
@@ -91,8 +88,9 @@ const ContentsInfo = styled.div`
     box-shadow: 3px 3px 4px #676767;
     position: relative;
     svg {
-      width: 4rem;
-      height: 4rem;
+      width: 3rem;
+      height: 3rem;
+      transition: all.2s;
     }
     span {
       position: absolute;
@@ -100,6 +98,12 @@ const ContentsInfo = styled.div`
       left: 1rem;
       font-size: 13px;
       color: #838383;
+    }
+    &:hover{
+        svg{
+            fill: #8fd4f4;
+            stroke: whitesmoke;
+        }
     }
   }
 `;
@@ -117,29 +121,27 @@ export default function DefaultProfile() {
               가입일: {getDateTimeFormat(Number(user.user.metadata.createdAt))}
             </h4>
             <Link href="/profile" className="material-btn">
-              비밀번호 변경
+              프로필 수정
             </Link>
 
             <ContentsTotal>
               <div>
-                <h4>13개</h4>
+                <h4><CountUp end={13} duration={1.2}/>개</h4>
                 <p>작성한 게시물</p>
               </div>
               <div>
-                <h4>542,100원</h4>
+                <h4><CountUp end={548100} duration={1.2}/>원</h4>
                 <p>총 구매액</p>
               </div>
               <div>
-                <h4>1,300,250원</h4>
+                <h4><CountUp end={1310020} duration={1.2}/>원</h4>
                 <p>총 판매액</p>
               </div>
             </ContentsTotal>
           </ProfileInfoDiv>
           <ContentsInfo>
             <Link href="/profile">
-              <motion.div
-                whileHover={{ y: -5, backgroundColor: "whitesmoke" }}
-              >
+              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
@@ -158,9 +160,26 @@ export default function DefaultProfile() {
               </motion.div>
             </Link>
             <Link href="/profile">
-              <motion.div
-                whileHover={{ y: -5, backgroundColor: "whitesmoke" }}
-              >
+              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }} className="material-btn">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#898989"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1"
+                  stroke="#fff"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                  />
+                </svg>
+
+                <span>‹‹ 찜 목록</span>
+              </motion.div>
+            </Link>
+            <Link href="/profile">
+              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
@@ -179,9 +198,7 @@ export default function DefaultProfile() {
               </motion.div>
             </Link>
             <Link href="/profile">
-              <motion.div
-                whileHover={{ y: -5, backgroundColor: "whitesmoke" }}
-              >
+              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }}  className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
