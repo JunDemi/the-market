@@ -207,11 +207,7 @@ export default function MyHeartList() {
                             </button>
                           </span>
                           <Link
-                            href={
-                              user?.user.uid === data.productInfo.userId
-                                ? `/market/updatePage/${data.productId}`
-                                : `/market/detailPage/${data.productId}`
-                            }
+                            href={`/market/detailPage/${data.productId}`}
                           >
                             <GoDetailButton
                               className="material-btn"
@@ -224,9 +220,7 @@ export default function MyHeartList() {
                                   "linear-gradient(90deg, #fad590, #ff8b48)",
                               }}
                             >
-                              {user?.user.uid === data.productInfo.userId
-                                ? "수정하기"
-                                : "정보 보기"}
+                              정보 보기
                             </GoDetailButton>
                           </Link>
                         </div>

@@ -78,7 +78,7 @@ const ContentsInfo = styled.div`
   margin: 7rem auto 2rem auto;
   width: 61rem;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   column-gap: 2rem;
   div {
     padding: 5rem 0 2.5rem 0;
@@ -98,8 +98,12 @@ const ContentsInfo = styled.div`
       left: 1rem;
       font-size: 13px;
       color: #838383;
+      transition: all.2s;
     }
     &:hover{
+        span{
+          color: #5fc4f3;
+        }
         svg{
             fill: #8fd4f4;
             stroke: #f5f5f5;
@@ -178,7 +182,7 @@ export default function DefaultProfile() {
                 <span>‹‹ 찜 목록</span>
               </motion.div>
             </Link>
-            <Link href="/profile">
+            <Link href="/profile/buyPage">
               <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -194,26 +198,7 @@ export default function DefaultProfile() {
                   />
                 </svg>
 
-                <span>‹‹ 구매 내역</span>
-              </motion.div>
-            </Link>
-            <Link href="/profile">
-              <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }}  className="material-btn">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#898989"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1"
-                  stroke="#fff"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
-                  />
-                </svg>
-
-                <span>‹‹ 판매 내역</span>
+                <span>‹‹ 구매 & 판매 내역</span>
               </motion.div>
             </Link>
           </ContentsInfo>
