@@ -21,7 +21,7 @@ interface IBuyData {
   buyerId: string;
   buyerEmail: string;
   sellerId: string;
-  sellerEmail: string
+  sellerEmail: string;
 }
 //Firestore 테이블 불러오기
 const productsRef = collection(db, "product");
@@ -92,32 +92,34 @@ export const updateProduct = async (
 ) => {
   if (productId && productName) {
     const updateRef = doc(db, "product", productId);
-    if(img){//이미지를 변경했으면
+    if (img) {
+      //이미지를 변경했으면
       await updateDoc(updateRef, {
         productImg: img,
         productName: productName,
         productPrice: price,
         productDescription: description,
-        updateAt: Date.now()
+        updateAt: Date.now(),
       });
-    }else{//이미지를 변경하지 않았으면
+    } else {
+      //이미지를 변경하지 않았으면
       await updateDoc(updateRef, {
         productName: productName,
         productPrice: price,
         productDescription: description,
-        updateAt: Date.now()
+        updateAt: Date.now(),
       });
-    } 
+    }
   }
 };
 //상품 삭제
-export const deleteProduct = async(productId?: string) => {
-  if(productId){
+export const deleteProduct = async (productId?: string) => {
+  if (productId) {
     await deleteDoc(doc(db, "product", productId));
   }
-}
+};
 //상품 구매 & 판매
-export const buyProduct = async(buyData: IBuyData) => {
+export const buyProduct = async (buyData: IBuyData) => {
   await addDoc(collection(db, "buy"), {
     productName: buyData.pName,
     productPrice: buyData.pPrice,
@@ -127,6 +129,23 @@ export const buyProduct = async(buyData: IBuyData) => {
     buyerEmail: buyData.buyerEmail,
     sellerId: buyData.sellerId,
     sellerEmail: buyData.sellerEmail,
-    buyDate: Date.now()
-  })
-}
+    buyDate: Date.now(),
+  });
+};
+//찜한 상품 목록 불러오기
+export const readHeartProduct = async (pageParam: number, userId?: string) => {
+  const resultArray: any = [];
+  if (userId) {
+    const productQuery = query(
+      productsRef,
+      where("heart", "==", userId),
+      orderBy("createAt", "desc"),
+      limit(pageParam * 12)
+    );
+    const result = await getDocs(productQuery); //문서화
+    result.docs.map((data) => {
+      resultArray.push({ productId: data.id, productInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
+    });
+    return resultArray;
+  }
+};

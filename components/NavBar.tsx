@@ -307,7 +307,7 @@ export default function NavBar() {
             <div
               className="material-btn"
               style={
-                pathname === "/blog"
+                pathname.startsWith("/blog")
                   ? {
                       backgroundColor: "#0ba3ea",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -320,7 +320,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/blog" ? { fill: "white", stroke: "white" } : {}
+                  pathname.startsWith("/blog") ? { fill: "white", stroke: "white" } : {}
                 }
               >
                 <path
@@ -338,7 +338,7 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/blog" ? { color: "white" } : {}}
+                style={pathname.startsWith("/blog") ? { color: "white" } : {}}
               >
                 Blog
               </motion.p>
@@ -348,7 +348,7 @@ export default function NavBar() {
             <div
               className="material-btn"
               style={
-                pathname === "/profile"
+                pathname.startsWith("/profile")
                   ? {
                       backgroundColor: "#d7c659",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -361,7 +361,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname === "/profile" ? { fill: "white", stroke: "white" } : {}
+                  pathname.startsWith("/profile") ? { fill: "white", stroke: "white" } : {}
                 }
               >
                 <path
@@ -379,7 +379,7 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname === "/profile" ? { color: "white" } : {}}
+                style={pathname.startsWith("/profile") ? { color: "white" } : {}}
               >
                 My Profile
               </motion.p>

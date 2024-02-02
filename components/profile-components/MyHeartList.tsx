@@ -1,13 +1,11 @@
+'use client';
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import WriteButton from "../WriteButton";
-import { productHeart, readProduct } from "@/services/firebaseCRUD";
+import { productHeart, readHeartProduct } from "@/services/firebaseCRUD";
 import { useInfiniteQuery } from "react-query";
 import Image from "next/image";
 import { AuthContext } from "@/app/lib/AuthProvider";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 
@@ -25,76 +23,19 @@ interface IProduct {
     heart: string;
   };
 }
-interface IKeyword {
-  keyword?: string | null;
-}
 //스타일 컴포넌트
-const SearchBar = styled.div`
-  //검색 창
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  margin: 0 3.5rem;
-  gap: 1rem;
-  form,
-  div {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    background-image: url("https://wallpapers.com/images/hd/white-pattern-background-nnqjxiito1qd9475.jpg");
-    background-size: cover;
-    box-shadow: 2px 2px 4px 0 #676767;
-    padding: 0.3rem;
-    border-radius: 5px;
-    input {
-      background: none;
-      transition: all.2s;
-      font-size: 15px;
-      letter-spacing: -0.03rem;
-      color: #555555;
-      padding: 10px 10px;
-      width: 8rem;
-      border: none;
-      &:focus {
-        width: 13rem;
-      }
-    }
-    button {
-      cursor: pointer;
-      padding: 0 0.5rem;
-      border: none;
-      background: none;
-      svg {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-    }
-  }
-`;
-const ReloadButton = styled(motion.button)`
-  cursor: pointer;
-  border: none;
-  width: 2.4rem;
-  height: 2.4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover svg {
-    stroke: #868686;
-  }
-  svg {
-    stroke: #5f5f5f;
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-`;
 const ProductList = styled.div`
   //검색 창 하단 리스트
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin: 5rem 2.5rem;
+  margin: 2.5rem;
   align-items: center;
   row-gap: 5rem;
+  h4{
+    grid-column: span 3;
+    color: #858585;
+    font-size: 22px;
+  }
 `;
 const ProductItem = styled(motion.div)`
   //물품
@@ -149,6 +90,11 @@ const GoDetailButton = styled(motion.button)`
   font-size: 16px;
   width: 100%;
 `;
+const InfiniteScrollDiv = styled.div`
+margin: auto;
+display: flex;
+justify-content: center;
+`;
 const HeartPopup = styled(motion.div)`
   position: fixed;
   z-index: 10;
@@ -161,17 +107,10 @@ const HeartPopup = styled(motion.div)`
   left: 50%;
   transform: translateX(-50%);
 `;
-const InfiniteScrollDiv = styled.div`
-margin: auto;
-display: flex;
-justify-content: center;
-`;
 //스타일 컴포넌트
-export default function ProductsList({ keyword }: IKeyword) {
+export default function MyHeartList() {
   const { user }: any = AuthContext();
   const [myHeart, set_myHeart] = useState(false);
-  const router = useRouter();
-  const { handleSubmit, register, reset } = useForm({ mode: "onSubmit" });
   const {ref, inView} = useInView();
   //상품 목록 불러오기
   const {
@@ -183,20 +122,15 @@ export default function ProductsList({ keyword }: IKeyword) {
     hasNextPage
   } = useInfiniteQuery({
     queryKey: ["product_list"],
-    queryFn: ({ pageParam = 1 }) => readProduct(pageParam, keyword), //첫 페이지 당 12개의 데이터 -> DB호출에서 12를 곱할 예정
+    queryFn: ({ pageParam = 1 }) => readHeartProduct(pageParam, user?.user.uid), //첫 페이지 당 12개의 데이터 -> DB호출에서 12를 곱할 예정
     getNextPageParam: (lastPage, allPages) => {
       return allPages.length + 1 // 마지막 페이지가 될 때까지 / 1 * 12 -> 2 * 12 -> 3 * 12 ...
     }
   });
-  //검색
-  const productSearch = async (value: { keyword?: string | null }) => {
-    router.push(`/market/${value.keyword}`);
-    reset();
-  };
   //찜하기
-  const 찜하기 = async (productId: string, userId: string) => {
+  const 찜하기 = async (productId: string, noHeart: "0") => {
     set_myHeart(true);
-    await productHeart(productId, userId);
+    await productHeart(productId, noHeart);
     refetch();
     setInterval(() => {
       set_myHeart(false);
@@ -211,62 +145,16 @@ export default function ProductsList({ keyword }: IKeyword) {
     <>
       {user.isLogin ? (
         <>
-          <HeartPopup
+          {!isLoading ? (
+            <>
+            <HeartPopup
             initial={{ opacity: 0 }}
             animate={myHeart ? { opacity: 1 } : { opacity: 0 }}
           >
-            찜 목록에 추가되었습니다.
+            찜 목록에서 제거되었습니다.
           </HeartPopup>
-          <SearchBar>
-            <form onSubmit={handleSubmit(productSearch)}>
-              <input
-                type="text"
-                placeholder="물품을 검색해보세요"
-                {...register("keyword", { required: true })}
-                autoComplete="off"
-              />
-              <button type="submit">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="#676767"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
-              </button>
-            </form>
-            <div>
-              <ReloadButton
-                whileTap={{ rotateZ: 300 }}
-                transition={{ duration: 0.7 }}
-                onClick={() => refetch()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                  />
-                </svg>
-              </ReloadButton>
-            </div>
-          </SearchBar>
-
-          {!isLoading ? (
-            <>
               <ProductList>
+                <h4>내가 찜한 상품</h4>
                 {pData?.pages[pData.pages.length - 1].map((data: IProduct,) =>
                       <ProductItem
                         key={data.productId}
@@ -299,26 +187,15 @@ export default function ProductsList({ keyword }: IKeyword) {
                           <span>
                             <button
                               onClick={() =>
-                                찜하기(data.productId, user.user.uid)
-                              }
-                              disabled={
-                                user?.user.uid === data.productInfo.userId
+                                찜하기(data.productId, "0")
                               }
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                fill={
-                                  data.productInfo.heart === user.user.uid
-                                    ? "#fc7676"
-                                    : "none"
-                                }
+                                fill="#fc7676"
                                 viewBox="0 0 24 24"
                                 strokeWidth="1.2"
-                                stroke={
-                                  data.productInfo.userId === user.user.uid
-                                    ? "#bebebe"
-                                    : "#fc7676"
-                                }
+                                stroke="#fc7676"
                                 style={{ width: "2rem", height: "2rem" }}
                               >
                                 <path
@@ -356,8 +233,6 @@ export default function ProductsList({ keyword }: IKeyword) {
                       </ProductItem>
                 )}
               </ProductList>
-              <WriteButton to="market" />
-
               <InfiniteScrollDiv ref={ref}>
                 {isFetchingNextPage ? hasNextPage ? 
                 <Image src="/loading2.gif" alt="loading..." width={60} height={60}/>

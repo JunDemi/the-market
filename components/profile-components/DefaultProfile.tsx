@@ -102,7 +102,7 @@ const ContentsInfo = styled.div`
     &:hover{
         svg{
             fill: #8fd4f4;
-            stroke: whitesmoke;
+            stroke: #f5f5f5;
         }
     }
   }
@@ -120,7 +120,7 @@ export default function DefaultProfile() {
             <h4>
               가입일: {getDateTimeFormat(Number(user.user.metadata.createdAt))}
             </h4>
-            <Link href="/profile" className="material-btn">
+            <Link href="/profile" className="material-btn" style={{opacity: 0}}>
               프로필 수정
             </Link>
 
@@ -141,7 +141,7 @@ export default function DefaultProfile() {
           </ProfileInfoDiv>
           <ContentsInfo>
             <Link href="/profile">
-              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }} className="material-btn">
+              <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
@@ -159,8 +159,8 @@ export default function DefaultProfile() {
                 <span>‹‹ 내가 쓴 글</span>
               </motion.div>
             </Link>
-            <Link href="/profile">
-              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }} className="material-btn">
+            <Link href="/profile/myHeart">
+              <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
@@ -179,7 +179,7 @@ export default function DefaultProfile() {
               </motion.div>
             </Link>
             <Link href="/profile">
-              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }} className="material-btn">
+              <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
@@ -198,7 +198,7 @@ export default function DefaultProfile() {
               </motion.div>
             </Link>
             <Link href="/profile">
-              <motion.div whileHover={{ y: -5, backgroundColor: "whitesmoke" }}  className="material-btn">
+              <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }}  className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#898989"
