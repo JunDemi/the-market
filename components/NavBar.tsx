@@ -29,7 +29,8 @@ const NavContainer = styled(motion.div)`
   z-index: 10;
   hr {
     width: 70%;
-    border: 0.5px solid #8d8d8d;
+    border: none;
+    border-bottom: 0.5px solid #8d8d8d;
     margin: 1.5rem 0;
   }
 `;
@@ -113,7 +114,7 @@ const MenuContainer = styled.div`
 `;
 const LoginDiv = styled.div`
   //로그인 관련 버튼 부분
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   padding: 1rem;
   box-shadow: 3px 3px 6px 0 #7b7b7b;
   border-radius: 10px;
@@ -176,15 +177,15 @@ export default function NavBar() {
     signOut(auth)
       .then((응답) => console.log(응답))
       .catch((에러) => console.log(에러.message));
-      router.push('/');
+    router.push("/");
   };
-  useEffect(()=> {
-    if(pathname !== '/'){
-      if(!user.user){
-        router.push('/');
+  useEffect(() => {
+    if (pathname !== "/") {
+      if (!user.user) {
+        router.push("/");
       }
     }
-  },[pathname]);
+  }, [pathname]);
   return (
     <>
       <NavContainer
@@ -302,7 +303,7 @@ export default function NavBar() {
               </motion.p>
             </div>
           </Link>
-         
+
           <Link href="/blog">
             <div
               className="material-btn"
@@ -320,7 +321,9 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname.startsWith("/blog") ? { fill: "white", stroke: "white" } : {}
+                  pathname.startsWith("/blog")
+                    ? { fill: "white", stroke: "white" }
+                    : {}
                 }
               >
                 <path
@@ -361,13 +364,15 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname.startsWith("/profile") ? { fill: "white", stroke: "white" } : {}
+                  pathname.startsWith("/profile")
+                    ? { fill: "white", stroke: "white" }
+                    : {}
                 }
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                 />
               </svg>
 
@@ -379,7 +384,9 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname.startsWith("/profile") ? { color: "white" } : {}}
+                style={
+                  pathname.startsWith("/profile") ? { color: "white" } : {}
+                }
               >
                 My Profile
               </motion.p>
@@ -391,10 +398,7 @@ export default function NavBar() {
           {user?.isLogin ? (
             <>
               <span onClick={logOut}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -491,7 +495,6 @@ export default function NavBar() {
             duration={0.6}
           />
         </ToggleButton>
-        
       </NavContainer>
       {signModal !== "off" && (
         <ModalOverlay initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

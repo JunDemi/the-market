@@ -25,7 +25,7 @@ interface IBuyData {
 }
 //Firestore 테이블 불러오기
 const productsRef = collection(db, "product");
-
+const buyRef = collection(db, "buy");
 //상품 목록 불러오기
 export const readProduct = async (
   pageParam: number,
@@ -147,5 +147,34 @@ export const readHeartProduct = async (pageParam: number, userId?: string) => {
       resultArray.push({ productId: data.id, productInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
     });
     return resultArray;
+  }
+};
+//구매 및 판매내역 불러오기
+export const readBuyList = async (type: string, userId?: string) => {
+  const resultArray: any = [];
+  if (userId) {
+    if (type === "buy") {
+      const buyQuery= query(
+        buyRef,
+        where("buyerId", "==", userId),
+        orderBy("buyDate", "desc")
+      );
+      const result = await getDocs(buyQuery);
+      result.docs.map((data) => {
+        resultArray.push({ buyId: data.id, buyInfo: data.data() });
+      });
+      return resultArray;
+    } else if (type === "sell") {
+      const sellQuery = query(
+        buyRef,
+        where("sellerId", "==", userId),
+        orderBy("buyDate", "desc")
+      );
+      const result = await getDocs(sellQuery);
+      result.docs.map((data) => {
+        resultArray.push({ sellId: data.id, sellInfo: data.data() });
+      });
+      return resultArray;
+    }
   }
 };

@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 import "@/asset/main.scss";
-import BuyList from "@/components/profile-components/BuyList";
+import  SellList from "@/components/profile-components/SellList";
 export const metadata: Metadata = {
-  title: "구매내역",
+  title: "판매내역",
 };
 
 export default function BuyPage() {
   return (
     <>
-       <BuyList/>
+       <SellList/>
     </>
   );
 }

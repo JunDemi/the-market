@@ -79,7 +79,8 @@ const WriteContainer = styled.div`
         }
       }
       hr {
-        border: 0.5px solid #d1d1d1;
+        border: none;
+        border-bottom: 0.5px solid #d1d1d1;
         width: 100%;
       }
       h1 {
