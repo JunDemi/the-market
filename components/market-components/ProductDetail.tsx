@@ -162,7 +162,7 @@ export default function ProductDetail() {
     await buyProduct(buyData);
     await deleteProduct(keyword); //구매를 하여 상품목록에 제거
     set_isLoading(false);
-    router.push('/profile');
+    router.push('/profile/buyPage');
   };
   return (
     <>

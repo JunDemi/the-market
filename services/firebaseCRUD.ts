@@ -178,3 +178,13 @@ export const readBuyList = async (type: string, userId?: string) => {
     }
   }
 };
+//구매 & 판매 상세
+export const buyDetail = async (buyId?: string) => {
+  const resultData: any = {};
+  const buyQuery = query(buyRef, where(documentId(), "==", buyId));
+  const result = await getDocs(buyQuery); //문서화
+  result.docs.map((data) => {
+    resultData.info = data.data();
+  });
+  return resultData;
+};

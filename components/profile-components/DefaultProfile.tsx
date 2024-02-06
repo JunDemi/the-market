@@ -3,8 +3,8 @@ import { AuthContext } from "@/app/lib/AuthProvider";
 import { getDateTimeFormat } from "@/services/getDay";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import CountUp from "react-countup";
 import styled from "styled-components";
+import ContentsTotal from "./ContentsTotal";
 //스타일 컴포넌트
 const ProfileInfoDiv = styled.div`
   display: flex;
@@ -46,34 +46,7 @@ const ProfileImage = styled.div`
   border-radius: 50%;
   box-shadow: 2px 2px 7px #787878;
 `;
-const ContentsTotal = styled.div`
-  position: absolute;
-  bottom: -3.5rem;
-  padding: 2.5rem;
-  background-color: white;
-  box-shadow: 3px 3px 4px #898989;
-  min-width: 40rem;
-  border-radius: 15px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  text-align: center;
-  column-gap: 2.5rem;
-  div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    h4 {
-      font-weight: bold;
-      font-size: 20px;
-    }
-    p {
-      font-size: 14px;
-      color: #949494;
-    }
-  }
-`;
+
 const ContentsInfo = styled.div`
   margin: 7rem auto 2rem auto;
   width: 61rem;
@@ -127,21 +100,7 @@ export default function DefaultProfile() {
             <Link href="/profile" className="material-btn" style={{opacity: 0}}>
               프로필 수정
             </Link>
-
-            <ContentsTotal>
-              <div>
-                <h4><CountUp end={13} duration={1.2}/>개</h4>
-                <p>작성한 게시물</p>
-              </div>
-              <div>
-                <h4><CountUp end={548100} duration={1.2}/>원</h4>
-                <p>총 구매액</p>
-              </div>
-              <div>
-                <h4><CountUp end={1310020} duration={1.2}/>원</h4>
-                <p>총 판매액</p>
-              </div>
-            </ContentsTotal>
+            <ContentsTotal userId={user.user.uid}/>
           </ProfileInfoDiv>
           <ContentsInfo>
             <Link href="/profile">

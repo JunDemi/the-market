@@ -32,8 +32,8 @@ const TableHead = styled.div`
   padding: 1rem;
   box-shadow: 3px 3px 4px #898989;
   display: grid;
-  width: 70rem;
-  grid-template-columns: 6rem 14rem 15rem 15rem 8rem auto;
+  width: 65rem;
+  grid-template-columns: 6rem 12rem 14rem 14rem 7rem auto;
   text-align: center;
   font-size: 16px;
   div {
@@ -47,18 +47,18 @@ const TableHead = styled.div`
 const TableBodyContainer = styled.div`
   overflow: hidden;
   box-shadow: 3px 3px 4px #898989;
-  width: 70rem;
+  width: 65rem;
   margin: auto;
   background-color: white;
   hr {
-    width: 67rem;
+    width: 62rem;
     border: none;
     border-bottom: 0.1px solid #cbcbcb;
     background: none;
     margin: 0 auto;
-    &:first-child {
-      display: none;
-    }
+  }
+  div:first-child hr {
+    display: none;
   }
 `;
 const TableBody = styled(TableHead)`
@@ -96,7 +96,7 @@ const CloseButton = styled.div`
   display: flex;
   justify-content: end;
   margin-bottom: 0.5rem;
-  button{
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -120,12 +120,8 @@ export default function BuyList() {
     isLoading,
     data: bData,
     refetch,
-  } = useQuery<IBuyData[]>(
-    ["buyList"],
-    () => readBuyList("buy", user.user.uid),
-    {
-      staleTime: Infinity,
-    }
+  } = useQuery<IBuyData[]>(["buyList"], () =>
+    readBuyList("buy", user?.user.uid)
   );
   const goBuyDetail = (buyId: string) => {
     set_buyDetail(true);
@@ -136,7 +132,7 @@ export default function BuyList() {
       {user.isLogin ? (
         <>
           <BuySellLinks />
-          {bData ? (
+          {bData && !isLoading ? (
             <>
               <TableHead>
                 <div>거래일</div>
@@ -181,7 +177,10 @@ export default function BuyList() {
                   animate={{ opacity: 1 }}
                 >
                   <CloseButton>
-                    <button onClick={() => set_buyDetail(false)} className="material-btn">
+                    <button
+                      onClick={() => set_buyDetail(false)}
+                      className="material-btn"
+                    >
                       close
                       <svg
                         onClick={() => set_buyDetail(false)}
@@ -207,7 +206,16 @@ export default function BuyList() {
                 </DetailOverlay>
               )}
             </>
-          ) : null}
+          ) : (
+            <div className="loading-gif">
+              <Image
+                src="/loading2.gif"
+                alt="로딩중..."
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
         </>
       ) : null}
     </>

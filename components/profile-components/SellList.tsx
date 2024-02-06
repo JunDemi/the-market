@@ -7,6 +7,9 @@ import { useQuery } from "react-query";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { readBuyList } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
+import BuyDetail from "./BuyDetail";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 interface IBuyData {
   sellId: string;
@@ -29,8 +32,8 @@ const TableHead = styled.div`
   padding: 1rem;
   box-shadow: 3px 3px 4px #898989;
   display: grid;
-  width: 70rem;
-  grid-template-columns: 6rem 14rem 15rem 15rem 8rem auto;
+  width: 65rem;
+  grid-template-columns: 6rem 12rem 14rem 14rem 7rem auto;
   text-align: center;
   font-size: 16px;
   div {
@@ -44,18 +47,18 @@ const TableHead = styled.div`
 const TableBodyContainer = styled.div`
   overflow: hidden;
   box-shadow: 3px 3px 4px #898989;
-  width: 70rem;
+  width: 65rem;
   margin: auto;
   background-color: white;
   hr {
-    width: 67rem;
+    width: 62rem;
     border: none;
     border-bottom: 0.1px solid #cbcbcb;
     background: none;
     margin: 0 auto;
-    &:first-child {
-      display: none;
-    }
+  }
+  div:first-child hr {
+    display: none;
   }
 `;
 const TableBody = styled(TableHead)`
@@ -74,26 +77,60 @@ const TableBody = styled(TableHead)`
     background-color: #e5eefb;
   }
 `;
+const DetailOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
+const CloseButton = styled.div`
+  width: 50rem;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 0.5rem;
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    background: linear-gradient(90deg, #fa9740, #9c8f05);
+    gap: 5px;
+    cursor: pointer;
+  }
+`;
 export default function SellList() {
   const { user }: any = AuthContext();
-
+  const [buyDetail, set_buyDetail] = useState(false); //상세 페이지 오버레이
+  const [buyIdForDetail, set_buyIdForDetail] = useState("");
   const {
     isLoading,
     data: sData,
     refetch,
-  } = useQuery<IBuyData[]>(
-    ["sellList"],
-    () => readBuyList("sell", user.user.uid),
-    {
-      staleTime: Infinity,
-    }
+  } = useQuery<IBuyData[]>(["sellList"], () =>
+    readBuyList("sell", user?.user.uid)
   );
+  const goBuyDetail = (buyId: string) => {
+    set_buyDetail(true);
+    set_buyIdForDetail(buyId);
+  };
   return (
     <>
       {user.isLogin ? (
         <>
           <BuySellLinks />
-          {sData ? (
+          {sData && !isLoading ? (
             <>
               <TableHead>
                 <div>거래일</div>
@@ -107,12 +144,18 @@ export default function SellList() {
                 {sData.map((data) => (
                   <div key={data.sellId}>
                     <hr />
-                    <TableBody>
-                      <div>{String(getDateTimeFormat(Number(data.sellInfo.buyDate))).substring(0, 10)}</div>
+                    <TableBody onClick={() => goBuyDetail(data.sellId)}>
+                      <div>
+                        {String(
+                          getDateTimeFormat(Number(data.sellInfo.buyDate))
+                        ).substring(0, 10)}
+                      </div>
                       <div>{data.sellInfo.productName}</div>
                       <div>{data.sellInfo.buyerEmail}</div>
                       <div>{data.sellInfo.sellerEmail}</div>
-                      <div>{Number(data.sellInfo.productPrice).toLocaleString()}</div>
+                      <div>
+                        {Number(data.sellInfo.productPrice).toLocaleString()}
+                      </div>
                       <div>
                         <Image
                           src={data.sellInfo.productImg}
@@ -126,8 +169,51 @@ export default function SellList() {
                   </div>
                 ))}
               </TableBodyContainer>
+              {buyDetail && (
+                <DetailOverlay
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <CloseButton>
+                    <button
+                      onClick={() => set_buyDetail(false)}
+                      className="material-btn"
+                    >
+                      close
+                      <svg
+                        onClick={() => set_buyDetail(false)}
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="3"
+                        stroke="white"
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                        }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </CloseButton>
+                  <BuyDetail buyId={buyIdForDetail} />
+                </DetailOverlay>
+              )}
             </>
-          ) : null}
+          ) : (
+            <div className="loading-gif">
+              <Image
+                src="/loading2.gif"
+                alt="로딩중..."
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
         </>
       ) : null}
     </>
