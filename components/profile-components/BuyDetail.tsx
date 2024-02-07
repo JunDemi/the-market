@@ -82,8 +82,7 @@ const DetailInfo = styled.div`
   }
 `;
 const Description = styled.div`
-  margin-top: 1rem;
-  width: 90%;
+  margin: 1rem 0;
   p {
     margin: 1rem 0;
     color: #787878;
@@ -93,8 +92,8 @@ const Description = styled.div`
     border: 1px solid #d1d1d1;
     background: none;
     height: 20rem;
-    width: 100%;
     padding: 1rem;
+    width: 40rem;
     font-size: 15px;
   }
 `;

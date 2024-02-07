@@ -3,13 +3,14 @@
 import Image from "next/image";
 import styled from "styled-components";
 import BuySellLinks from "./BuySellLinks";
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { readBuyList } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
 import BuyDetail from "./BuyDetail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 interface IBuyData {
   sellId: string;
@@ -110,21 +111,41 @@ const CloseButton = styled.div`
     cursor: pointer;
   }
 `;
+const InfiniteScrollDiv = styled.div`
+margin: 5rem auto 0 auto;
+display: flex;
+justify-content: center;
+`;
 export default function SellList() {
   const { user }: any = AuthContext();
   const [buyDetail, set_buyDetail] = useState(false); //상세 페이지 오버레이
   const [buyIdForDetail, set_buyIdForDetail] = useState("");
+  const {ref, inView} = useInView();
   const {
     isLoading,
     data: sData,
     refetch,
-  } = useQuery<IBuyData[]>(["sellList"], () =>
-    readBuyList("sell", user?.user.uid)
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage
+  } = useInfiniteQuery<IBuyData[]>(
+    {
+      queryKey: ["sellList"],
+      queryFn: ({pageParam = 1}) =>  readBuyList("sell", user?.user.uid, pageParam),
+      getNextPageParam: (lasPage, allPages) => {
+        return allPages.length + 1
+      }
+    }
   );
   const goBuyDetail = (buyId: string) => {
     set_buyDetail(true);
     set_buyIdForDetail(buyId);
   };
+  useEffect(()=> { //ref에 닿으면 무한 스크롤 1회 작동
+    if(inView && hasNextPage){
+      fetchNextPage();
+    }
+  },[inView, hasNextPage, fetchNextPage]);
   return (
     <>
       {user.isLogin ? (
@@ -141,7 +162,7 @@ export default function SellList() {
                 <div>사진</div>
               </TableHead>
               <TableBodyContainer>
-                {sData.map((data) => (
+                {sData.pages[sData.pages.length - 1].map((data) => (
                   <div key={data.sellId}>
                     <hr />
                     <TableBody onClick={() => goBuyDetail(data.sellId)}>
@@ -203,6 +224,11 @@ export default function SellList() {
                   <BuyDetail buyId={buyIdForDetail} />
                 </DetailOverlay>
               )}
+                <InfiniteScrollDiv ref={ref}>
+                {isFetchingNextPage ? hasNextPage ? 
+                <Image src="/loading2.gif" alt="loading..." width={60} height={60}/>
+                : "" : <div style={{height: "40px"}}/> }
+              </InfiniteScrollDiv>
             </>
           ) : (
             <div className="loading-gif">

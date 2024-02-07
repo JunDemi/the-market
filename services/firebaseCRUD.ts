@@ -150,31 +150,63 @@ export const readHeartProduct = async (pageParam: number, userId?: string) => {
   }
 };
 //구매 및 판매내역 불러오기
-export const readBuyList = async (type: string, userId?: string) => {
+export const readBuyList = async (
+  type: string,
+  userId?: string,
+  pageParam?: number
+) => {
   const resultArray: any = [];
   if (userId) {
-    if (type === "buy") {
-      const buyQuery= query(
-        buyRef,
-        where("buyerId", "==", userId),
-        orderBy("buyDate", "desc")
-      );
-      const result = await getDocs(buyQuery);
-      result.docs.map((data) => {
-        resultArray.push({ buyId: data.id, buyInfo: data.data() });
-      });
-      return resultArray;
-    } else if (type === "sell") {
-      const sellQuery = query(
-        buyRef,
-        where("sellerId", "==", userId),
-        orderBy("buyDate", "desc")
-      );
-      const result = await getDocs(sellQuery);
-      result.docs.map((data) => {
-        resultArray.push({ sellId: data.id, sellInfo: data.data() });
-      });
-      return resultArray;
+    if (pageParam) {
+      if (type === "buy") {
+        const buyQuery = query(
+          buyRef,
+          where("buyerId", "==", userId),
+          orderBy("buyDate", "desc"),
+          limit(pageParam * 5)
+        );
+        const result = await getDocs(buyQuery);
+        result.docs.map((data) => {
+          resultArray.push({ buyId: data.id, buyInfo: data.data() });
+        });
+        return resultArray;
+      } else if (type === "sell") {
+        const sellQuery = query(
+          buyRef,
+          where("sellerId", "==", userId),
+          orderBy("buyDate", "desc"),
+          limit(pageParam * 5)
+        );
+        const result = await getDocs(sellQuery);
+        result.docs.map((data) => {
+          resultArray.push({ sellId: data.id, sellInfo: data.data() });
+        });
+        return resultArray;
+      }
+    } else {
+      if (type === "buy") {
+        const buyQuery = query(
+          buyRef,
+          where("buyerId", "==", userId),
+          orderBy("buyDate", "desc")
+        );
+        const result = await getDocs(buyQuery);
+        result.docs.map((data) => {
+          resultArray.push({ buyId: data.id, buyInfo: data.data() });
+        });
+        return resultArray;
+      } else if (type === "sell") {
+        const sellQuery = query(
+          buyRef,
+          where("sellerId", "==", userId),
+          orderBy("buyDate", "desc")
+        );
+        const result = await getDocs(sellQuery);
+        result.docs.map((data) => {
+          resultArray.push({ sellId: data.id, sellInfo: data.data() });
+        });
+        return resultArray;
+      }
     }
   }
 };

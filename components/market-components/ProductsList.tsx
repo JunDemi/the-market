@@ -162,7 +162,7 @@ const HeartPopup = styled(motion.div)`
   transform: translateX(-50%);
 `;
 const InfiniteScrollDiv = styled.div`
-margin: auto;
+margin: 5rem auto 0 auto;
 display: flex;
 justify-content: center;
 `;
