@@ -2,7 +2,7 @@
 import Image from "next/image";
 import "../asset/main.scss";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Hamburger from "hamburger-react";
@@ -496,8 +496,9 @@ export default function NavBar() {
           />
         </ToggleButton>
       </NavContainer>
+      <AnimatePresence>
       {signModal !== "off" && (
-        <ModalOverlay initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <ModalOverlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{opacity: 0}}>
           <div
             style={{
               display: "flex",
@@ -509,6 +510,7 @@ export default function NavBar() {
           </div>
         </ModalOverlay>
       )}
+      </AnimatePresence>
     </>
   );
 }

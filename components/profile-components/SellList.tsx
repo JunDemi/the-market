@@ -9,7 +9,7 @@ import { readBuyList } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
 import BuyDetail from "./BuyDetail";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 interface IBuyData {
@@ -112,40 +112,40 @@ const CloseButton = styled.div`
   }
 `;
 const InfiniteScrollDiv = styled.div`
-margin: 5rem auto 0 auto;
-display: flex;
-justify-content: center;
+  margin: 5rem auto 0 auto;
+  display: flex;
+  justify-content: center;
 `;
 export default function SellList() {
   const { user }: any = AuthContext();
   const [buyDetail, set_buyDetail] = useState(false); //상세 페이지 오버레이
   const [buyIdForDetail, set_buyIdForDetail] = useState("");
-  const {ref, inView} = useInView();
+  const { ref, inView } = useInView();
   const {
     isLoading,
     data: sData,
     refetch,
     fetchNextPage,
     isFetchingNextPage,
-    hasNextPage
-  } = useInfiniteQuery<IBuyData[]>(
-    {
-      queryKey: ["sellList"],
-      queryFn: ({pageParam = 1}) =>  readBuyList("sell", user?.user.uid, pageParam),
-      getNextPageParam: (lasPage, allPages) => {
-        return allPages.length + 1
-      }
-    }
-  );
+    hasNextPage,
+  } = useInfiniteQuery<IBuyData[]>({
+    queryKey: ["sellList"],
+    queryFn: ({ pageParam = 1 }) =>
+      readBuyList("sell", user?.user.uid, pageParam),
+    getNextPageParam: (lasPage, allPages) => {
+      return allPages.length + 1;
+    },
+  });
   const goBuyDetail = (buyId: string) => {
     set_buyDetail(true);
     set_buyIdForDetail(buyId);
   };
-  useEffect(()=> { //ref에 닿으면 무한 스크롤 1회 작동
-    if(inView && hasNextPage){
+  useEffect(() => {
+    //ref에 닿으면 무한 스크롤 1회 작동
+    if (inView && hasNextPage) {
       fetchNextPage();
     }
-  },[inView, hasNextPage, fetchNextPage]);
+  }, [inView, hasNextPage, fetchNextPage]);
   return (
     <>
       {user.isLogin ? (
@@ -190,44 +190,59 @@ export default function SellList() {
                   </div>
                 ))}
               </TableBodyContainer>
-              {buyDetail && (
-                <DetailOverlay
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <CloseButton>
-                    <button
-                      onClick={() => set_buyDetail(false)}
-                      className="material-btn"
-                    >
-                      close
-                      <svg
+
+              <AnimatePresence>
+                {buyDetail && (
+                  <DetailOverlay
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <CloseButton>
+                      <button
                         onClick={() => set_buyDetail(false)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="3"
-                        stroke="white"
-                        style={{
-                          width: "1rem",
-                          height: "1rem",
-                        }}
+                        className="material-btn"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  </CloseButton>
-                  <BuyDetail buyId={buyIdForDetail} />
-                </DetailOverlay>
-              )}
-                <InfiniteScrollDiv ref={ref}>
-                {isFetchingNextPage ? hasNextPage ? 
-                <Image src="/loading2.gif" alt="loading..." width={60} height={60}/>
-                : "" : <div style={{height: "40px"}}/> }
+                        close
+                        <svg
+                          onClick={() => set_buyDetail(false)}
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="3"
+                          stroke="white"
+                          style={{
+                            width: "1rem",
+                            height: "1rem",
+                          }}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </CloseButton>
+                    <BuyDetail buyId={buyIdForDetail} />
+                  </DetailOverlay>
+                )}
+              </AnimatePresence>
+              <InfiniteScrollDiv ref={ref}>
+                {isFetchingNextPage ? (
+                  hasNextPage ? (
+                    <Image
+                      src="/loading2.gif"
+                      alt="loading..."
+                      width={60}
+                      height={60}
+                    />
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  <div style={{ height: "40px" }} />
+                )}
               </InfiniteScrollDiv>
             </>
           ) : (
