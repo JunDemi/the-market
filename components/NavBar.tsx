@@ -304,11 +304,11 @@ export default function NavBar() {
             </div>
           </Link>
 
-          <Link href="/blog">
+          <Link href="/sns">
             <div
               className="material-btn"
               style={
-                pathname.startsWith("/blog")
+                pathname.startsWith("/sns")
                   ? {
                       backgroundColor: "#0ba3ea",
                       boxShadow: "0px 3px 8px -3px gray",
@@ -321,7 +321,7 @@ export default function NavBar() {
                 fill="none"
                 viewBox="0 0 24 24"
                 style={
-                  pathname.startsWith("/blog")
+                  pathname.startsWith("/sns")
                     ? { fill: "white", stroke: "white" }
                     : {}
                 }
@@ -341,9 +341,9 @@ export default function NavBar() {
                     : { display: "none", opacity: 0 }
                 }
                 transition={{ duration: 0.6 }}
-                style={pathname.startsWith("/blog") ? { color: "white" } : {}}
+                style={pathname.startsWith("/sns") ? { color: "white" } : {}}
               >
-                Blog
+                SNS
               </motion.p>
             </div>
           </Link>
