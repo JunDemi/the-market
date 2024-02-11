@@ -18,7 +18,7 @@ const PostHead = styled.div`
   font-size: 14px;
   padding: 1rem;
   span {
-    background-image: url("https://image.winudf.com/v2/image1/bmV0LndsbHBwci5ib3lzX3Byb2ZpbGVfcGljdHVyZXNfc2NyZWVuXzBfMTY2NzUzNzYxN18wOTk/screen-0.webp?fakeurl=1&type=.webp");
+    background-image: url("/defaultProfile.webp");
     background-size: cover;
     background-repeat: no-repeat;
     width: 40px;

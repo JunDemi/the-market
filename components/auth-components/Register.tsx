@@ -4,9 +4,10 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import InputField from "./InputField";
 import { RegisterValidation } from "@/validationSchema/auth";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { useState } from "react";
+import { getAuthenticInfo } from "@/services/firebaseCRUD";
 //스타일 컴포넌트
 const SignContainer = styled.div`
   display: grid;
@@ -119,7 +120,7 @@ export default function Register() {
     set_loading(true);
     await createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((응답) => {
-        auth.signOut();
+        getAuthenticInfo(응답.user.uid, 응답.user.email);
         set_registSuccess(true); //회원가입이 성공하면 팝업이 뜨게
       })
       .catch((에러) => set_registFailed(true)); //회원가입이 실패하면 메세지가 뜨게
@@ -128,6 +129,7 @@ export default function Register() {
   };
 
   const successConfirm = () => {
+    signOut(auth);
     set_registSuccess(false);
     set_signToggle("login");
   };

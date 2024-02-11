@@ -5,6 +5,14 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import styled from "styled-components";
 import ContentsTotal from "./ContentsTotal";
+import { useQuery } from "react-query";
+import { getMyProfile } from "@/services/firebaseCRUD";
+
+interface IMyProfile {
+  userId: string,
+  userEmail: string,
+  profileImg: string,
+}
 //스타일 컴포넌트
 const ProfileInfoDiv = styled.div`
   display: flex;
@@ -29,15 +37,14 @@ const ProfileInfoDiv = styled.div`
     font-weight: bold;
     border: none;
     border-radius: 30px;
-    background-color: #0059ff;
+    background-color: #fff;
     font-size: 12px;
-    color: white;
+    color: black;
     cursor: pointer;
     transition: 0.2s;
   }
 `;
 const ProfileImage = styled.div`
-  background-image: url("https://image.winudf.com/v2/image1/bmV0LndsbHBwci5ib3lzX3Byb2ZpbGVfcGljdHVyZXNfc2NyZWVuXzBfMTY2NzUzNzYxN18wOTk/screen-0.webp?fakeurl=1&type=.webp");
   background-size: cover;
   background-repeat: no-repeat;
   width: 180px;
@@ -87,17 +94,24 @@ const ContentsInfo = styled.div`
 //스타일 컴포넌트
 export default function DefaultProfile() {
   const { user }: any = AuthContext();
+  const {isLoading, data: userData} = useQuery<IMyProfile[]>(
+    ["my_userProfile"],
+    () => getMyProfile(user?.user.uid),
+    {
+      staleTime: Infinity
+    }
+  );
   return (
     <>
-      {user?.isLogin ? (
+      {user?.isLogin && userData ? (
         <>
           <ProfileInfoDiv>
-            <ProfileImage />
+            <ProfileImage style={{backgroundImage: `url('${userData[0].profileImg === "default" ? "/defaultProfile.webp" : userData[0].profileImg}')`}}/>
             <h3>{user.user.email}</h3>
             <h4>
               가입일: {getDateTimeFormat(Number(user.user.metadata.createdAt))}
             </h4>
-            <Link href="/profile" className="material-btn" style={{opacity: 0}}>
+            <Link href="/profile/updateProfile" className="material-btn">
               프로필 수정
             </Link>
             <ContentsTotal userId={user.user.uid}/>

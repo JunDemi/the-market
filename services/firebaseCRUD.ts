@@ -26,6 +26,30 @@ interface IBuyData {
 //Firestore 테이블 불러오기
 const productsRef = collection(db, "product");
 const buyRef = collection(db, "buy");
+const authRef = collection(db, "profiles");
+//회원가입 후 사용자 계정 정보를 DB에 추가 저장
+export const getAuthenticInfo = (uid: string, uemail: string | null) => {
+    addDoc(collection(db, "profiles"), {
+      userId: uid,
+      userEmail: uemail,
+      profileImg: "default",
+    });
+};
+//사용자 계정 정보 불러오기
+export const getMyProfile = async(userId?: string) => {
+  const resultArray: any = [];
+  if(userId){
+    const profileQuery = query(
+      authRef,
+      where("userId", "==", userId)
+    );
+    const result = await getDocs(profileQuery); //문서화
+    result.docs.map((data) => {
+      resultArray.push(data.data());
+    })
+    return resultArray;
+  }
+}
 //상품 목록 불러오기
 export const readProduct = async (
   pageParam: number,
@@ -118,7 +142,7 @@ export const deleteProduct = async (productId?: string) => {
     await deleteDoc(doc(db, "product", productId));
   }
 };
-//상품 구매 & 판매
+//상품 구매 & 판매내역을 DB에 저장
 export const buyProduct = async (buyData: IBuyData) => {
   await addDoc(collection(db, "buy"), {
     productName: buyData.pName,
