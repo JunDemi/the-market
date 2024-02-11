@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function UpdateProfile() {
   return (
     <>
-    <ProfileUpdate />
+        <ProfileUpdate />
     </>
   );
 }

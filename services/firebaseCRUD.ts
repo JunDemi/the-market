@@ -45,9 +45,18 @@ export const getMyProfile = async(userId?: string) => {
     );
     const result = await getDocs(profileQuery); //문서화
     result.docs.map((data) => {
-      resultArray.push(data.data());
+      resultArray.push({ profileId: data.id, profileInfo: data.data() });
     })
     return resultArray;
+  }
+}
+//프로필 사진 수정하기
+export const updateProfile = async(profileImg?: string, profileId?: string) => {
+  if(profileId && profileImg){
+    const updateRef = doc(db, "profiles", profileId);
+    await updateDoc(updateRef, {
+      profileImg: profileImg
+    });
   }
 }
 //상품 목록 불러오기

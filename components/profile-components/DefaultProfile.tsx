@@ -9,9 +9,12 @@ import { useQuery } from "react-query";
 import { getMyProfile } from "@/services/firebaseCRUD";
 
 interface IMyProfile {
-  userId: string,
-  userEmail: string,
-  profileImg: string,
+  profileId: string;
+  profileInfo: {
+    userId: string,
+    userEmail: string,
+    profileImg: string,
+  }
 }
 //스타일 컴포넌트
 const ProfileInfoDiv = styled.div`
@@ -97,22 +100,19 @@ export default function DefaultProfile() {
   const {isLoading, data: userData} = useQuery<IMyProfile[]>(
     ["my_userProfile"],
     () => getMyProfile(user?.user.uid),
-    {
-      staleTime: Infinity
-    }
   );
   return (
     <>
       {user?.isLogin && userData ? (
         <>
           <ProfileInfoDiv>
-            <ProfileImage style={{backgroundImage: `url('${userData[0].profileImg === "default" ? "/defaultProfile.webp" : userData[0].profileImg}')`}}/>
+            <ProfileImage style={{backgroundImage: `url('${userData[0].profileInfo.profileImg === "default" ? "/defaultProfile.webp" : userData[0].profileInfo.profileImg}')`}}/>
             <h3>{user.user.email}</h3>
             <h4>
               가입일: {getDateTimeFormat(Number(user.user.metadata.createdAt))}
             </h4>
             <Link href="/profile/updateProfile" className="material-btn">
-              프로필 수정
+              프로필 사진 변경
             </Link>
             <ContentsTotal userId={user.user.uid}/>
           </ProfileInfoDiv>
