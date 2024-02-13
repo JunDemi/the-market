@@ -24,43 +24,44 @@ interface IBuyData {
   sellerEmail: string;
 }
 //Firestore 테이블 불러오기
+const authRef = collection(db, "profiles");
 const productsRef = collection(db, "product");
 const buyRef = collection(db, "buy");
-const authRef = collection(db, "profiles");
+const snsRef = collection(db, "sns");
 
 /*--------------------------- Autentication ---------------------------*/
 //회원가입 후 사용자 계정 정보를 DB에 추가 저장
 export const getAuthenticInfo = (uid: string, uemail: string | null) => {
-    addDoc(collection(db, "profiles"), {
-      userId: uid,
-      userEmail: uemail,
-      profileImg: "default",
-    });
+  addDoc(collection(db, "profiles"), {
+    userId: uid,
+    userEmail: uemail,
+    profileImg: "default",
+  });
 };
 //사용자 계정 정보 불러오기
-export const getMyProfile = async(userId?: string) => {
+export const getMyProfile = async (userId?: string) => {
   const resultArray: any = [];
-  if(userId){
-    const profileQuery = query(
-      authRef,
-      where("userId", "==", userId)
-    );
+  if (userId) {
+    const profileQuery = query(authRef, where("userId", "==", userId));
     const result = await getDocs(profileQuery); //문서화
     result.docs.map((data) => {
       resultArray.push({ profileId: data.id, profileInfo: data.data() });
-    })
+    });
     return resultArray;
   }
-}
+};
 //프로필 사진 수정하기
-export const updateProfile = async(profileImg?: string, profileId?: string) => {
-  if(profileId && profileImg){
+export const updateProfile = async (
+  profileImg?: string,
+  profileId?: string
+) => {
+  if (profileId && profileImg) {
     const updateRef = doc(db, "profiles", profileId);
     await updateDoc(updateRef, {
-      profileImg: profileImg
+      profileImg: profileImg,
     });
   }
-}
+};
 /*--------------------------- Products ---------------------------*/
 //상품 목록 불러오기
 export const readProduct = async (
@@ -256,4 +257,19 @@ export const buyDetail = async (buyId?: string) => {
     resultData.info = data.data();
   });
   return resultData;
+};
+/*--------------------------- SNS ---------------------------*/
+export const readSNSList = async (pageParam: number) => {
+  const resultArray: any = [];
+  //검색을 하지 않은 기본 페이지
+  const snsQuery = query(
+    snsRef,
+    orderBy("createAt", "desc"),
+    limit(pageParam * 10)
+  );
+  const result = await getDocs(snsQuery); //문서화
+  result.docs.map((data) => {
+    resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
+  });
+  return resultArray;
 };

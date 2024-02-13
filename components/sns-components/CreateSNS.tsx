@@ -198,7 +198,7 @@ export default function CreateSNS() {
         updateAt: Date.now(),
       })
       .then((응답) => router.push("/sns"))
-      .catch((에러) => alert("이미지는 1MB이하의 파일로 해주세요."));
+      .catch((에러) => alert("파일 용량이 초과되었습니다."));
       set_loading(false);
     }
   },[fbImgList, writeText])
