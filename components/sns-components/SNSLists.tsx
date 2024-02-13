@@ -27,26 +27,6 @@ const Post = styled.div`
   background-color: white;
   box-shadow: 3px 3px 4px #787878;
 `;
-const PostHead = styled.div`
-  background: linear-gradient(90deg, #f5ffff, #dcdbfc);
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  font-size: 14px;
-  padding: 1rem;
-  span {
-    background-image: url("/defaultProfile.webp");
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 1rem;
-  }
-  h4 {
-    color: #848484;
-  }
-`;
 const PostHeart = styled.div`
   display: flex;
   justify-content: start;
@@ -108,14 +88,7 @@ export default function SNSLists() {
     <>
       {snsData?.pages[snsData.pages.length - 1].map((data: ISNSList) => (
         <Post key={data.snsId}>
-          <PostHead>
-            <span />
-            <h3>{data.snsInfo.userEmail}</h3>
-            <h4>&nbsp;•&nbsp;{getDateTimeFormat(Number(data.snsInfo.createAt))}</h4>
-          </PostHead>
-
           <PostSlider data={data} />
-
           <PostHeart>
             <svg
               xmlns="http://www.w3.org/2000/svg"

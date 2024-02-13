@@ -9,7 +9,6 @@ import { AuthContext } from "@/app/lib/AuthProvider";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-
 interface IFileArray {
   filename: any;
   filedata: string;
