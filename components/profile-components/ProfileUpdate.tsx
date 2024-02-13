@@ -121,17 +121,19 @@ export default function ProfileUpdate() {
       const imgSnap = await uploadBytes(imageRef, profileImg[0]); //파이어 스토리지에 이미지 업로드
       const imgpath = await getDownloadURL(imgSnap.ref); //생성된 이미지 파일 링크를 변수에 저장
       await updateProfile(imgpath, profile_userData[0].profileId);
+
+      set_loading(false);
+      router.push("/profile");
     } else {
       alert("프로필 사진이 변경되지 않았습니다.");
+      set_loading(false);
     }
-    set_loading(false);
-    router.push("/profile");
   };
   const setDefaultImg = async () => {
     set_loading(true);
     if (profile_userData) {
       await updateProfile("default", profile_userData[0].profileId);
-    set_loading(false);
+      set_loading(false);
       router.push("/profile");
     }
   };
@@ -178,7 +180,11 @@ export default function ProfileUpdate() {
                   }}
                 />
               </ProfileImage>
-              <DefaultImageButton className="material-btn" onClick={setDefaultImg} disabled={loading}>
+              <DefaultImageButton
+                className="material-btn"
+                onClick={setDefaultImg}
+                disabled={loading}
+              >
                 기본 이미지로 변경
               </DefaultImageButton>
               <SaveButton

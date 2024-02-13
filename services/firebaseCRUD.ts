@@ -27,6 +27,8 @@ interface IBuyData {
 const productsRef = collection(db, "product");
 const buyRef = collection(db, "buy");
 const authRef = collection(db, "profiles");
+
+/*--------------------------- Autentication ---------------------------*/
 //회원가입 후 사용자 계정 정보를 DB에 추가 저장
 export const getAuthenticInfo = (uid: string, uemail: string | null) => {
     addDoc(collection(db, "profiles"), {
@@ -59,6 +61,7 @@ export const updateProfile = async(profileImg?: string, profileId?: string) => {
     });
   }
 }
+/*--------------------------- Products ---------------------------*/
 //상품 목록 불러오기
 export const readProduct = async (
   pageParam: number,
@@ -182,6 +185,7 @@ export const readHeartProduct = async (pageParam: number, userId?: string) => {
     return resultArray;
   }
 };
+/*--------------------------- Buy ---------------------------*/
 //구매 및 판매내역 불러오기
 export const readBuyList = async (
   type: string,
