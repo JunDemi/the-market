@@ -8,7 +8,7 @@ import { useState } from "react";
 const boxVar = {
   //AnimatePresense에 custom을 boolean state값을 적용시켜 isBack이란 변수를 사용
   entry: (isBack: boolean) => ({
-    //entry는 n번째 사진을 불러올때. isBack = 현재보다 뒤에 있는 사진일때 현재 사진을 -640만큼 이동
+    //entry는 n번째 사진을 불러올때. isBack = 현재보다 뒤에 있는 사진일때 현재 사진을 -640만큼 이동 (640은 SNS게시물 컨테이너 넓이를 px값으로 변환한값임)
     x: isBack ? -640 : 640,
   }),
   center: {
@@ -155,29 +155,29 @@ const testData = [
 
 export default function SNSLists() {
   const [back, set_back] = useState(false); //현재 사진이 불러올 사진보다 뒤에 있는지 앞에 있는지 판가름
-  const [visible, set_visible] = useState(0); //number형태의 state값. 각 사진의 위치를 숫자로 저장한다.
+  const [currentPage, set_currentPage] = useState(0); //number형태의 state값. 각 사진의 위치를 숫자로 저장한다.
 
   const nextCard = () => {
     //다음 버튼 클릭
-    set_visible((prev) =>
+    set_currentPage((prev) =>
       prev === testData.length - 1 ? testData.length - 1 : prev + 1
     ); //다음 숫자로 변경하여 페이지 넘김. 가장 끝일 경우 동작하지 않도록, 개수는 0부터 시작하지 않으므르 -1
     set_back(false);
   };
   const prevCard = () => {
     //이전 버튼 클릭
-    set_visible((prev) => (prev === 0 ? 0 : prev - 1)); //이전 숫자로 변경하여 페이지 넘김. 0일 경우 동작하지 않도록
+    set_currentPage((prev) => (prev === 0 ? 0 : prev - 1)); //이전 숫자로 변경하여 페이지 넘김. 0일 경우 동작하지 않도록
     set_back(true);
   };
   const txt =
     "めっちゃ久々にしらのむぎゅー撮れた 🥹 めっちゃ久々にしらのむぎゅー撮れた 🥹";
-  const visibleSet = (current: number) => {
-    if (visible > current) {
+  const currentPageSet = (current: number) => {
+    if (currentPage > current) {
       set_back(true);
-    } else if (visible < current) {
+    } else if (currentPage < current) {
       set_back(false);
     }
-    set_visible(current);
+    set_currentPage(current);
   };
   return (
     <>
@@ -191,7 +191,7 @@ export default function SNSLists() {
           <AnimatePresence mode="sync" custom={back}>
             {testData.map(
               (i, number) =>
-                number === visible && (
+                number === currentPage && (
                   <PostSlideItems
                     key={number}
                     custom={back}
@@ -206,7 +206,7 @@ export default function SNSLists() {
           </AnimatePresence>
           <SliderButtons>
             <svg
-            style={visible === 0 ? {opacity: 0} : {}}
+            style={currentPage === 0 ? {opacity: 0} : {}}
               onClick={prevCard}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -221,7 +221,7 @@ export default function SNSLists() {
             </svg>
 
             <svg
-              style={visible === testData.length - 1 ? {opacity: 0} : {}}
+              style={currentPage === testData.length - 1 ? {opacity: 0} : {}}
               onClick={nextCard}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -238,7 +238,7 @@ export default function SNSLists() {
           <SliderRadios>
             {testData.map((data, current) => (
               <>
-              <button onClick={() => visibleSet(current)} style={visible === current ? {backgroundColor: "#4ebbf5"} : {}}/>
+              <button onClick={() => currentPageSet(current)} style={currentPage === current ? {backgroundColor: "#4ebbf5"} : {}}/>
               </>
             ))}
           </SliderRadios>
