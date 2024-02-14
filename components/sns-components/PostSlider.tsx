@@ -172,7 +172,7 @@ export default function PostSlider({ data }: { data: ISNSList }) {
                 (i, number) =>
                   number === currentPage && (
                     <PostSlideItems
-                      key={String(i + number)}
+                      key={number}
                       custom={back}
                       variants={boxVar}
                       initial="entry"
@@ -222,7 +222,7 @@ export default function PostSlider({ data }: { data: ISNSList }) {
               {data.snsInfo.snsImageArray.map((data, current) => (
                 <>
                   <button
-                    key={String(data + current)}
+                    key={current}
                     onClick={() => currentPageSet(current)}
                     style={
                       currentPage === current

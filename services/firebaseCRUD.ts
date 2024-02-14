@@ -1,5 +1,7 @@
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -272,4 +274,17 @@ export const readSNSList = async (pageParam: number) => {
     resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
   });
   return resultArray;
+};
+//찜 하기
+export const updateSNSHeart = async (snsId: string, myUserId: string, isHeart: string) => {
+    const updateRef = doc(db, "sns", snsId);
+    if(isHeart === "+"){
+      await updateDoc(updateRef, {
+        snsHeart: arrayUnion(myUserId), //arrayUnion, arrayRemove: 배열 형태의 데이터 타입 추가,삭제기능은 이것을 사용
+      });
+    }else if(isHeart === "-"){
+      await updateDoc(updateRef, {
+        snsHeart: arrayRemove(myUserId),
+      });
+    }
 };
