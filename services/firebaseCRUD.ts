@@ -265,7 +265,7 @@ export const readSNSList = async (pageParam: number) => {
   const snsQuery = query(
     snsRef,
     orderBy("createAt", "desc"),
-    limit(pageParam * 10)
+    limit(pageParam * 5)
   );
   const result = await getDocs(snsQuery); //문서화
   result.docs.map((data) => {

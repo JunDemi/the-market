@@ -2,11 +2,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { readSNSList } from "@/services/firebaseCRUD";
 import PostSlider from "./PostSlider";
 import { getDateTimeFormat } from "@/services/getDay";
+import Image from "next/image";
+import { useInView } from "react-intersection-observer";
 
 interface ISNSList {
   snsId: string;
@@ -66,7 +68,14 @@ const PostComment = styled.div`
     cursor: pointer;
   }
 `;
+const InfiniteScrollDiv = styled.div`
+  margin: 5rem auto 0 auto;
+  display: flex;
+  justify-content: center;
+`;
+//스타일 컴포넌트
 export default function SNSLists() {
+  const { ref, inView } = useInView();
   const {
     isLoading,
     data: snsData,
@@ -81,9 +90,12 @@ export default function SNSLists() {
       return allPages.length + 1; // 마지막 페이지가 될 때까지 / 1 * 4-> 2 * 4 -> 3 * 4 ...
     },
   });
-
-  const txt =
-    "めっちゃ久々にしらのむぎゅー撮れた 🥹 めっちゃ久々にしらのむぎゅー撮れた 🥹";
+  useEffect(() => {
+    //ref에 닿으면 무한 스크롤 1회 작동
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
   return (
     <>
       {snsData?.pages[snsData.pages.length - 1].map((data: ISNSList) => (
@@ -109,7 +121,11 @@ export default function SNSLists() {
           <PostText
             rows={3}
             readOnly
-            defaultValue={data.snsInfo.snsText.length > 30 ? data.snsInfo.snsText.slice(0, 30) + "....." : data.snsInfo.snsText}
+            defaultValue={
+              data.snsInfo.snsText.length > 30
+                ? data.snsInfo.snsText.slice(0, 30) + "....."
+                : data.snsInfo.snsText
+            }
           />
           <PostComment>
             <p>댓글 300개</p>
@@ -128,6 +144,22 @@ export default function SNSLists() {
         </Post>
       ))}
       <WriteButton to="sns" />
+      <InfiniteScrollDiv ref={ref}>
+        {isFetchingNextPage ? (
+          hasNextPage ? (
+            <Image
+              src="/loading2.gif"
+              alt="loading..."
+              width={60}
+              height={60}
+            />
+          ) : (
+            ""
+          )
+        ) : (
+          <div style={{ height: "40px" }} />
+        )}
+      </InfiniteScrollDiv>
     </>
   );
 }
