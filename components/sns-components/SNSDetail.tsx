@@ -1,27 +1,33 @@
-import { getMyProfile, getSNSDetail } from "@/services/firebaseCRUD";
+import { AuthContext } from "@/app/lib/AuthProvider";
+import {
+  getMyProfile,
+  getSNSDetail,
+  updateSNSHeart,
+} from "@/services/firebaseCRUD";
+import { getDateTimeFormat } from "@/services/getDay";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 interface IUserProfile {
-    profileId: string;
-    profileInfo: {
-      userId: string;
-      userEmail: string;
-      profileImg: string;
-    };
-  }
+  profileId: string;
+  profileInfo: {
+    userId: string;
+    userEmail: string;
+    profileImg: string;
+  };
+}
 interface ISNSList {
-    snsId: string;
-    snsInfo: {
-      userId: string;
-      userEmail: string;
-      snsImageArray: string[];
-      snsText: string;
-      snsHeart: string[];
-      createAt: number;
-      updateAt: number;
-    };
-  }
+  info: {
+    userId: string;
+    userEmail: string;
+    snsImageArray: string[];
+    snsText: string;
+    snsHeart: string[];
+    createAt: number;
+    updateAt: number;
+  };
+}
 //framer motomion variants
 const boxVar = {
   entry: (isBack: boolean) => ({
@@ -111,9 +117,52 @@ const SliderRadios = styled.div`
     }
   }
 `;
+const CommentContainer = styled.div`
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+const PostHead = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 14px;
+  padding: 1rem;
+  border-bottom: 1px solid #d7d7d7;
+  span {
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+  }
+  h4 {
+    color: #848484;
+  }
+`;
+const Postinput = styled.div``;
+const PostHeart = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  font-size: 13px;
+  color: #616161;
+  svg {
+    cursor: pointer;
+  }
+`;
 //스타일 컴포넌트
-export default function SNSDetail({ snsData }: {snsData?: ISNSList}) {
-    const [userData, set_userData] = useState<IUserProfile[]>();
+export default function SNSDetail({ snsId }: { snsId: string }) {
+    const {isLoading, data:sdData, refetch} = useQuery<ISNSList>(
+    ["sns_detail", snsId],
+    () => getSNSDetail(snsId),
+    );
+  const { user }: any = AuthContext();
+  const [userData, set_userData] = useState<IUserProfile[]>();
   const [back, set_back] = useState(false); //현재 사진이 불러올 사진보다 뒤에 있는지 앞에 있는지 판가름
   const [currentPage, set_currentPage] = useState(0); //number형태의 state값. 각 사진의 위치를 숫자로 저장한다.
   const nextCard = (imgLength: number) => {
@@ -139,17 +188,39 @@ export default function SNSDetail({ snsData }: {snsData?: ISNSList}) {
   };
 
   //프로필 사진이 디폴트인지 커스텀인지
-  useEffect(()=> {
-    getMyProfile(snsData?.snsInfo.userId).then(response => set_userData(response)).catch(error => console.log(error.message));
-  },[snsData])
+  useEffect(() => {
+    getMyProfile(sdData?.info.userId)
+      .then((response) => set_userData(response))
+      .catch((error) => console.log(error.message));
+  }, [sdData]);
+  const getHeart = (
+    snsId: string,
+    snsUserId: string,
+    myUserId: string,
+    snsHeart: string[]
+  ) => {
+    //좋아요 (본인게시물이면 작동하지 않게)
+    if (snsUserId === myUserId) {
+      return;
+    } else {
+      if (snsHeart.indexOf(myUserId) !== -1) {
+        //좋아요 한 사람 목록에 본인이 있으면 좋아요 삭제
+        updateSNSHeart(snsId, myUserId, "-");
+      } else {
+        //좋아요 한 사람 목록에 본인이 없으면 좋아요 추가
+        updateSNSHeart(snsId, myUserId, "+");
+      }
+      refetch();
+    }
+  };
   return (
     <>
-      {snsData && userData ? (
+      {!isLoading && sdData && userData && user.isLogin ? (
         <DetailContainer>
           <PostSlide>
             <PostSlider>
               <AnimatePresence mode="sync" custom={back}>
-                {snsData.snsInfo.snsImageArray.map(
+                {sdData.info.snsImageArray.map(
                   (i, number) =>
                     number === currentPage && (
                       <PostSlideItems
@@ -183,11 +254,11 @@ export default function SNSDetail({ snsData }: {snsData?: ISNSList}) {
 
               <svg
                 style={
-                  currentPage === snsData.snsInfo.snsImageArray.length - 1
+                  currentPage === sdData.info.snsImageArray.length - 1
                     ? { opacity: 0 }
                     : {}
                 }
-                onClick={() => nextCard(snsData.snsInfo.snsImageArray.length)}
+                onClick={() => nextCard(sdData.info.snsImageArray.length)}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -201,7 +272,7 @@ export default function SNSDetail({ snsData }: {snsData?: ISNSList}) {
               </svg>
             </SliderButtons>
             <SliderRadios>
-              {snsData.snsInfo.snsImageArray.map((data, current) => (
+              {sdData.info.snsImageArray.map((data, current) => (
                 <>
                   <button
                     key={current}
@@ -216,7 +287,58 @@ export default function SNSDetail({ snsData }: {snsData?: ISNSList}) {
               ))}
             </SliderRadios>
           </PostSlide>
-          <button>Hello</button>
+          <CommentContainer>
+            <PostHead>
+              <span
+                style={
+                  userData[0].profileInfo.profileImg === "default"
+                    ? {
+                        backgroundImage: `url('/defaultProfile.webp')`,
+                      }
+                    : {
+                        backgroundImage: `url('${userData[0].profileInfo.profileImg}')`,
+                      }
+                }
+              />
+              <h3>{sdData.info.userEmail}</h3>
+              <h4>
+                &nbsp;•&nbsp;
+                {getDateTimeFormat(Number(sdData.info.createAt))}
+              </h4>
+            </PostHead>
+            <Postinput>
+              <PostHeart>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  onClick={() =>
+                    getHeart(
+                      snsId,
+                      sdData.info.userId,
+                      user.user.uid,
+                      sdData.info.snsHeart
+                    )
+                  }
+                  fill={
+                    sdData.info.snsHeart.indexOf(user.user.uid) !== -1
+                      ? "#83c2f5"
+                      : "none"
+                  }
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="#83c2f5"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                  />
+                </svg>
+
+                <h4>좋아요{sdData.info.snsHeart.length}개</h4>
+              </PostHeart>
+            </Postinput>
+          </CommentContainer>
         </DetailContainer>
       ) : null}
     </>

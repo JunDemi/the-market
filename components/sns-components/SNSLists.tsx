@@ -99,7 +99,7 @@ export default function SNSLists() {
   const { user }: any = AuthContext();
   const { ref, inView } = useInView();
   const [goOverlay, set_goOverlay] = useState<boolean>(false);
-  const [moreData, set_moreData] = useState<ISNSList>();
+  const [moreData, set_moreData] = useState("");
   const {
     isLoading,
     data: snsData,
@@ -141,7 +141,7 @@ export default function SNSLists() {
       refetch();
     }
   };
-  const getOverlay = (snsId: ISNSList) => {
+  const getOverlay = (snsId: string) => {
     set_goOverlay(true);
     set_moreData(snsId);
   };
@@ -196,7 +196,7 @@ export default function SNSLists() {
                   <PostComment>
                     <p>댓글 300개</p>
                     <motion.button
-                      onClick={() => getOverlay(data)}
+                      onClick={() => getOverlay(data.snsId)}
                       className="material-btn"
                       initial={{
                         background: "linear-gradient(90deg, #d3fafa, #c7c5f8)",
@@ -265,7 +265,7 @@ export default function SNSLists() {
                           />
                         </svg>
                     </CloseButton>
-                    <SNSDetail snsData={moreData}/>
+                    <SNSDetail snsId={moreData}/>
                 </SNSOverlay>
               </>
             ) : null}
