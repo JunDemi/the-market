@@ -275,7 +275,7 @@ export const readSNSList = async (pageParam: number) => {
   });
   return resultArray;
 };
-//찜 하기
+//좋아요
 export const updateSNSHeart = async (snsId: string, myUserId: string, isHeart: string) => {
     const updateRef = doc(db, "sns", snsId);
     if(isHeart === "+"){

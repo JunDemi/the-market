@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
-import { useQuery } from "react-query";
 import { getMyProfile } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
 interface IUserProfile {
@@ -142,6 +141,7 @@ export default function PostSlider({ data }: { data: ISNSList }) {
     }
     set_currentPage(current);
   };
+  //프로필 사진이 디폴트인지 커스텀인지
   useEffect(()=> {
     getMyProfile(data.snsInfo.userId).then(response => set_userData(response)).catch(error => console.log(error.message));
   },[data])

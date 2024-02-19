@@ -206,7 +206,6 @@ export default function BuyList() {
                       >
                         close
                         <svg
-                          onClick={() => set_buyDetail(false)}
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
