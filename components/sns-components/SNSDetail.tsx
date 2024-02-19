@@ -142,7 +142,47 @@ const PostHead = styled.div`
     color: #848484;
   }
 `;
-const Postinput = styled.div``;
+const PostSection = styled.div`
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const Postinput = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: start;
+  form {
+    border-top: 1px solid #d7d7d7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px;
+    input {
+      border: none;
+      padding: 1.5rem 0;
+      font-size: 16px;
+      width: 90%;
+    }
+    button {
+      padding: 1rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      svg{
+        stroke: #0fadf1;
+        width: 1.5rem;
+        height: 1.5rem;
+        transition: all.2s;
+        &:hover{
+            stroke: #79cbee;
+        }
+      }
+    }
+  }
+`;
 const PostHeart = styled.div`
   display: flex;
   justify-content: start;
@@ -157,10 +197,11 @@ const PostHeart = styled.div`
 `;
 //스타일 컴포넌트
 export default function SNSDetail({ snsId }: { snsId: string }) {
-    const {isLoading, data:sdData, refetch} = useQuery<ISNSList>(
-    ["sns_detail", snsId],
-    () => getSNSDetail(snsId),
-    );
+  const {
+    isLoading,
+    data: sdData,
+    refetch,
+  } = useQuery<ISNSList>(["sns_detail", snsId], () => getSNSDetail(snsId));
   const { user }: any = AuthContext();
   const [userData, set_userData] = useState<IUserProfile[]>();
   const [back, set_back] = useState(false); //현재 사진이 불러올 사진보다 뒤에 있는지 앞에 있는지 판가름
@@ -306,6 +347,7 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
                 {getDateTimeFormat(Number(sdData.info.createAt))}
               </h4>
             </PostHead>
+            <PostSection>hello</PostSection>
             <Postinput>
               <PostHeart>
                 <svg
@@ -337,6 +379,23 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
 
                 <h4>좋아요{sdData.info.snsHeart.length}개</h4>
               </PostHeart>
+              <form>
+                <input type="text" placeholder="댓글 작성" />
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                    />
+                  </svg>
+                </button>
+              </form>
             </Postinput>
           </CommentContainer>
         </DetailContainer>
