@@ -261,19 +261,32 @@ export const buyDetail = async (buyId?: string) => {
   return resultData;
 };
 /*--------------------------- SNS ---------------------------*/
-export const readSNSList = async (pageParam: number) => {
+export const readSNSList = async (pageParam?: number, userId?: string) => {
   const resultArray: any = [];
-  //검색을 하지 않은 기본 페이지
-  const snsQuery = query(
-    snsRef,
-    orderBy("createAt", "desc"),
-    limit(pageParam * 5)
-  );
-  const result = await getDocs(snsQuery); //문서화
-  result.docs.map((data) => {
-    resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
-  });
-  return resultArray;
+  if(pageParam){
+    //검색을 하지 않은 기본 페이지
+    const snsQuery = query(
+      snsRef,
+      orderBy("createAt", "desc"),
+      limit(pageParam * 5)
+    );
+    const result = await getDocs(snsQuery); //문서화
+    result.docs.map((data) => {
+      resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
+    });
+    return resultArray;
+  }else if(userId){ //해당 유저가 작성한 sns개수
+    const snsQuery = query(
+      snsRef,
+      where("userId", "==", userId)
+    );
+    const result = await getDocs(snsQuery); //문서화
+    result.docs.map((data) => {
+      resultArray.push(data.data()); //필드 고유의 id값과 필드 내용을 배열에 담기
+    });
+    return resultArray;
+  }
+  
 };
 //좋아요
 export const updateSNSHeart = async (snsId: string, myUserId: string, isHeart: string) => {
@@ -298,3 +311,7 @@ export const getSNSDetail = async(snsId: string) => {
   });
   return resultData;
 }
+//sns게시물 삭제
+export const deleteSNS = async (snsid: string) => {
+    await deleteDoc(doc(db, "sns", snsid));
+};

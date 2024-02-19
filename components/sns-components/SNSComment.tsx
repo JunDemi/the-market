@@ -43,6 +43,8 @@ align-items: start;
     }
     p{
         font-size: 12px;
+        max-width: 200px;
+        line-height: 1rem;
     }
   }
   h4{

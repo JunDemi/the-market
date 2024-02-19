@@ -1,7 +1,16 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
-import { readBuyList } from "@/services/firebaseCRUD";
+import { readBuyList, readSNSList } from "@/services/firebaseCRUD";
+interface ISNSData {
+  userId: string;
+  userEmail: string;
+  snsImageArray: string[];
+  snsText: string;
+  snsHeart: string[];
+  createAt: number;
+  updateAt: number;
+}
 interface IBuyData {
   buyId: string;
   buyInfo: {
@@ -61,9 +70,13 @@ const ContentsTotals = styled.div`
 `;
 //스타일 컴포넌트
 export default function ContentsTotal({ userId }: { userId: string }) {
+  const [snsTotal, set_snsTotal] = useState<ISNSData[]>();
   const [buyTotal, set_buyTotal] = useState<IBuyData[]>();
   const [sellTotal, set_sellTotal] = useState<ISellData[]>();
   useEffect(() => {
+    readSNSList(undefined, userId)
+      .then((res) => set_snsTotal(res))
+      .catch((error) => console.log(error.message));
     readBuyList("buy", userId)
       .then((res) => set_buyTotal(res))
       .catch((error) => console.log(error.message));
@@ -72,21 +85,23 @@ export default function ContentsTotal({ userId }: { userId: string }) {
       .catch((error) => console.log(error.message));
   }, [userId]);
 
-  const total1 = buyTotal?.reduce( //총 구매액 계산
+  const total1 = buyTotal?.reduce(
+    //총 구매액 계산
     (acc, data) => acc + Number(data.buyInfo.productPrice),
     0
   );
-  const total2 = sellTotal?.reduce( //총 판매액 계산
+  const total2 = sellTotal?.reduce(
+    //총 판매액 계산
     (acc, data) => acc + Number(data.sellInfo.productPrice),
     0
   );
   return (
     <ContentsTotals>
-      {buyTotal && sellTotal ? (
+      {snsTotal && buyTotal && sellTotal ? (
         <>
           <div>
             <h4>
-              <CountUp end={13} duration={1.2} />개
+              <CountUp end={snsTotal.length} duration={1.2} />개
             </h4>
             <p>작성한 게시물</p>
           </div>

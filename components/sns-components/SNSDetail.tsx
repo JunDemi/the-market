@@ -1,5 +1,6 @@
 import { AuthContext } from "@/app/lib/AuthProvider";
 import {
+    deleteSNS,
   getMyProfile,
   getSNSDetail,
   updateSNSHeart,
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import SNSComment from "./SNSComment";
+import { useRouter } from "next/navigation";
 interface IUserProfile {
   profileId: string;
   profileInfo: {
@@ -188,8 +190,21 @@ const PostHeart = styled.div`
     cursor: pointer;
   }
 `;
+const DeleteSNS = styled.button`
+cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    border: none;
+    font-size: 12px;
+    color: white;
+    border-radius: 30px;
+    background-color: #f76363;
+    padding: 5px 1.2rem;
+`;
 //스타일 컴포넌트
 export default function SNSDetail({ snsId }: { snsId: string }) {
+    const router = useRouter();
   const {
     isLoading,
     data: sdData,
@@ -247,11 +262,19 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
       refetch();
     }
   };
+  const onDeleteSNS = async(snsId: string) => {
+    await deleteSNS(snsId);
+    router.replace('/profile');
+  }
   return (
     <>
       {!isLoading && sdData && userData && user.isLogin ? (
         <DetailContainer>
           <PostSlide>
+            {user.user.uid === sdData.info.userId && 
+            <DeleteSNS className="material-btn" onClick={() => onDeleteSNS(snsId)}>
+               삭제
+            </DeleteSNS>}
             <PostSlider>
               <AnimatePresence mode="sync" custom={back}>
                 {sdData.info.snsImageArray.map(
