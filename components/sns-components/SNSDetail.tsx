@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
+import SNSComment from "./SNSComment";
 interface IUserProfile {
   profileId: string;
   profileInfo: {
@@ -127,7 +128,7 @@ const PostHead = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
   padding: 1rem;
   border-bottom: 1px solid #d7d7d7;
   span {
@@ -138,17 +139,9 @@ const PostHead = styled.div`
     border-radius: 50%;
     margin-right: 1rem;
   }
-  h4 {
-    color: #848484;
-  }
-`;
-const PostSection = styled.div`
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 const Postinput = styled.div`
+flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: end;
@@ -342,12 +335,8 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
                 }
               />
               <h3>{sdData.info.userEmail}</h3>
-              <h4>
-                &nbsp;•&nbsp;
-                {getDateTimeFormat(Number(sdData.info.createAt))}
-              </h4>
             </PostHead>
-            <PostSection>hello</PostSection>
+            <SNSComment writerData={sdData} writerImg={userData[0].profileInfo.profileImg}/>
             <Postinput>
               <PostHeart>
                 <svg
