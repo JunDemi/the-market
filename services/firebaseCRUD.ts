@@ -288,3 +288,13 @@ export const updateSNSHeart = async (snsId: string, myUserId: string, isHeart: s
       });
     }
 };
+//sns게시물 상세
+export const getSNSDetail = async(snsId: string) => {
+  const resultData: any = {};
+  const snsQuery = query(snsRef, where(documentId(), "==", snsId));
+  const result = await getDocs(snsQuery); //문서화
+  result.docs.map((data) => {
+    resultData.info = data.data();
+  });
+  return resultData;
+}

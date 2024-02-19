@@ -27,8 +27,8 @@ interface ISNSList {
 const boxVar = {
   //AnimatePresense에 custom을 boolean state값을 적용시켜 isBack이란 변수를 사용
   entry: (isBack: boolean) => ({
-    //entry는 n번째 사진을 불러올때. isBack = 현재보다 뒤에 있는 사진일때 현재 사진을 -640만큼 이동 (640은 SNS게시물 컨테이너 넓이를 px값으로 변환한값임)
-    x: isBack ? -640 : 640,
+    //entry는 n번째 사진을 불러올때. isBack = 현재보다 뒤에 있는 사진일때 현재 사진을 -630만큼 이동 (630은 SNS게시물 컨테이너 넓이를 px값으로 변환한값임)
+    x: isBack ? -630 : 630,
   }),
   center: {
     //불러온 사진의 위치는 x: 0
@@ -38,8 +38,8 @@ const boxVar = {
     },
   },
   hide: (isBack: boolean) => ({
-    //현재 있는 사진을 치우고 다른 사진을 불러올때 현재있는 사진의 동작 메소드, 불러올 사진이 현재 사진보다 앞에 있을때 현재 사진을 640만큼 이동
-    x: isBack ? 640 : -640,
+    //현재 있는 사진을 치우고 다른 사진을 불러올때 현재있는 사진의 동작 메소드, 불러올 사진이 현재 사진보다 앞에 있을때 현재 사진을 630만큼 이동
+    x: isBack ? 630 : -630,
     transition: {
       duration: 0.4,
     },

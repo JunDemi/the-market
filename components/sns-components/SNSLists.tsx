@@ -90,17 +90,7 @@ const CloseButton = styled.div`
   display: flex;
   justify-content: end;
   margin-bottom: 0.5rem;
-  button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3px 12px;
-    font-size: 14px;
-    border: none;
-    border-radius: 30px;
-    color: white;
-    background: linear-gradient(90deg, #40f1fa, #05809c);
-    gap: 5px;
+  svg{
     cursor: pointer;
   }
 `;
@@ -109,7 +99,7 @@ export default function SNSLists() {
   const { user }: any = AuthContext();
   const { ref, inView } = useInView();
   const [goOverlay, set_goOverlay] = useState<boolean>(false);
-  const [moreData, set_moreData] = useState("");
+  const [moreData, set_moreData] = useState<ISNSList>();
   const {
     isLoading,
     data: snsData,
@@ -151,7 +141,7 @@ export default function SNSLists() {
       refetch();
     }
   };
-  const getOverlay = (snsId: string) => {
+  const getOverlay = (snsId: ISNSList) => {
     set_goOverlay(true);
     set_moreData(snsId);
   };
@@ -206,7 +196,7 @@ export default function SNSLists() {
                   <PostComment>
                     <p>댓글 300개</p>
                     <motion.button
-                      onClick={() => getOverlay(data.snsId)}
+                      onClick={() => getOverlay(data)}
                       className="material-btn"
                       initial={{
                         background: "linear-gradient(90deg, #d3fafa, #c7c5f8)",
@@ -256,20 +246,16 @@ export default function SNSLists() {
                   exit={{ opacity: 0 }}
                 >
                     <CloseButton>
-                      <button
-                        onClick={() => set_goOverlay(false)}
-                        className="material-btn"
-                      >
-                        close
                         <svg
+                        onClick={() => set_goOverlay(false)}
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          strokeWidth="3"
+                          strokeWidth="1.5"
                           stroke="white"
                           style={{
-                            width: "1rem",
-                            height: "1rem",
+                            width: "2rem",
+                            height: "2rem",
                           }}
                         >
                           <path
@@ -278,9 +264,8 @@ export default function SNSLists() {
                             d="M6 18 18 6M6 6l12 12"
                           />
                         </svg>
-                      </button>
                     </CloseButton>
-                    <SNSDetail snsId={moreData}/>
+                    <SNSDetail snsData={moreData}/>
                 </SNSOverlay>
               </>
             ) : null}
