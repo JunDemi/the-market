@@ -43,10 +43,8 @@ const PostHeart = styled.div`
     cursor: pointer;
   }
 `;
-const PostText = styled.textarea`
-  border: none;
-  width: 35rem;
-  padding: 0 1.5rem;
+const PostText = styled.p`
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
   font-size: 15px;
 `;
 const PostComment = styled.div`
@@ -90,7 +88,7 @@ const CloseButton = styled.div`
   display: flex;
   justify-content: end;
   margin-bottom: 0.5rem;
-  svg{
+  svg {
     cursor: pointer;
   }
 `;
@@ -184,15 +182,11 @@ export default function SNSLists() {
 
                     <h4>좋아요{data.snsInfo.snsHeart.length}개</h4>
                   </PostHeart>
-                  <PostText
-                    rows={3}
-                    readOnly
-                    defaultValue={
-                      data.snsInfo.snsText.length > 30
-                        ? data.snsInfo.snsText.slice(0, 30) + "....."
-                        : data.snsInfo.snsText
-                    }
-                  />
+                  <PostText>
+                    {data.snsInfo.snsText.length > 30
+                      ? data.snsInfo.snsText.slice(0, 30) + "....."
+                      : data.snsInfo.snsText}
+                  </PostText>
                   <PostComment>
                     <p>댓글 300개</p>
                     <motion.button
@@ -245,37 +239,39 @@ export default function SNSLists() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                    <CloseButton>
-                        <svg
-                        onClick={() => {
-                          set_goOverlay(false);
-                          refetch();
-                        }}
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="white"
-                          style={{
-                            width: "2rem",
-                            height: "2rem",
-                          }}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
-                        </svg>
-                    </CloseButton>
-                    <SNSDetail snsId={moreData}/>
+                  <CloseButton>
+                    <svg
+                      onClick={() => {
+                        set_goOverlay(false);
+                        refetch();
+                      }}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="white"
+                      style={{
+                        width: "2rem",
+                        height: "2rem",
+                      }}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </CloseButton>
+                  <SNSDetail snsId={moreData} />
                 </SNSOverlay>
               </>
             ) : null}
           </AnimatePresence>
         </>
       ) : (
-        ""
+        <div className="loading-gif">
+          <Image src="/loading2.gif" alt="로딩중..." width={100} height={100} />
+        </div>
       )}
     </>
   );

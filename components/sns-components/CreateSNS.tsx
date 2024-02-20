@@ -62,15 +62,15 @@ const WriteContainer = styled.div`
     font-size: 14px;
     color: #727272;
   }
-  textarea {
-    border-radius: 5px;
-    border: 1.5px solid #787878;
+  input {
+    border: none;
+    background: none;
+    border-bottom: 1.5px solid #787878;
     color: #595959;
     width: 830px;
     font-size: 15px;
     margin: 1rem 0 0 0;
-    padding: 5px;
-    height: 10rem;
+    padding: 15px 5px 5px 5px;
   }
   p {
     width: 830px;
@@ -181,7 +181,6 @@ export default function CreateSNS() {
     } else {
       set_loading(false);
       set_imgError(true);
-      return;
     }
   };
 
@@ -196,9 +195,9 @@ export default function CreateSNS() {
         createAt: Date.now(),
         updateAt: Date.now(),
       })
-      .then((응답) => router.push("/sns"))
       .catch((에러) => alert("파일 용량이 초과되었습니다."));
       set_loading(false);
+      router.push('/sns');
     }
   },[fbImgList, writeText])
   return (
@@ -256,7 +255,9 @@ export default function CreateSNS() {
             </>
           )}
           <h4>글 작성</h4>
-          <textarea
+          <input
+          type="text"
+          autoComplete="off"
             {...register("writeText", {
               required: "글 내용이 비어있습니다.",
             })}

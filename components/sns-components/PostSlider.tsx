@@ -220,7 +220,6 @@ export default function PostSlider({ data }: { data: ISNSList }) {
             </SliderButtons>
             <SliderRadios>
               {data.snsInfo.snsImageArray.map((data, current) => (
-                <>
                   <button
                     key={current}
                     onClick={() => currentPageSet(current)}
@@ -230,7 +229,6 @@ export default function PostSlider({ data }: { data: ISNSList }) {
                         : {}
                     }
                   />
-                </>
               ))}
             </SliderRadios>
           </PostSlide>
