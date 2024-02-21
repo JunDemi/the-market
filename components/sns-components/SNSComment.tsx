@@ -1,4 +1,5 @@
 import { getDateTimeFormat } from "@/services/getDay";
+import Link from "next/link";
 import styled from "styled-components";
 interface ISNSList {
   info: {
@@ -78,7 +79,7 @@ export default function SNSComment({
           }
         />
         <div>
-            <h5>{writerData.info.userEmail}</h5>
+            <Link href={`/userinfo/${writerData.info.userId}`}><h5>{writerData.info.userEmail}</h5></Link>
             <p>{writerData.info.snsText}</p>
         </div>
         <h4>{getDateTimeFormat(Number(writerData.info.createAt))}</h4>
@@ -87,7 +88,7 @@ export default function SNSComment({
         <PostDescription key={data}>
         <span style={{ backgroundImage: `url('/defaultProfile.webp')`, }}/>
         <div>
-            <h5>lovefls19@naver.com</h5>
+            <Link href="/userinfo"><h5>lovefls19@naver.com</h5></Link>
             <p>예쁜 사진들이네요!!</p>
         </div>
         <h4>2024-06-05 ( 12시 00분 )</h4>

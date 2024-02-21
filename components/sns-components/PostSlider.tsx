@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { getMyProfile } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
+import Link from "next/link";
 interface IUserProfile {
   profileId: string;
   profileInfo: {
@@ -60,6 +61,12 @@ const PostHead = styled.div`
     height: 40px;
     border-radius: 50%;
     margin-right: 1rem;
+  }
+  a{
+    color: black;
+    &:hover{
+      text-decoration: underline;
+    }
   }
   h4 {
     color: #848484;
@@ -161,7 +168,7 @@ export default function PostSlider({ data }: { data: ISNSList }) {
                     }
               }
             />
-            <h3>{data.snsInfo.userEmail}</h3>
+            <Link href={`/userinfo/${data.snsInfo.userId}`}>{data.snsInfo.userEmail}</Link>
             <h4>
               &nbsp;•&nbsp;{getDateTimeFormat(Number(data.snsInfo.createAt))}
             </h4>

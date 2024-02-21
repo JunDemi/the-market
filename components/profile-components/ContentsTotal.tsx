@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
-import { readBuyList, readSNSList } from "@/services/firebaseCRUD";
+import { readBuyList, readIDSNSList, readSNSList } from "@/services/firebaseCRUD";
 interface ISNSData {
   userId: string;
   userEmail: string;
@@ -74,7 +74,7 @@ export default function ContentsTotal({ userId }: { userId: string }) {
   const [buyTotal, set_buyTotal] = useState<IBuyData[]>();
   const [sellTotal, set_sellTotal] = useState<ISellData[]>();
   useEffect(() => {
-    readSNSList(undefined, userId, undefined)
+    readIDSNSList(userId)
       .then((res) => set_snsTotal(res))
       .catch((error) => console.log(error.message));
     readBuyList("buy", userId)

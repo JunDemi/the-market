@@ -117,7 +117,7 @@ export default function DefaultProfile() {
             <ContentsTotal userId={user.user.uid}/>
           </ProfileInfoDiv>
           <ContentsInfo>
-            <Link href="/profile">
+            <Link href="/profile/snsPage">
               <motion.div whileHover={{ y: -5, backgroundColor: "#f5f5f5" }} className="material-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

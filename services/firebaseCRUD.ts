@@ -261,48 +261,55 @@ export const buyDetail = async (buyId?: string) => {
   return resultData;
 };
 /*--------------------------- SNS ---------------------------*/
-export const readSNSList = async (pageParam?: number, userId?: string, keyword?: string) => {
+export const readSNSList = async (pageParam?: number, keyword?: string) => { //sns조회
   const resultArray: any = [];
-  if(pageParam){ //일반 조회
-    if(keyword){ //일반 조회: 검색을 했을 경우
-      const snsQuery = query(
-        snsRef,
-        orderBy("createAt", "desc"),
-        where("userEmail", ">=", keyword),
-        where("userEmail", "<=", keyword + "\uf8ff"), //키워드
-        limit(pageParam * 1)
-      );
-      const result = await getDocs(snsQuery); //문서화
-      result.docs.map((data) => {
-        resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
-      });
-      return resultArray;
-    }else{ //일반 조회
-      const snsQuery = query(
-        snsRef,
-        orderBy("createAt", "desc"),
-        limit(pageParam * 1)
-      );
-      const result = await getDocs(snsQuery); //문서화
-      result.docs.map((data) => {
-        resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
-      });
-      return resultArray;
+  
+    if(pageParam){ //일반 조회
+      if(keyword){ //일반 조회: 검색을 했을 경우
+        const snsQuery = query(
+          snsRef,
+          orderBy("createAt", "desc"),
+          where("userEmail", ">=", keyword),
+          where("userEmail", "<=", keyword + "\uf8ff"), //키워드
+          limit(pageParam * 1)
+        );
+        const result = await getDocs(snsQuery); //문서화
+        result.docs.map((data) => {
+          resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
+        });
+        return resultArray;
+      }else{ //일반 조회
+        const snsQuery = query(
+          snsRef,
+          orderBy("createAt", "desc"),
+          limit(pageParam * 1)
+        );
+        const result = await getDocs(snsQuery); //문서화
+        result.docs.map((data) => {
+          resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
+        });
+        return resultArray;
+      }
+     
     }
-   
-  }else if(userId){ //해당 유저가 작성한 sns개수
+  
+};
+//userID별 sns게시글 조회
+export const readIDSNSList = async (userId?: string) => {
+  const resultArray: any = [];
+  if(userId){ //해당 유저가 작성한 sns
     const snsQuery = query(
       snsRef,
       where("userId", "==", userId)
     );
     const result = await getDocs(snsQuery); //문서화
     result.docs.map((data) => {
-      resultArray.push(data.data()); //필드 고유의 id값과 필드 내용을 배열에 담기
+      resultArray.push({ snsId: data.id, snsInfo: data.data() }); //필드 고유의 id값과 필드 내용을 배열에 담기
     });
     return resultArray;
   }
-  
-};
+}
+
 //좋아요
 export const updateSNSHeart = async (snsId: string, myUserId: string, isHeart: string) => {
     const updateRef = doc(db, "sns", snsId);

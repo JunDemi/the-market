@@ -172,7 +172,7 @@ export default function SNSLists({ keyword }: IKeyword) {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["sns_list"],
-    queryFn: ({ pageParam = 1 }) => readSNSList(pageParam, undefined, keyword), //첫 페이지 당 4개의 데이터 -> DB호출에서 4를 곱할 예정
+    queryFn: ({ pageParam = 1 }) => readSNSList(pageParam, keyword), //첫 페이지 당 4개의 데이터 -> DB호출에서 4를 곱할 예정
     getNextPageParam: (lastPage, allPages) => {
       return allPages.length + 1; // 마지막 페이지가 될 때까지 / 1 * 4-> 2 * 4 -> 3 * 4 ...
     },
