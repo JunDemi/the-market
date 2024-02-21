@@ -74,7 +74,7 @@ export default function ContentsTotal({ userId }: { userId: string }) {
   const [buyTotal, set_buyTotal] = useState<IBuyData[]>();
   const [sellTotal, set_sellTotal] = useState<ISellData[]>();
   useEffect(() => {
-    readSNSList(undefined, userId)
+    readSNSList(undefined, userId, undefined)
       .then((res) => set_snsTotal(res))
       .catch((error) => console.log(error.message));
     readBuyList("buy", userId)

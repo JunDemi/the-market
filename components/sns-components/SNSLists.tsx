@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { readSNSList, updateSNSHeart } from "@/services/firebaseCRUD";
 import PostSlider from "./PostSlider";
-import { getDateTimeFormat } from "@/services/getDay";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import SNSDetail from "./SNSDetail";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 interface ISNSList {
   snsId: string;
@@ -24,7 +25,69 @@ interface ISNSList {
     updateAt: number;
   };
 }
+interface IKeyword {
+  keyword?: string;
+}
 //스타일 컴포넌트
+const SearchBar = styled.div`
+  //검색 창
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin: 0 3.5rem;
+  gap: 1rem;
+  form,
+  div {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-image: url("https://wallpapers.com/images/hd/white-pattern-background-nnqjxiito1qd9475.jpg");
+    background-size: cover;
+    box-shadow: 2px 2px 4px 0 #676767;
+    padding: 0.3rem;
+    border-radius: 5px;
+    input {
+      background: none;
+      transition: all.2s;
+      font-size: 15px;
+      letter-spacing: -0.03rem;
+      color: #555555;
+      padding: 10px 10px;
+      width: 8rem;
+      border: none;
+      &:focus {
+        width: 13rem;
+      }
+    }
+    button {
+      cursor: pointer;
+      padding: 0 0.5rem;
+      border: none;
+      background: none;
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+`;
+const ReloadButton = styled(motion.button)`
+  cursor: pointer;
+  border: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover svg {
+    stroke: #868686;
+  }
+  svg {
+    stroke: #5f5f5f;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+`;
 const Post = styled.div`
   width: 40rem;
   margin: 1rem auto 3rem auto;
@@ -93,11 +156,13 @@ const CloseButton = styled.div`
   }
 `;
 //스타일 컴포넌트
-export default function SNSLists() {
+export default function SNSLists({ keyword }: IKeyword) {
   const { user }: any = AuthContext();
+  const router = useRouter();
   const { ref, inView } = useInView();
   const [goOverlay, set_goOverlay] = useState<boolean>(false);
   const [moreData, set_moreData] = useState("");
+  const { handleSubmit, register, reset } = useForm({ mode: "onSubmit" });
   const {
     isLoading,
     data: snsData,
@@ -107,7 +172,7 @@ export default function SNSLists() {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["sns_list"],
-    queryFn: ({ pageParam = 1 }) => readSNSList(pageParam), //첫 페이지 당 4개의 데이터 -> DB호출에서 4를 곱할 예정
+    queryFn: ({ pageParam = 1 }) => readSNSList(pageParam, undefined, keyword), //첫 페이지 당 4개의 데이터 -> DB호출에서 4를 곱할 예정
     getNextPageParam: (lastPage, allPages) => {
       return allPages.length + 1; // 마지막 페이지가 될 때까지 / 1 * 4-> 2 * 4 -> 3 * 4 ...
     },
@@ -143,8 +208,60 @@ export default function SNSLists() {
     set_goOverlay(true);
     set_moreData(snsId);
   };
+   //검색
+   const snsSearch = async (value: { keyword?: string | null }) => {
+    router.push(`/sns/${value.keyword}`);
+    reset();
+  };
   return (
     <>
+     <SearchBar>
+            <form onSubmit={handleSubmit(snsSearch)}>
+              <input
+                type="text"
+                placeholder="이메일을 검색해보세요"
+                {...register("keyword", { required: true })}
+                autoComplete="off"
+              />
+              <button type="submit">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="#676767"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
+              </button>
+            </form>
+            <div>
+              <ReloadButton
+                whileTap={{ rotateZ: 300 }}
+                transition={{ duration: 0.7 }}
+                onClick={() => refetch()}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                  />
+                </svg>
+              </ReloadButton>
+            </div>
+          </SearchBar>
+          <div style={{margin: "2.5rem 0"}}/>
       {!isLoading && snsData && user.isLogin ? (
         <>
           {snsData.pages[snsData.pages.length - 1].map(
@@ -183,9 +300,7 @@ export default function SNSLists() {
                     <h4>좋아요{data.snsInfo.snsHeart.length}개</h4>
                   </PostHeart>
                   <PostText>
-                    {data.snsInfo.snsText.length > 30
-                      ? data.snsInfo.snsText.slice(0, 30) + "....."
-                      : data.snsInfo.snsText}
+                    {data.snsInfo.snsText.length > 30 ? data.snsInfo.snsText.slice(0, 30) + "..." : data.snsInfo.snsText}
                   </PostText>
                   <PostComment>
                     <p>댓글 300개</p>
