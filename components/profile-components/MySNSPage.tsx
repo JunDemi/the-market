@@ -6,7 +6,9 @@ export default function MySNSPage() {
   const { user }: any = AuthContext();
   return (
     <>
-      <MySNSList yourId={user.user.uid} />
+    {user?.isLogin &&
+    <MySNSList yourId={user.user.uid} />
+    }
     </>
   );
 }

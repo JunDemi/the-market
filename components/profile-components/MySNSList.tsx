@@ -1,16 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
-import { useEffect, useState } from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
-import { readIDSNSList, readSNSList } from "@/services/firebaseCRUD";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { readIDSNSList } from "@/services/firebaseCRUD";
 import PostSlider from "../sns-components/PostSlider";
 import Image from "next/image";
-import { useInView } from "react-intersection-observer";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import SNSDetail from "../sns-components/SNSDetail";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 
 interface ISNSList {
   snsId: string;
@@ -62,11 +59,6 @@ const PostComment = styled.div`
     cursor: pointer;
   }
 `;
-const InfiniteScrollDiv = styled.div`
-  margin: 5rem auto 0 auto;
-  display: flex;
-  justify-content: center;
-`;
 const SNSOverlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.8);
   position: fixed;
@@ -91,7 +83,6 @@ const CloseButton = styled.div`
 `;
 //스타일 컴포넌트
 export default function MySNSList(yourId: { yourId?: string }) {
-  const { user }: any = AuthContext();
   const [goOverlay, set_goOverlay] = useState<boolean>(false);
   const [moreData, set_moreData] = useState("");
   const {
@@ -105,7 +96,7 @@ export default function MySNSList(yourId: { yourId?: string }) {
   };
   return (
     <>
-      {!isLoading && snsData && user.isLogin ? (
+      {!isLoading && snsData ? (
         <>
           {snsData.map((data, num) => (
             <div key={num}>
