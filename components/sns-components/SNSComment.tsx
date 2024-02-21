@@ -84,8 +84,8 @@ export default function SNSComment({
         </div>
         <h4>{getDateTimeFormat(Number(writerData.info.createAt))}</h4>
       </PostDescription>
-      {[...Array(8)].map(data => (
-        <PostDescription key={data}>
+      {[...Array(8)].map((data, number) => (
+        <PostDescription key={number}>
         <span style={{ backgroundImage: `url('/defaultProfile.webp')`, }}/>
         <div>
             <Link href="/userinfo"><h5>lovefls19@naver.com</h5></Link>

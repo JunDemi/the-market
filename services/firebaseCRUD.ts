@@ -337,3 +337,17 @@ export const getSNSDetail = async(snsId: string) => {
 export const deleteSNS = async (snsid: string) => {
     await deleteDoc(doc(db, "sns", snsid));
 };
+/*--------------------------- SNS댓글 ---------------------------*/
+//sns댓글 추가
+export const addSNSComment = async(snsId: string, commentText: string, userId?: string, userEmail?: string) => {
+  if(userId && userEmail){
+    addDoc(collection(db, "snscomment"), {
+      snsId: snsId,
+      userId: userId,
+      userEmail: userEmail,
+      commentText: commentText,
+      createAt: Date.now(),
+      updateAt: Date.now(),
+    })
+  }
+}

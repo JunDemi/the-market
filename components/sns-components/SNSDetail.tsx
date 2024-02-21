@@ -1,6 +1,7 @@
 import { AuthContext } from "@/app/lib/AuthProvider";
 import {
-    deleteSNS,
+  addSNSComment,
+  deleteSNS,
   getMyProfile,
   getSNSDetail,
   updateSNSHeart,
@@ -12,6 +13,7 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import SNSComment from "./SNSComment";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 interface IUserProfile {
   profileId: string;
   profileInfo: {
@@ -143,7 +145,7 @@ const PostHead = styled.div`
   }
 `;
 const Postinput = styled.div`
-flex-grow: 1;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: end;
@@ -166,13 +168,13 @@ flex-grow: 1;
       cursor: pointer;
       border: none;
       background: none;
-      svg{
+      svg {
         stroke: #0fadf1;
         width: 1.5rem;
         height: 1.5rem;
         transition: all.2s;
-        &:hover{
-            stroke: #79cbee;
+        &:hover {
+          stroke: #79cbee;
         }
       }
     }
@@ -191,20 +193,20 @@ const PostHeart = styled.div`
   }
 `;
 const DeleteSNS = styled.button`
-cursor: pointer;
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    border: none;
-    font-size: 12px;
-    color: white;
-    border-radius: 30px;
-    background-color: #f76363;
-    padding: 5px 1.2rem;
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  border: none;
+  font-size: 12px;
+  color: white;
+  border-radius: 30px;
+  background-color: #f76363;
+  padding: 5px 1.2rem;
 `;
 //스타일 컴포넌트
 export default function SNSDetail({ snsId }: { snsId: string }) {
-    const router = useRouter();
+  const router = useRouter();
   const {
     isLoading,
     data: sdData,
@@ -262,19 +264,37 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
       refetch();
     }
   };
-  const onDeleteSNS = async(snsId: string) => {
+  //게시물 삭제
+  const onDeleteSNS = async (snsId: string) => {
     await deleteSNS(snsId);
-    router.replace('/profile');
-  }
+    router.push("/profile");
+  };
+  //댓글 작성 훅
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm<{ commentText: string }>({ mode: "onSubmit" });
+  //댓글 작성
+  const onValid = async (value: { commentText: string }) => {
+    await addSNSComment(snsId, value.commentText, user?.user.uid, user?.user.email);
+    reset();
+    refetch();
+  };
   return (
     <>
       {!isLoading && sdData && userData && user.isLogin ? (
         <DetailContainer>
           <PostSlide>
-            {user.user.uid === sdData.info.userId && 
-            <DeleteSNS className="material-btn" onClick={() => onDeleteSNS(snsId)}>
-               삭제
-            </DeleteSNS>}
+            {user.user.uid === sdData.info.userId && (
+              <DeleteSNS
+                className="material-btn"
+                onClick={() => onDeleteSNS(snsId)}
+              >
+                삭제
+              </DeleteSNS>
+            )}
             <PostSlider>
               <AnimatePresence mode="sync" custom={back}>
                 {sdData.info.snsImageArray.map(
@@ -330,17 +350,15 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
             </SliderButtons>
             <SliderRadios>
               {sdData.info.snsImageArray.map((data, current) => (
-                <>
-                  <button
-                    key={current}
-                    onClick={() => currentPageSet(current)}
-                    style={
-                      currentPage === current
-                        ? { backgroundColor: "#4ebbf5" }
-                        : {}
-                    }
-                  />
-                </>
+                <button
+                  key={current}
+                  onClick={() => currentPageSet(current)}
+                  style={
+                    currentPage === current
+                      ? { backgroundColor: "#4ebbf5" }
+                      : {}
+                  }
+                />
               ))}
             </SliderRadios>
           </PostSlide>
@@ -359,7 +377,10 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
               />
               <h3>{sdData.info.userEmail}</h3>
             </PostHead>
-            <SNSComment writerData={sdData} writerImg={userData[0].profileInfo.profileImg}/>
+            <SNSComment
+              writerData={sdData}
+              writerImg={userData[0].profileInfo.profileImg}
+            />
             <Postinput>
               <PostHeart>
                 <svg
@@ -391,9 +412,16 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
 
                 <h4>좋아요{sdData.info.snsHeart.length}개</h4>
               </PostHeart>
-              <form>
-                <input type="text" placeholder="댓글 작성" />
-                <button>
+              <form onSubmit={handleSubmit(onValid)}>
+                <input
+                type="text"
+                  placeholder="댓글 작성"
+                  autoComplete="off"
+                  {...register("commentText", {
+                    required: true,
+                  })}
+                />
+                <button type="submit">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

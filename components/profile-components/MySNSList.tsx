@@ -142,7 +142,6 @@ export default function MySNSList(yourId: { yourId?: string }) {
               </Post>
             </div>
           ))}
-          <WriteButton to="sns" />
 
           <AnimatePresence>
             {goOverlay ? (
