@@ -94,6 +94,34 @@ const ContentsInfo = styled.div`
     }
   }
 `;
+const TotalDiv = styled.div`
+  position: absolute;
+  bottom: -3.5rem;
+  padding: 2.5rem;
+  background-color: white;
+  box-shadow: 3px 3px 4px #898989;
+  min-width: 40rem;
+  border-radius: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  column-gap: 2.5rem;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    h4 {
+      font-weight: bold;
+      font-size: 20px;
+    }
+    p {
+      font-size: 14px;
+      color: #949494;
+    }
+  }
+`;
 //스타일 컴포넌트
 export default function DefaultProfile() {
   const { user }: any = AuthContext();
@@ -114,7 +142,9 @@ export default function DefaultProfile() {
             <Link href="/profile/updateProfile" className="material-btn">
               프로필 사진 변경
             </Link>
+            <TotalDiv>
             <ContentsTotal userId={user.user.uid}/>
+            </TotalDiv>
           </ProfileInfoDiv>
           <ContentsInfo>
             <Link href="/profile/snsPage">

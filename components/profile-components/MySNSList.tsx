@@ -6,7 +6,6 @@ import { useQuery } from "react-query";
 import { readIDSNSList } from "@/services/firebaseCRUD";
 import PostSlider from "../sns-components/PostSlider";
 import Image from "next/image";
-import { AuthContext } from "@/app/lib/AuthProvider";
 import SNSDetail from "../sns-components/SNSDetail";
 
 interface ISNSList {

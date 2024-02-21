@@ -40,35 +40,6 @@ interface ISellData {
   };
 }
 //스타일 컴포넌트
-const ContentsTotals = styled.div`
-  position: absolute;
-  bottom: -3.5rem;
-  padding: 2.5rem;
-  background-color: white;
-  box-shadow: 3px 3px 4px #898989;
-  min-width: 40rem;
-  border-radius: 15px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  text-align: center;
-  column-gap: 2.5rem;
-  div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    h4 {
-      font-weight: bold;
-      font-size: 20px;
-    }
-    p {
-      font-size: 14px;
-      color: #949494;
-    }
-  }
-`;
-//스타일 컴포넌트
 export default function ContentsTotal({ userId }: { userId: string }) {
   const [snsTotal, set_snsTotal] = useState<ISNSData[]>();
   const [buyTotal, set_buyTotal] = useState<IBuyData[]>();
@@ -96,7 +67,7 @@ export default function ContentsTotal({ userId }: { userId: string }) {
     0
   );
   return (
-    <ContentsTotals>
+    <>
       {snsTotal && buyTotal && sellTotal ? (
         <>
           <div>
@@ -119,6 +90,6 @@ export default function ContentsTotal({ userId }: { userId: string }) {
           </div>
         </>
       ) : null}
-    </ContentsTotals>
+  </>
   );
 }
