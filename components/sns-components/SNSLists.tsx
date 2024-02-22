@@ -12,6 +12,7 @@ import { AuthContext } from "@/app/lib/AuthProvider";
 import SNSDetail from "./SNSDetail";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import SNSCommentLength from "./SNSCommentLength";
 
 interface ISNSList {
   snsId: string;
@@ -303,7 +304,7 @@ export default function SNSLists({ keyword }: IKeyword) {
                     {data.snsInfo.snsText.length > 30 ? data.snsInfo.snsText.slice(0, 30) + "..." : data.snsInfo.snsText}
                   </PostText>
                   <PostComment>
-                    <p>댓글 300개</p>
+                    <SNSCommentLength snsId={data.snsId}/>
                     <motion.button
                       onClick={() => getOverlay(data.snsId)}
                       className="material-btn"

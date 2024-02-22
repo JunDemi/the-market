@@ -7,11 +7,10 @@ import { getDateTimeFormat } from "@/services/getDay";
 import Link from "next/link";
 import { useInfiniteQuery } from "react-query";
 import styled from "styled-components";
-import CommentProfileImg from "./\bCommentProfileImg";
+import CommentProfileImg from "./CommentProfileImg";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { snsHeartState } from "@/app/atom";
-import { useEffect } from "react";
 interface ISNSList {
   info: {
     userId: string;
@@ -150,6 +149,7 @@ export default function SNSComment({
   writerData,
   writerImg,
 }: IProps) {
+  
   const [, set_snsHeart] = useRecoilState(snsHeartState); //좋아요 클릭 시 리코일 이벤트 발생시켜 상위 컴포넌트에 신호 전달
   const {
     isLoading,
@@ -159,7 +159,7 @@ export default function SNSComment({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["comment_list"],
-    queryFn: ({ pageParam = 1 }) => readSNSComment(pageParam, snsId), //첫 페이지 당 4개의 데이터 -> DB호출에서 4를 곱할 예정
+    queryFn: ({ pageParam = 1 }) => readSNSComment(snsId, pageParam), //첫 페이지 당 4개의 데이터 -> DB호출에서 4를 곱할 예정
     getNextPageParam: (lastPage, allPages) => {
       return allPages.length + 1; // 마지막 페이지가 될 때까지 / 1 * 4-> 2 * 4 -> 3 * 4 ...
     },
@@ -196,7 +196,6 @@ export default function SNSComment({
     reset();
     refetch();
   };
-  console.log(hasNextPage);
   return (
     <>
       <PostSection>

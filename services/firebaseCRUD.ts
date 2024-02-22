@@ -352,8 +352,9 @@ export const addSNSComment = async(snsId: string, commentText: string, userId?: 
   }
 }
 //sns댓글 조회
-export const readSNSComment = async(pageParam: number, snsId: string) => {
+export const readSNSComment = async( snsId: string, pageParam?: number) => {
   const resultArray: any = [];
+  if(pageParam){ //게시물 상세 페이지 전용
     const snsQuery = query(
       snsCommentRef,
       where("snsId", "==", snsId),
@@ -365,4 +366,17 @@ export const readSNSComment = async(pageParam: number, snsId: string) => {
       resultArray.push({ commentId: data.id, commentInfo: data.data() });
     });
     return resultArray;
+  }else{ //댓글 개수 세기 전용
+    const snsQuery = query(
+      snsCommentRef,
+      where("snsId", "==", snsId),
+      orderBy("createAt", "desc")
+    );
+    const result = await getDocs(snsQuery);
+    result.docs.map((data) => {
+      resultArray.push(data.data());
+    });
+    return resultArray;
+  }
+   
 }
