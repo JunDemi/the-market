@@ -11,6 +11,7 @@ import CommentProfileImg from "./\bCommentProfileImg";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { snsHeartState } from "@/app/atom";
+import { useEffect } from "react";
 interface ISNSList {
   info: {
     userId: string;
@@ -45,6 +46,16 @@ const PostSection = styled.div`
   background-color: #f9f9f9;
   padding: 1rem;
   overflow-y: scroll;
+  svg {
+    cursor: pointer;
+    stroke: #898989;
+    width: 30px;
+    height: 30px;
+    transition: all.2s;
+    &:hover {
+      stroke: #565656;
+    }
+  }
 `;
 const PostDescription = styled.div`
   display: flex;
@@ -145,7 +156,6 @@ export default function SNSComment({
     data: cData,
     refetch,
     fetchNextPage,
-    isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["comment_list"],
@@ -186,6 +196,7 @@ export default function SNSComment({
     reset();
     refetch();
   };
+  console.log(hasNextPage);
   return (
     <>
       <PostSection>
@@ -229,7 +240,25 @@ export default function SNSComment({
             )}
           </>
         ) : (
-          ""
+          "댓글 불러오는 중..."
+        )}
+        {hasNextPage && (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <svg
+              onClick={() => fetchNextPage()}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </div>
         )}
       </PostSection>
       <Postinput>
