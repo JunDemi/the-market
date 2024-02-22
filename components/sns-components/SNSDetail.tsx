@@ -14,6 +14,8 @@ import styled from "styled-components";
 import SNSComment from "./SNSComment";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { snsHeartState } from "@/app/atom";
 interface IUserProfile {
   profileId: string;
   profileInfo: {
@@ -144,54 +146,7 @@ const PostHead = styled.div`
     margin-right: 1rem;
   }
 `;
-const Postinput = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  align-items: start;
-  form {
-    border-top: 1px solid #d7d7d7;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0 10px;
-    input {
-      border: none;
-      padding: 1.5rem 0;
-      font-size: 16px;
-      width: 90%;
-    }
-    button {
-      padding: 1rem;
-      cursor: pointer;
-      border: none;
-      background: none;
-      svg {
-        stroke: #0fadf1;
-        width: 1.5rem;
-        height: 1.5rem;
-        transition: all.2s;
-        &:hover {
-          stroke: #79cbee;
-        }
-      }
-    }
-  }
-`;
-const PostHeart = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  padding: 1rem;
-  gap: 1rem;
-  font-size: 13px;
-  color: #616161;
-  svg {
-    cursor: pointer;
-  }
-`;
+
 const DeleteSNS = styled.button`
   cursor: pointer;
   position: absolute;
@@ -206,6 +161,7 @@ const DeleteSNS = styled.button`
 `;
 //스타일 컴포넌트
 export default function SNSDetail({ snsId }: { snsId: string }) {
+  const [snsHeart, set_snsHeart] = useRecoilState(snsHeartState); //전달된 좋아요 신호 리코일
   const router = useRouter();
   const {
     isLoading,
@@ -244,43 +200,16 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
       .then((response) => set_userData(response))
       .catch((error) => console.log(error.message));
   }, [sdData]);
-  const getHeart = (
-    snsId: string,
-    snsUserId: string,
-    myUserId: string,
-    snsHeart: string[]
-  ) => {
-    //좋아요 (본인게시물이면 작동하지 않게)
-    if (snsUserId === myUserId) {
-      return;
-    } else {
-      if (snsHeart.indexOf(myUserId) !== -1) {
-        //좋아요 한 사람 목록에 본인이 있으면 좋아요 삭제
-        updateSNSHeart(snsId, myUserId, "-");
-      } else {
-        //좋아요 한 사람 목록에 본인이 없으면 좋아요 추가
-        updateSNSHeart(snsId, myUserId, "+");
-      }
+  useEffect(()=>{
+    if(snsHeart === "clicked"){
       refetch();
+      set_snsHeart("");
     }
-  };
+  },[snsHeart]);
   //게시물 삭제
   const onDeleteSNS = async (snsId: string) => {
     await deleteSNS(snsId);
     router.push("/profile");
-  };
-  //댓글 작성 훅
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm<{ commentText: string }>({ mode: "onSubmit" });
-  //댓글 작성
-  const onValid = async (value: { commentText: string }) => {
-    await addSNSComment(snsId, value.commentText, user?.user.uid, user?.user.email);
-    reset();
-    refetch();
   };
   return (
     <>
@@ -378,65 +307,12 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
               <h3>{sdData.info.userEmail}</h3>
             </PostHead>
             <SNSComment
+              snsId={snsId}
+              userId={user.user.uid}
+              userEmail={user.user.email}
               writerData={sdData}
               writerImg={userData[0].profileInfo.profileImg}
             />
-            <Postinput>
-              <PostHeart>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  onClick={() =>
-                    getHeart(
-                      snsId,
-                      sdData.info.userId,
-                      user.user.uid,
-                      sdData.info.snsHeart
-                    )
-                  }
-                  fill={
-                    sdData.info.snsHeart.indexOf(user.user.uid) !== -1
-                      ? "#83c2f5"
-                      : "none"
-                  }
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="#83c2f5"
-                  style={{ width: "2rem", height: "2rem" }}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                  />
-                </svg>
-
-                <h4>좋아요{sdData.info.snsHeart.length}개</h4>
-              </PostHeart>
-              <form onSubmit={handleSubmit(onValid)}>
-                <input
-                type="text"
-                  placeholder="댓글 작성"
-                  autoComplete="off"
-                  {...register("commentText", {
-                    required: true,
-                  })}
-                />
-                <button type="submit">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                    />
-                  </svg>
-                </button>
-              </form>
-            </Postinput>
           </CommentContainer>
         </DetailContainer>
       ) : null}

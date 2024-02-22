@@ -30,7 +30,7 @@ const authRef = collection(db, "profiles");
 const productsRef = collection(db, "product");
 const buyRef = collection(db, "buy");
 const snsRef = collection(db, "sns");
-
+const snsCommentRef = collection(db, "snscomment");
 /*--------------------------- Autentication ---------------------------*/
 //회원가입 후 사용자 계정 정보를 DB에 추가 저장
 export const getAuthenticInfo = (uid: string, uemail: string | null) => {
@@ -350,4 +350,19 @@ export const addSNSComment = async(snsId: string, commentText: string, userId?: 
       updateAt: Date.now(),
     })
   }
+}
+//sns댓글 조회
+export const readSNSComment = async(pageParam: number, snsId: string) => {
+  const resultArray: any = [];
+    const snsQuery = query(
+      snsCommentRef,
+      where("snsId", "==", snsId),
+      orderBy("createAt", "desc"),
+      limit(pageParam * 5)
+    );
+    const result = await getDocs(snsQuery);
+    result.docs.map((data) => {
+      resultArray.push({ commentId: data.id, commentInfo: data.data() });
+    });
+    return resultArray;
 }

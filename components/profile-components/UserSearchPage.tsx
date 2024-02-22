@@ -85,7 +85,7 @@ export default function UserSearchPage({ userId }: { userId?: string }) {
   );
   return (
     <>
-      {user?.isLogin && userData ? (
+      {user?.isLogin && userData && userId? (
         <>
           <InfoContainer>
             <ProfileInfoDiv>
@@ -113,7 +113,7 @@ export default function UserSearchPage({ userId }: { userId?: string }) {
               </div>
 
               <TotalDiv>
-                <ContentsTotal userId={user.user.uid} />
+                <ContentsTotal userId={userId} />
               </TotalDiv>
             </ProfileInfoDiv>
 
