@@ -304,7 +304,7 @@ export default function SNSLists({ keyword }: IKeyword) {
                     {data.snsInfo.snsText.length > 30 ? data.snsInfo.snsText.slice(0, 30) + "..." : data.snsInfo.snsText}
                   </PostText>
                   <PostComment>
-                    <SNSCommentLength snsId={data.snsId}/>
+                    <SNSCommentLength snsId={data.snsId} close={goOverlay}/>
                     <motion.button
                       onClick={() => getOverlay(data.snsId)}
                       className="material-btn"

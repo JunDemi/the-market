@@ -226,7 +226,7 @@ export default function SNSComment({
                 <PostDescription key={number}>
                   <CommentProfileImg userId={data.commentInfo.userId} />
                   <div>
-                    <Link href="/userinfo">
+                    <Link href={`/userinfo/${data.commentInfo.userId}`}>
                       <h5>{data.commentInfo.userEmail}</h5>
                     </Link>
                     <p>{data.commentInfo.commentText}</p>
