@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import "../asset/main.scss";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";

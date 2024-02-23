@@ -107,8 +107,7 @@ export default function UserSearchPage({ userId }: { userId?: string }) {
                 />
                 <h3>{userData[0].profileInfo.userEmail}</h3>
                 <h4>
-                  가입일:{" "}
-                  {getDateTimeFormat(Number(user.user.metadata.createdAt))}
+                  가입일: {getDateTimeFormat(Number(user.user.metadata.createdAt))}
                 </h4>
               </div>
 
@@ -116,7 +115,6 @@ export default function UserSearchPage({ userId }: { userId?: string }) {
                 <ContentsTotal userId={userId} />
               </TotalDiv>
             </ProfileInfoDiv>
-
             <MySNSList yourId={userId} />
           </InfoContainer>
         </>

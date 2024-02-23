@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import { readBuyList, readIDSNSList, readSNSList } from "@/services/firebaseCRUD";
+import { useRecoilState } from "recoil";
+import { isDeleteSNS } from "@/app/atom";
 interface ISNSData {
   userId: string;
   userEmail: string;
@@ -41,6 +43,7 @@ interface ISellData {
 }
 //스타일 컴포넌트
 export default function ContentsTotal({ userId }: { userId: string }) {
+  const [close, ] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
   const [snsTotal, set_snsTotal] = useState<ISNSData[]>();
   const [buyTotal, set_buyTotal] = useState<IBuyData[]>();
   const [sellTotal, set_sellTotal] = useState<ISellData[]>();
@@ -54,7 +57,7 @@ export default function ContentsTotal({ userId }: { userId: string }) {
     readBuyList("sell", userId)
       .then((res) => set_sellTotal(res))
       .catch((error) => console.log(error.message));
-  }, [userId]);
+  }, [userId, close]);
 
   const total1 = buyTotal?.reduce(
     //총 구매액 계산

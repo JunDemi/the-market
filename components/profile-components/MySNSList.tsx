@@ -107,7 +107,12 @@ export default function MySNSList(yourId: { yourId?: string }) {
   },[goOverlay, close])
   return (
     <>
-      {!isLoading && snsData ? (
+      {!isLoading && snsData ? 
+        snsData.length === 0 ?
+          <div className="no-sns">
+            작성한 글이 없습니다.
+          </div>
+        :
         <>
           {snsData.map((data, num) => (
             <div key={num}>
@@ -192,7 +197,7 @@ export default function MySNSList(yourId: { yourId?: string }) {
             ) : null}
           </AnimatePresence>
         </>
-      ) : (
+      : (
         <div className="loading-gif">
           <Image src="/loading2.gif" alt="로딩중..." width={100} height={100} />
         </div>
