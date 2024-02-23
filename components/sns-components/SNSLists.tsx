@@ -308,7 +308,7 @@ export default function SNSLists({ keyword }: IKeyword) {
                       />
                     </svg>
 
-                    <h4>좋아요{data.snsInfo.snsHeart.length}개</h4>
+                    <h4>좋아요 {data.snsInfo.snsHeart.length}개</h4>
                   </PostHeart>
                   <PostText>
                     {data.snsInfo.snsText.length > 30 ? data.snsInfo.snsText.slice(0, 30) + "..." : data.snsInfo.snsText}

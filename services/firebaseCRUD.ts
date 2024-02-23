@@ -80,7 +80,7 @@ export const readProduct = async (
       where("productName", ">=", keyword.toLowerCase()),
       where("productName", "<=", keyword.toLowerCase() + "\uf8ff"), //키워드
       orderBy("createAt", "desc"),
-      limit(pageParam * 12)
+      limit(pageParam * 6)
     );
     const result = await getDocs(productQuery); //문서화
     result.docs.map((data) => {
@@ -93,7 +93,7 @@ export const readProduct = async (
       productsRef,
       where("heart", "==", "0"),
       orderBy("createAt", "desc"),
-      limit(pageParam * 12)
+      limit(pageParam * 6)
     );
     const result = await getDocs(productQuery); //문서화
     result.docs.map((data) => {

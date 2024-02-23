@@ -159,12 +159,12 @@ export default function PostSlider({ data }: { data: ISNSList }) {
           <PostHead>
             <span
               style={
-                userData[0].profileInfo.profileImg === "default"
+                userData[0]?.profileInfo.profileImg === "default"
                   ? {
                       backgroundImage: `url('/defaultProfile.webp')`,
                     }
                   : {
-                      backgroundImage: `url('${userData[0].profileInfo.profileImg}')`,
+                      backgroundImage: `url('${userData[0]?.profileInfo.profileImg}')`,
                     }
               }
             />
