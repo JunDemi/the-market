@@ -3,13 +3,14 @@ import styled from "styled-components";
 import WriteButton from "../WriteButton";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { readIDSNSList } from "@/services/firebaseCRUD";
+import { readIDSNSList, updateSNSHeart } from "@/services/firebaseCRUD";
 import PostSlider from "../sns-components/PostSlider";
 import Image from "next/image";
 import SNSDetail from "../sns-components/SNSDetail";
 import SNSCommentLength from "../sns-components/SNSCommentLength";
 import { useRecoilState } from "recoil";
 import { isDeleteSNS } from "@/app/atom";
+import { AuthContext } from "@/app/lib/AuthProvider";
 
 interface ISNSList {
   snsId: string;
@@ -31,6 +32,7 @@ const Post = styled.div`
   box-shadow: 3px 3px 4px #787878;
 `;
 const PostHeart = styled.div`
+cursor: pointer;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -86,6 +88,7 @@ const CloseButton = styled.div`
 //스타일 컴포넌트
 export default function MySNSList(yourId: { yourId?: string }) {
   const [close, set_close] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
+  const {user}:any = AuthContext();
   const [goOverlay, set_goOverlay] = useState<boolean>(false);
   const [moreData, set_moreData] = useState("");
   const {
@@ -104,10 +107,30 @@ export default function MySNSList(yourId: { yourId?: string }) {
       refetch();
       set_close("");
     }
-  },[goOverlay, close])
+  },[goOverlay, close]);
+  const getHeart = (
+    snsId: string,
+    snsUserId: string,
+    myUserId: string,
+    snsHeart: string[]
+  ) => {
+    //좋아요 (본인게시물이면 작동하지 않게)
+    if (snsUserId === myUserId) {
+      return;
+    } else {
+      if (snsHeart.indexOf(myUserId) !== -1) {
+        //좋아요 한 사람 목록에 본인이 있으면 좋아요 삭제
+        updateSNSHeart(snsId, myUserId, "-");
+      } else {
+        //좋아요 한 사람 목록에 본인이 없으면 좋아요 추가
+        updateSNSHeart(snsId, myUserId, "+");
+      }
+      refetch();
+    }
+  };
   return (
     <>
-      {!isLoading && snsData ? 
+      {!isLoading && snsData && user.isLogin ? 
         snsData.length === 0 ?
           <div className="no-sns">
             작성한 글이 없습니다.
@@ -121,7 +144,19 @@ export default function MySNSList(yourId: { yourId?: string }) {
                 <PostHeart>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
+                    onClick={() =>
+                      getHeart(
+                        data.snsId,
+                        data.snsInfo.userId,
+                        user.user.uid,
+                        data.snsInfo.snsHeart
+                      )
+                    }
+                    fill={
+                      data.snsInfo.snsHeart.indexOf(user.user.uid) !== -1
+                        ? "#83c2f5"
+                        : "none"
+                    }
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="#83c2f5"

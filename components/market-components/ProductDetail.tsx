@@ -188,7 +188,7 @@ export default function ProductDetail() {
                       &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
                       {getDateTimeFormat(detailData.info.updateAt)}
                     </p>
-                    <Link href="/blog">
+                    <Link href={`/userinfo/${detailData.info.userId}`}>
                       <motion.span
                         initial={{
                           background:
