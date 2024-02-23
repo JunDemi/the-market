@@ -1,10 +1,9 @@
 import { AuthContext } from "@/app/lib/AuthProvider";
 import {
-  addSNSComment,
   deleteSNS,
+  deleteSNSComment,
   getMyProfile,
   getSNSDetail,
-  updateSNSHeart,
 } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,7 +14,7 @@ import SNSComment from "./SNSComment";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { snsHeartState } from "@/app/atom";
+import { isDeleteSNS, snsHeartState } from "@/app/atom";
 interface IUserProfile {
   profileId: string;
   profileInfo: {
@@ -162,6 +161,7 @@ const DeleteSNS = styled.button`
 //스타일 컴포넌트
 export default function SNSDetail({ snsId }: { snsId: string }) {
   const [snsHeart, set_snsHeart] = useRecoilState(snsHeartState); //전달된 좋아요 신호 리코일
+  const [, set_close] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
   const router = useRouter();
   const {
     isLoading,
@@ -208,8 +208,9 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
   },[snsHeart]);
   //게시물 삭제
   const onDeleteSNS = async (snsId: string) => {
+    await deleteSNSComment(undefined ,snsId);
     await deleteSNS(snsId);
-    router.push("/profile");
+    set_close("close");
   };
   return (
     <>

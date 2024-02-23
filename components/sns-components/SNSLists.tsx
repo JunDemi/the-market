@@ -13,6 +13,8 @@ import SNSDetail from "./SNSDetail";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import SNSCommentLength from "./SNSCommentLength";
+import { useRecoilState } from "recoil";
+import { isDeleteSNS } from "@/app/atom";
 
 interface ISNSList {
   snsId: string;
@@ -158,6 +160,7 @@ const CloseButton = styled.div`
 `;
 //스타일 컴포넌트
 export default function SNSLists({ keyword }: IKeyword) {
+  const [close, set_close] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
   const { user }: any = AuthContext();
   const router = useRouter();
   const { ref, inView } = useInView();
@@ -184,7 +187,14 @@ export default function SNSLists({ keyword }: IKeyword) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-
+  useEffect(() => {
+    //게시물 삭제 시 오버레이 닫고 리패치
+    if(close === "close"){
+      set_goOverlay(false);
+      refetch();
+      set_close("");
+    }
+  },[goOverlay, close])
   const getHeart = (
     snsId: string,
     snsUserId: string,

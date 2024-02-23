@@ -379,10 +379,19 @@ export const readSNSComment = async( snsId: string, pageParam?: number) => {
     return resultArray;
   }
 }
+//sns댓글삭제
 export const deleteSNSComment = async(commentId?: string, snsId?: string) => {
   if(commentId && !snsId){ //댓글 낱개 삭제
     deleteDoc(doc(db, "snscomment", commentId));
   }else if(!commentId && snsId){ //sns게시물에 있는 모든 댓글 삭제
-    deleteDoc(doc(db, "snscomment", snsId));
+    const commentQuery = query(
+      snsCommentRef,
+      where("snsId", "==", snsId),
+    );
+    const result = await getDocs(commentQuery);
+    result.docs.map(data => {
+      deleteDoc(data.ref);
+    })
+    
   }
 }

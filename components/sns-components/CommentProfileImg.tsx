@@ -17,7 +17,7 @@ const ProfileImg = styled.span`
   border-radius: 50%;
   margin-right: 1rem;
 `;
-export default function CommentProfileImg({ userId, imgProp }: { userId: string, imgProp: string }) {
+export default function CommentProfileImg({ userId, imgProp }: { userId: string, imgProp: boolean }) {
   const [userImg, set_userImg] = useState<IUserProfile[]>();
   useEffect(() => {
     getMyProfile(userId)

@@ -165,7 +165,7 @@ export default function SNSComment({
   writerData,
   writerImg,
 }: IProps) {
-  const [profileImg, set_profileImg] = useState("");
+  const [profileImg, set_profileImg] = useState(false);
   const [, set_snsHeart] = useRecoilState(snsHeartState); //좋아요 클릭 시 리코일 이벤트 발생시켜 상위 컴포넌트에 신호 전달
   const {
     isLoading,
@@ -210,13 +210,13 @@ export default function SNSComment({
   const onValid = async (value: { commentText: string }) => {
     await addSNSComment(snsId, value.commentText, userId, userEmail);
     reset();
-    set_profileImg("c");
+    set_profileImg(prev => !prev);
     refetch();
   };
   //댓글 삭제
   const commentDelete = async (commentId: string) => {
-    await deleteSNSComment(commentId);
-    set_profileImg("d");
+    await deleteSNSComment(commentId, undefined);
+    set_profileImg(prev => !prev);
     refetch();
   };
   return (
