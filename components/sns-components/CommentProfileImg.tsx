@@ -17,13 +17,13 @@ const ProfileImg = styled.span`
   border-radius: 50%;
   margin-right: 1rem;
 `;
-export default function CommentProfileImg({ userId }: { userId: string }) {
+export default function CommentProfileImg({ userId, imgProp }: { userId: string, imgProp: string }) {
   const [userImg, set_userImg] = useState<IUserProfile[]>();
   useEffect(() => {
     getMyProfile(userId)
       .then((response) => set_userImg(response))
       .catch((error) => console.log(error.message));
-  }, []);
+  }, [imgProp, userImg]);
   return (
     <>
       {userImg && (
