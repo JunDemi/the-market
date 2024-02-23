@@ -300,7 +300,8 @@ export const readIDSNSList = async (userId?: string) => {
   if(userId){ //해당 유저가 작성한 sns
     const snsQuery = query(
       snsRef,
-      where("userId", "==", userId)
+      where("userId", "==", userId),
+      orderBy("createAt", "desc"),
     );
     const result = await getDocs(snsQuery); //문서화
     result.docs.map((data) => {

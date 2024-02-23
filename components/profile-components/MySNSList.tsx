@@ -1,12 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import WriteButton from "../WriteButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { readIDSNSList } from "@/services/firebaseCRUD";
 import PostSlider from "../sns-components/PostSlider";
 import Image from "next/image";
 import SNSDetail from "../sns-components/SNSDetail";
+import SNSCommentLength from "../sns-components/SNSCommentLength";
+import { useRecoilState } from "recoil";
+import { isDeleteSNS } from "@/app/atom";
 
 interface ISNSList {
   snsId: string;
@@ -82,6 +85,7 @@ const CloseButton = styled.div`
 `;
 //스타일 컴포넌트
 export default function MySNSList(yourId: { yourId?: string }) {
+  const [close, set_close] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
   const [goOverlay, set_goOverlay] = useState<boolean>(false);
   const [moreData, set_moreData] = useState("");
   const {
@@ -93,6 +97,14 @@ export default function MySNSList(yourId: { yourId?: string }) {
     set_goOverlay(true);
     set_moreData(snsId);
   };
+  useEffect(() => {
+    //게시물 삭제 시 오버레이 닫고 리패치
+    if(close === "close"){
+      set_goOverlay(false);
+      refetch();
+      set_close("");
+    }
+  },[goOverlay, close])
   return (
     <>
       {!isLoading && snsData ? (
@@ -125,7 +137,7 @@ export default function MySNSList(yourId: { yourId?: string }) {
                     : data.snsInfo.snsText}
                 </PostText>
                 <PostComment>
-                  <p>댓글 300개</p>
+                <SNSCommentLength snsId={data.snsId} close={goOverlay}/>
                   <motion.button
                     onClick={() => getOverlay(data.snsId)}
                     className="material-btn"
