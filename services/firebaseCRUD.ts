@@ -64,6 +64,18 @@ export const updateProfile = async (
     });
   }
 };
+//sns검색 시 이메일을 통해 userId가져오기
+export const getSearchUserId = async (userEmail?: string) => {
+  const resultArray: any = [];
+  if(userEmail){
+    const profileQuery = query(authRef, where("userEmail", "==", userEmail));
+    const result = await getDocs(profileQuery); //문서화
+    result.docs.map((data) => {
+      resultArray.push({ profileId: data.id, profileInfo: data.data() });
+    });
+    return resultArray;
+  }
+};
 /*--------------------------- Products ---------------------------*/
 //상품 목록 불러오기
 export const readProduct = async (
@@ -268,9 +280,10 @@ export const readSNSList = async (pageParam?: number, keyword?: string) => { //s
       if(keyword){ //일반 조회: 검색을 했을 경우
         const snsQuery = query(
           snsRef,
-          orderBy("createAt", "desc"),
+          orderBy("userEmail"),
           where("userEmail", ">=", keyword),
           where("userEmail", "<=", keyword + "\uf8ff"), //키워드
+          orderBy("createAt", "desc"),
           limit(pageParam * 1)
         );
         const result = await getDocs(snsQuery); //문서화

@@ -163,35 +163,42 @@ export default function BuyList() {
                 <div>가격 (원)</div>
                 <div>사진</div>
               </TableHead>
-              <TableBodyContainer>
-                {bData.pages[bData.pages.length - 1].map((data) => (
-                  <div key={data.buyId}>
-                    <hr />
-                    <TableBody onClick={() => goBuyDetail(data.buyId)}>
-                      <div>
-                        {String(
-                          getDateTimeFormat(Number(data.buyInfo.buyDate))
-                        ).substring(0, 10)}
-                      </div>
-                      <div>{data.buyInfo.productName}</div>
-                      <div>{data.buyInfo.buyerEmail}</div>
-                      <div>{data.buyInfo.sellerEmail}</div>
-                      <div>
-                        {Number(data.buyInfo.productPrice).toLocaleString()}
-                      </div>
-                      <div>
-                        <Image
-                          src={data.buyInfo.productImg}
-                          alt=""
-                          width={0}
-                          height={0}
-                          fill
-                        />
-                      </div>
-                    </TableBody>
-                  </div>
-                ))}
-              </TableBodyContainer>
+              {bData.pages[bData.pages.length - 1].length === 0 ? (
+                <div className="no-sns" style={{ height: "50%" }}>
+                  구매 내역이 없습니다.
+                </div>
+              ) : (
+                <TableBodyContainer>
+                  {bData.pages[bData.pages.length - 1].map((data) => (
+                    <div key={data.buyId}>
+                      <hr />
+                      <TableBody onClick={() => goBuyDetail(data.buyId)}>
+                        <div>
+                          {String(
+                            getDateTimeFormat(Number(data.buyInfo.buyDate))
+                          ).substring(0, 10)}
+                        </div>
+                        <div>{data.buyInfo.productName}</div>
+                        <div>{data.buyInfo.buyerEmail}</div>
+                        <div>{data.buyInfo.sellerEmail}</div>
+                        <div>
+                          {Number(data.buyInfo.productPrice).toLocaleString()}
+                        </div>
+                        <div>
+                          <Image
+                            src={data.buyInfo.productImg}
+                            alt=""
+                            width={0}
+                            height={0}
+                            fill
+                          />
+                        </div>
+                      </TableBody>
+                    </div>
+                  ))}
+                </TableBodyContainer>
+              )}
+
               <AnimatePresence>
                 {buyDetail && (
                   <DetailOverlay

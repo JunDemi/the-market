@@ -220,9 +220,11 @@ export default function SNSLists({ keyword }: IKeyword) {
     set_moreData(snsId);
   };
    //검색
-   const snsSearch = async (value: { keyword?: string | null }) => {
-    router.push(`/sns/${value.keyword}`);
-    reset();
+   const snsSearch = (value: {keyword?: string}) => {
+    if(value.keyword){
+      router.push(`/sns/${value.keyword}`);
+      reset();
+    }
   };
   return (
     <>
