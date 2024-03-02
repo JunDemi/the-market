@@ -5,7 +5,6 @@ const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const ChartContainer = styled.div`
   background-color: white;
   box-shadow: 5px 5px 10px 0 #7b7b7b;
-  width: 25rem;
   padding: 2rem;
 `;
 export default function LineChart() {
