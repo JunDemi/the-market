@@ -12,3 +12,38 @@ export const getDateTimeFormat = (datetime?: number) => {
     return formattedTime;
   }
 };
+//0시 00분의 밀리초 값 구하기 5일전 ~ 오늘
+export const getPastTime = (
+  type: "오늘" | "1일전" | "2일전" | "3일전" | "4일전" | "5일전" | "6일전"
+) => {
+  const now = new Date();
+  if (type === "오늘") {
+    now.setDate(now.getDate() + 1); //내일 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  } else if (type === "1일전") {
+    now.setDate(now.getDate()); //오늘 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  } else if (type === "2일전") {
+    now.setDate(now.getDate() - 1); //1일 전 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  } else if (type === "3일전") {
+    now.setDate(now.getDate() - 2); //2일 전 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  } else if (type === "4일전") {
+    now.setDate(now.getDate() - 3); //3일 전 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  } else if (type === "5일전") {
+    now.setDate(now.getDate() - 4); //4일 전 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  }else if (type === "6일전") {
+    now.setDate(now.getDate() - 5); //5일 전 0시 00분
+    now.setHours(0, 0, 0, 0);
+    return now.getTime();
+  }
+};
