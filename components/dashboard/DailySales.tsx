@@ -3,7 +3,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { getDateTimeFormat, getPastTime } from "@/services/getDay";
 import { useEffect, useState } from "react";
-import { getDailySales } from "@/services/filebaseDashboard";
+import { getSales } from "@/services/filebaseDashboard";
 interface ISale {
   buyDate: string;
   buyerId: string;
@@ -25,11 +25,16 @@ const ChartContainer = styled.div`
   h1{
     font-size: 16px;
     font-weight: bold;
+  }
+  h2 {
+    font-size: 12px;
+    margin-top: 1.5rem;
     margin-bottom: 1rem;
+    color: #787878;
   }
 `;
 //styled component
-export default function LineChart() {
+export default function DailySales() {
   const [oneDay, set_oneDay] = useState<number>(0);
   const [twoDay, set_twoDay] = useState<number>(0);
   const [threeDay, set_threeDay] = useState<number>(0);
@@ -55,16 +60,6 @@ export default function LineChart() {
     stroke: {
       curve: "smooth" as "smooth",
     },
-    // title: {
-    //   show: false,
-    //   // text: "일일 매출액",
-    //   // align: "left" as "left",
-    //   // style: {
-    //   //   color: "#000",
-    //   //   fontWeight: "normal",
-    //   //   fontSize: "16px",
-    //   // },
-    // },
     grid: {
       row: {
         colors: ["#fff"],
@@ -99,22 +94,22 @@ export default function LineChart() {
   ];
 
   useEffect(() => {
-    getDailySales(getPastTime("1일전"), getPastTime("오늘")).then((response) =>
+    getSales(getPastTime("1일전"), getPastTime("오늘")).then((response) =>
       priceTotal(response, "oneDay")
     );
-    getDailySales(getPastTime("2일전"), getPastTime("1일전")).then((response) =>
+    getSales(getPastTime("2일전"), getPastTime("1일전")).then((response) =>
       priceTotal(response, "twoDay")
     );
-    getDailySales(getPastTime("3일전"), getPastTime("2일전")).then((response) =>
+    getSales(getPastTime("3일전"), getPastTime("2일전")).then((response) =>
       priceTotal(response, "threeDay")
     );
-    getDailySales(getPastTime("4일전"), getPastTime("3일전")).then((response) =>
+    getSales(getPastTime("4일전"), getPastTime("3일전")).then((response) =>
       priceTotal(response, "fourDay")
     );
-    getDailySales(getPastTime("5일전"), getPastTime("4일전")).then((response) =>
+    getSales(getPastTime("5일전"), getPastTime("4일전")).then((response) =>
       priceTotal(response, "fiveDay")
     );
-    getDailySales(getPastTime("6일전"), getPastTime("5일전")).then((response) =>
+    getSales(getPastTime("6일전"), getPastTime("5일전")).then((response) =>
       priceTotal(response, "sixDay")
     );
   }, []);
@@ -164,8 +159,9 @@ export default function LineChart() {
     <>
       <ChartContainer>
         <h1>일일 매출액</h1>
+        <h2>현재 날짜: {getDateTimeFormat(Date.now())?.substring(0, 10)}</h2>
         <ApexChart
-          type="line"
+          type="area"
           options={option}
           series={series}
           height={250}

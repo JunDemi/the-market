@@ -1,10 +1,8 @@
 import "@/asset/main.scss";
 import styled from "styled-components";
-import LineChart from "./LineChart";
-import DonutChart from "./DonutChart";
-import BarChart from "./BarChart";
-import AreaChart from "./AreaChart";
 import TotalValues from "./TotalValues";
+import DailySales from "./DailySales";
+import TotalSales from "./TotalSales";
 
 const ChartContainer = styled.div`
   display: grid;
@@ -17,7 +15,8 @@ export default function Dashboard() {
     <>
       <ChartContainer>
         <TotalValues/>
-        <LineChart/>
+        <DailySales/>
+        <TotalSales/>
       </ChartContainer>
     </>
   );
