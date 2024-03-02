@@ -49,7 +49,7 @@ export default function BestBuyer() {
     }));
     return resultArray;
   };
-  const option = {
+  const option: any = {
     chart: {
       offsetY: 0,
       type: "bar" as "bar",
@@ -81,9 +81,12 @@ export default function BestBuyer() {
       },
     },
     xaxis: {
-      categories: buyerList?.map(name => [
-        name.buyer ?? ""
-      ]),
+      categories: buyerList?.map((name) => [name.buyer ?? ""]),
+      labels: {
+        formatter: function (val: number) {
+          return Math.floor(val);
+        },
+      },
       axisBorder: {
         show: false,
       },
@@ -99,22 +102,28 @@ export default function BestBuyer() {
       },
     },
     tooltip: {
-        y: {
-          formatter: function (val: number) {
-            return val + "개"
-          }
-        }
-      }
+      y: {
+        formatter: function (val: number) {
+          return val + "개";
+        },
+      },
+    },
   };
   const series = [
     {
       name: "구매 횟수",
-      data: [buyerList[0]?.count ?? 0, buyerList[1]?.count ?? 0, buyerList[2]?.count ?? 0, buyerList[3]?.count ?? 0, buyerList[4]?.count ?? 0]
+      data: [
+        buyerList[0]?.count ?? 0,
+        buyerList[1]?.count ?? 0,
+        buyerList[2]?.count ?? 0,
+        buyerList[3]?.count ?? 0,
+        buyerList[4]?.count ?? 0,
+      ],
     },
   ];
-  buyerList.map(da => {
+  buyerList.map((da) => {
     console.log(da.count);
-  })
+  });
   return (
     <>
       {buyerList && (
