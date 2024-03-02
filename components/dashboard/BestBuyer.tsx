@@ -84,11 +84,6 @@ export default function BestBuyer() {
       categories: buyerList?.map(name => [
         name.buyer ?? ""
       ]),
-      labels: {
-        formatter: function(val: number) {
-            return Math.floor(val)
-          }
-      },
       axisBorder: {
         show: false,
       },
