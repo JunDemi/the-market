@@ -19,9 +19,14 @@ interface ISale {
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const ChartContainer = styled.div`
   background-color: white;
-  box-shadow: 5px 5px 10px 0 #7b7b7b;
-  padding: 2rem;
+  border-radius: 10px;
+  padding: 2rem 1rem 1rem 1rem;
   grid-column: span 2;
+  h1{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
 `;
 //styled component
 export default function LineChart() {
@@ -50,15 +55,16 @@ export default function LineChart() {
     stroke: {
       curve: "smooth" as "smooth",
     },
-    title: {
-      text: "월별 판매 수",
-      align: "left" as "left",
-      style: {
-        color: "#6d6d6d",
-        fontWeight: "thin",
-        fontSize: "14px",
-      },
-    },
+    // title: {
+    //   show: false,
+    //   // text: "일일 매출액",
+    //   // align: "left" as "left",
+    //   // style: {
+    //   //   color: "#000",
+    //   //   fontWeight: "normal",
+    //   //   fontSize: "16px",
+    //   // },
+    // },
     grid: {
       row: {
         colors: ["#fff"],
@@ -77,6 +83,13 @@ export default function LineChart() {
       min: 0,
       tickAmount: 4,
     },
+    tooltip: {
+      y: {
+        formatter: function (val: any) {
+          return val + "원"
+        }
+      }
+    }
   };
   const series = [
     {
@@ -150,6 +163,7 @@ export default function LineChart() {
   return (
     <>
       <ChartContainer>
+        <h1>일일 매출액</h1>
         <ApexChart
           type="line"
           options={option}
