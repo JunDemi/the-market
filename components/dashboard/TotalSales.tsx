@@ -65,14 +65,14 @@ export default function TotalSales() {
     <Container>
       <div>
         <h1>누적 매출액</h1>
-        <h2>현재 날짜: {getDateTimeFormat(Date.now())?.substring(0, 10)}</h2>
+        <h2>기준일: {getDateTimeFormat(Date.now())?.substring(0, 10)}</h2>
         <h3>
           <CountUp end={priceTotal} duration={1.2} />원
         </h3>
       </div>
-      <div style={{backgroundColor: "#fafafa"}}>
+      <div style={{borderTop: "0.5px solid #b8b8b8"}}>
         <h1>어제 누적 매출액</h1>
-        <h2>현재 날짜: {getDateTimeFormat(now.getTime())?.substring(0, 10)}</h2>
+        <h2>기준일: {getDateTimeFormat(now.getTime())?.substring(0, 10)}</h2>
         <h3>
           <CountUp end={yesterdayPriceTotal} duration={1.2} />원
         </h3>

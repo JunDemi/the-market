@@ -41,23 +41,41 @@ export const getTotals = async () => {
 /*--------------------------- 누적 구매&판매액 ---------------------------*/
 export const getSales = async (from?: number, to?: number) => {
   const resultArray: any[] = [];
-  if(from && to){//일일 매출액
+  if (from && to) {
+    //일일 매출액
     const buyQuery = query(
       buyRef,
       where("buyDate", ">", from),
       where("buyDate", "<", to)
     ); //from날짜부터 to날짜까지의 포함된 데이터들 불러오기
     const result = await getDocs(buyQuery);
-    result.docs.map(data => {
+    result.docs.map((data) => {
       resultArray.push(data.data());
-    })
+    });
     return resultArray;
-  }else{ //전체 매출액
+  } else {
+    //전체 매출액
     const buyQuery = query(buyRef);
     const result = await getDocs(buyQuery);
-    result.docs.map(data => {
+    result.docs.map((data) => {
       resultArray.push(data.data());
-    })
+    });
     return resultArray;
   }
+};
+/*--------------------------- 베스트 ---------------------------*/
+export const getBestBuyer = async (type: "buy" | "sell") => {
+  const resultArray: string[] = [];
+  const buyQuery = query(buyRef);
+  const result = await getDocs(buyQuery);
+  if (type === "buy") { //구매자 리스트
+    result.docs.map((data) => {
+      resultArray.push(data.data().buyerEmail);
+    });
+  } else if (type === "sell") { //판매자 리스트
+    result.docs.map((data) => {
+      resultArray.push(data.data().sellerEmail);
+    });
+  }
+  return resultArray;
 };

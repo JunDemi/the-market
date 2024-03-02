@@ -81,7 +81,7 @@ export default function DailySales() {
     tooltip: {
       y: {
         formatter: function (val: any) {
-          return val + "원"
+          return val.toLocaleString() + "원"
         }
       }
     }

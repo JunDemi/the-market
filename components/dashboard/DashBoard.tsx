@@ -3,6 +3,9 @@ import styled from "styled-components";
 import TotalValues from "./TotalValues";
 import DailySales from "./DailySales";
 import TotalSales from "./TotalSales";
+import BestBuyer from "./BestBuyer";
+import BestSeller from "./BestSeller";
+import BestHeart from "./BestHeart";
 
 const ChartContainer = styled.div`
   display: grid;
@@ -17,6 +20,9 @@ export default function Dashboard() {
         <TotalValues/>
         <DailySales/>
         <TotalSales/>
+        <BestBuyer/>
+        <BestSeller/>
+        <BestHeart/>
       </ChartContainer>
     </>
   );
