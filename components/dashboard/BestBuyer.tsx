@@ -68,7 +68,7 @@ export default function BestBuyer() {
         barHeight: "30%",
       },
     },
-    colors: ["#33b2df", "#546E7A", "#d4526e", "#13d8aa", "#A5978B", "#2b908f"],
+    colors: ["#00afef", "#ad68f2"],
     dataLabels: {
       enabled: false,
     },
@@ -76,9 +76,7 @@ export default function BestBuyer() {
       show: false,
     },
     grid: {
-      row: {
-        colors: ["#fff"],
-      },
+        show: false,
     },
     xaxis: {
       categories: buyerList?.map((name) => [name.buyer ?? ""]),
@@ -88,13 +86,14 @@ export default function BestBuyer() {
         },
       },
       axisBorder: {
-        show: false,
+        show: true,
+        color:"#e2e2e2"
       },
       axisTicks: {
         show: false,
       },
       min: 0,
-      tickAmount: 3,
+      tickAmount: 2,
     },
     yaxis: {
       labels: {
@@ -121,9 +120,6 @@ export default function BestBuyer() {
       ],
     },
   ];
-  buyerList.map((da) => {
-    console.log(da.count);
-  });
   return (
     <>
       {buyerList && (

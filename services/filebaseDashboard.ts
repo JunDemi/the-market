@@ -64,6 +64,7 @@ export const getSales = async (from?: number, to?: number) => {
   }
 };
 /*--------------------------- 베스트 ---------------------------*/
+//구매&판매
 export const getBestBuyer = async (type: "buy" | "sell") => {
   const resultArray: string[] = [];
   const buyQuery = query(buyRef);
@@ -79,3 +80,13 @@ export const getBestBuyer = async (type: "buy" | "sell") => {
   }
   return resultArray;
 };
+//좋아요
+export const getBestHeart = async() => {
+  const resultArray: any[] = [];
+  const snsQuery = query(snsRef);
+  const result = await getDocs(snsQuery);
+  result.docs.map((data) => {
+    resultArray.push({email: data.data().userEmail, heartCount: data.data().snsHeart.length});
+  });
+  return resultArray;
+}
