@@ -98,21 +98,21 @@ export default function BuyDetail({ buyId }: { buyId: string }) {
       <DetailContainer>
         {detailData ? (
           <>
-            <h1>{detailData.info.productName}</h1>
+            <h1>{detailData.buyInfo.productName}</h1>
             <h2>구매ID: {buyId}</h2>
             <hr />
 
             <DetailInfo>
               <p>거래일</p>
-              <span>{getDateTimeFormat(Number(detailData.info.buyDate))}</span>
-              <p>판매자</p> <span>{detailData.info.sellerEmail}</span>
-              <p>구매자</p> <span>{detailData.info.buyerEmail}</span>
+              <span>{getDateTimeFormat(Number(detailData.buyInfo.buyDate))}</span>
+              <p>판매자</p> <span>{detailData.buyInfo.sellerEmail}</span>
+              <p>구매자</p> <span>{detailData.buyInfo.buyerEmail}</span>
               <h4>결제금액</h4>
-              <h5>{Number(detailData.info.productPrice).toLocaleString()}원</h5>
+              <h5>{Number(detailData.buyInfo.productPrice).toLocaleString()}원</h5>
             </DetailInfo>
             <ImageContainer>
               <Image
-                src={detailData.info.productImg}
+                src={detailData.buyInfo.productImg}
                 alt=""
                 width={450}
                 height={280}
@@ -122,7 +122,7 @@ export default function BuyDetail({ buyId }: { buyId: string }) {
               <p>상품설명</p>
               <textarea
                 readOnly
-                defaultValue={detailData.info.productDescription}
+                defaultValue={detailData.buyInfo.productDescription}
               ></textarea>
             </Description>
           </>

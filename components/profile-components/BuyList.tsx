@@ -163,18 +163,18 @@ export default function BuyList() {
                       <TableBody onClick={() => goBuyDetail(data.buyId)}>
                         <div>
                           {String(
-                            getDateTimeFormat(Number(data.info.buyDate))
+                            getDateTimeFormat(Number(data.buyInfo.buyDate))
                           ).substring(0, 10)}
                         </div>
-                        <div>{data.info.productName}</div>
-                        <div>{data.info.buyerEmail}</div>
-                        <div>{data.info.sellerEmail}</div>
+                        <div>{data.buyInfo.productName}</div>
+                        <div>{data.buyInfo.buyerEmail}</div>
+                        <div>{data.buyInfo.sellerEmail}</div>
                         <div>
-                          {Number(data.info.productPrice).toLocaleString()}
+                          {Number(data.buyInfo.productPrice).toLocaleString()}
                         </div>
                         <div>
                           <Image
-                            src={data.info.productImg}
+                            src={data.buyInfo.productImg}
                             alt=""
                             width={0}
                             height={0}

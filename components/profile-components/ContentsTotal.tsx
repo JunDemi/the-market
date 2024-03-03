@@ -26,12 +26,12 @@ export default function ContentsTotal({ userId }: { userId: string }) {
 
   const total1 = buyTotal?.reduce(
     //총 구매액 계산
-    (acc, data) => acc + Number(data.info.productPrice),
+    (acc, data) => acc + Number(data.buyInfo.productPrice),
     0
   );
   const total2 = sellTotal?.reduce(
     //총 판매액 계산
-    (acc, data) => acc + Number(data.info.productPrice),
+    (acc, data) => acc + Number(data.buyInfo.productPrice),
     0
   );
   return (

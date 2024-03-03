@@ -105,8 +105,7 @@ export default function UpdateProduct() {
   const {
     handleSubmit,
     register,
-    formState: { errors },
-    reset,
+    formState: { errors }
   } = useForm<IProductCreate>({ mode: "onSubmit" });
 
   useEffect(() => {
@@ -177,7 +176,7 @@ export default function UpdateProduct() {
                 {preview ? (
                   preview === "default" ? (
                     <Image
-                      src={detailData.info.productImg}
+                      src={detailData.productInfo.productImg}
                       alt=""
                       width={0}
                       height={0}
@@ -221,7 +220,7 @@ export default function UpdateProduct() {
                   {...register("productName", {
                     required: "상품명을 적어주세요.",
                   })}
-                  defaultValue={detailData?.info.productName}
+                  defaultValue={detailData?.productInfo.productName}
                   autoComplete="off"
                 />
                 {errors.productName && <p>{errors.productName?.message}</p>}
@@ -231,7 +230,7 @@ export default function UpdateProduct() {
                   {...register("price", {
                     required: "가격을 적어주세요.",
                   })}
-                  defaultValue={detailData?.info.productPrice}
+                  defaultValue={detailData?.productInfo.productPrice}
                   autoComplete="off"
                 />
                 {errors.price && <p>{errors.price?.message}</p>}
@@ -240,7 +239,7 @@ export default function UpdateProduct() {
                   {...register("description", {
                     required: "상품설명을 적어주세요.",
                   })}
-                  defaultValue={detailData?.info.productDescription}
+                  defaultValue={detailData?.productInfo.productDescription}
                   autoComplete="off"
                 />
                 {errors.description && <p>{errors.description?.message}</p>}

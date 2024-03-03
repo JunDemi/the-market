@@ -51,7 +51,6 @@ export default function BestHeart() {
     );
     return sumByEmail.sort((a, b) => b.total - a.total);
   };
-  console.log(heartList);
   const option: any = {
     chart: {
       offsetY: 0,

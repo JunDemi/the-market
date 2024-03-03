@@ -261,7 +261,7 @@ export default function ProductsList({ keyword }: IKeyword) {
                   >
                     <div>
                       <Image
-                        src={data.info.productImg}
+                        src={data.productInfo.productImg}
                         alt=""
                         width={0}
                         height={0}
@@ -270,30 +270,30 @@ export default function ProductsList({ keyword }: IKeyword) {
                     </div>
                     <div>
                       <h1>
-                        {data.info.productName.replace(/\b\w/g, (match) =>
+                        {data.productInfo.productName.replace(/\b\w/g, (match) =>
                           match.toUpperCase()
                         )}
                       </h1>
-                      <p>{data.info.userEmail}</p>
+                      <p>{data.productInfo.userEmail}</p>
                       <h2>
-                        {Number(data.info.productPrice).toLocaleString()}원
+                        {Number(data.productInfo.productPrice).toLocaleString()}원
                       </h2>
                       <span>
                         <button
                           onClick={() => 찜하기(user.user.uid, data.productId)}
-                          disabled={user?.user.uid === data.info.userId}
+                          disabled={user?.user.uid === data.productInfo.userId}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill={
-                              data.info.heart === user.user.uid
+                              data.productInfo.heart === user.user.uid
                                 ? "#fc7676"
                                 : "none"
                             }
                             viewBox="0 0 24 24"
                             strokeWidth="1.2"
                             stroke={
-                              data.info.userId === user.user.uid
+                              data.productInfo.userId === user.user.uid
                                 ? "#bebebe"
                                 : "#fc7676"
                             }
@@ -309,7 +309,7 @@ export default function ProductsList({ keyword }: IKeyword) {
                       </span>
                       <Link
                         href={
-                          user?.user.uid === data.info.userId
+                          user?.user.uid === data.productInfo.userId
                             ? `/market/updatePage/${data.productId}`
                             : `/market/detailPage/${data.productId}`
                         }
@@ -325,7 +325,7 @@ export default function ProductsList({ keyword }: IKeyword) {
                               "linear-gradient(90deg, #fad590, #ff8b48)",
                           }}
                         >
-                          {user?.user.uid === data.info.userId
+                          {user?.user.uid === data.productInfo.userId
                             ? "수정하기"
                             : "정보 보기"}
                         </GoDetailButton>

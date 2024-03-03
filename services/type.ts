@@ -15,7 +15,7 @@ export interface ISale {
 export interface IBuyDetail {
   //구매, 판매정보 2
   buyId?: string;
-  info: {
+  buyInfo: {
     buyDate: string;
     buyerId: string;
     buyerEmail: string;
@@ -42,7 +42,7 @@ export interface IProductCreate {
 export interface IProduct {
   //상품 정보
   productId?: string;
-  info: {
+  productInfo: {
     userId: string;
     userEmail: string;
     productName: string;

@@ -119,7 +119,7 @@ export const productDetail = async (keyword?: string) => {
   const productQuery = query(productsRef, where(documentId(), "==", keyword));
   const result = await getDocs(productQuery); //문서화
   result.docs.map((data) => {
-    resultData.info = data.data();
+    resultData.productInfo = data.data();
   });
   return resultData;
 };
@@ -221,7 +221,7 @@ export const readBuyList = async (
         );
         const result = await getDocs(sellQuery);
         result.docs.map((data) => {
-          resultArray.push({ sellId: data.id, sellInfo: data.data() });
+          resultArray.push({ buyId: data.id, buyInfo: data.data() });
         });
         return resultArray;
       }
@@ -245,7 +245,7 @@ export const readBuyList = async (
         );
         const result = await getDocs(sellQuery);
         result.docs.map((data) => {
-          resultArray.push({ sellId: data.id, sellInfo: data.data() });
+          resultArray.push({ buyId: data.id, buyInfo: data.data() });
         });
         return resultArray;
       }
@@ -258,7 +258,7 @@ export const buyDetail = async (buyId?: string) => {
   const buyQuery = query(buyRef, where(documentId(), "==", buyId));
   const result = await getDocs(buyQuery); //문서화
   result.docs.map((data) => {
-    resultData.info = data.data();
+    resultData.buyInfo = data.data();
   });
   return resultData;
 };
@@ -333,7 +333,7 @@ export const getSNSDetail = async(snsId: string) => {
   const snsQuery = query(snsRef, where(documentId(), "==", snsId));
   const result = await getDocs(snsQuery); //문서화
   result.docs.map((data) => {
-    resultData.info = data.data();
+    resultData.snsInfo = data.data();
   });
   return resultData;
 }

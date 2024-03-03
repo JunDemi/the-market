@@ -159,7 +159,7 @@ export default function MyHeartList() {
                         >
                           <div>
                             <Image
-                              src={data.info.productImg}
+                              src={data.productInfo.productImg}
                               alt=""
                               width={0}
                               height={0}
@@ -168,13 +168,13 @@ export default function MyHeartList() {
                           </div>
                           <div>
                             <h1>
-                              {data.info.productName.replace(/\b\w/g, (match) =>
+                              {data.productInfo.productName.replace(/\b\w/g, (match) =>
                                 match.toUpperCase()
                               )}
                             </h1>
-                            <p>{data.info.userEmail}</p>
+                            <p>{data.productInfo.userEmail}</p>
                             <h2>
-                              {Number(data.info.productPrice).toLocaleString()}
+                              {Number(data.productInfo.productPrice).toLocaleString()}
                               원
                             </h2>
                             <span>

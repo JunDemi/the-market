@@ -152,7 +152,7 @@ export default function ProductDetail() {
                 <>
                   <div>
                     <Image
-                      src={String(detailData.info.productImg)}
+                      src={String(detailData.productInfo.productImg)}
                       alt=""
                       width={0}
                       height={0}
@@ -161,11 +161,11 @@ export default function ProductDetail() {
                   </div>
                   <div>
                     <p>
-                      작성일: {getDateTimeFormat(detailData.info.createAt)}
+                      작성일: {getDateTimeFormat(detailData.productInfo.createAt)}
                       &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; 최근수정일:{" "}
-                      {getDateTimeFormat(detailData.info.updateAt)}
+                      {getDateTimeFormat(detailData.productInfo.updateAt)}
                     </p>
-                    <Link href={`/userinfo/${detailData.info.userId}`}>
+                    <Link href={`/userinfo/${detailData.productInfo.userId}`}>
                       <motion.span
                         initial={{
                           background:
@@ -176,23 +176,23 @@ export default function ProductDetail() {
                             "linear-gradient(90deg, #90f6fa, #4876ff)",
                         }}
                       >
-                        {detailData?.info.userEmail}
+                        {detailData?.productInfo.userEmail}
                       </motion.span>
                     </Link>
                     <hr />
                     <h1>
-                      {detailData?.info.productName.replace(/\b\w/g, (match) =>
+                      {detailData?.productInfo.productName.replace(/\b\w/g, (match) =>
                         match.toUpperCase()
                       )}
                     </h1>
                     <h3>
-                      ₩{Number(detailData.info.productPrice).toLocaleString()}
+                      ₩{Number(detailData.productInfo.productPrice).toLocaleString()}
                     </h3>
                     <h4>상품 설명</h4>
 
                     <textarea
                       readOnly
-                      value={String(detailData.info.productDescription)}
+                      value={String(detailData.productInfo.productDescription)}
                     />
                   </div>
                 </>
@@ -201,7 +201,7 @@ export default function ProductDetail() {
                 <>
                   <button
                     className={
-                      detailData?.info.heart === user.user.uid
+                      detailData?.productInfo.heart === user.user.uid
                         ? "heart-already-btn material-btn"
                         : "heart-basic-btn material-btn"
                     }
@@ -222,7 +222,7 @@ export default function ProductDetail() {
                         d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                       />
                     </svg>
-                    {detailData?.info.heart === user.user.uid
+                    {detailData?.productInfo.heart === user.user.uid
                       ? "찜하기 완료"
                       : "찜 목록에 추가"}
                   </button>
@@ -231,14 +231,14 @@ export default function ProductDetail() {
                     disabled={isLoading}
                     onClick={() =>
                       구매하기({
-                        productName: detailData.info.productName,
-                        productPrice: detailData.info.productPrice,
-                        productImg: detailData.info.productImg,
-                        productDescription: detailData.info.productDescription,
+                        productName: detailData.productInfo.productName,
+                        productPrice: detailData.productInfo.productPrice,
+                        productImg: detailData.productInfo.productImg,
+                        productDescription: detailData.productInfo.productDescription,
                         buyerId: user.user.uid,
                         buyerEmail: user.user.email,
-                        sellerId: detailData.info.userId,
-                        sellerEmail: detailData.info.userEmail
+                        sellerId: detailData.productInfo.userId,
+                        sellerEmail: detailData.productInfo.userEmail
                       }
                        
                       )
