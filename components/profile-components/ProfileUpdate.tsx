@@ -1,6 +1,5 @@
 "use client";
 import { AuthContext } from "@/app/lib/AuthProvider";
-import { motion } from "framer-motion";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import styled from "styled-components";
 import { useQuery } from "react-query";
@@ -10,18 +9,7 @@ import { useForm } from "react-hook-form";
 import { storage } from "@/services/firebase";
 import { v4 as uuid } from "uuid";
 import { useRouter } from "next/navigation";
-
-interface IMyProfile {
-  profileId: string;
-  profileInfo: {
-    userId: string;
-    userEmail: string;
-    profileImg: string;
-  };
-}
-interface IUpdateImg {
-  profileImg: any;
-}
+import { IMyProfile } from "@/services/type";
 //스타일 컴포넌트
 const ProfileInfoDiv = styled.div`
   display: flex;
@@ -82,7 +70,7 @@ const SaveButton = styled.button`
 export default function ProfileUpdate() {
   const router = useRouter();
   const { user }: any = AuthContext();
-  const { isLoading, data: profile_userData } = useQuery<IMyProfile[]>(
+  const { data: profile_userData } = useQuery<IMyProfile[]>(
     ["update_userProfile"],
     () => getMyProfile(user?.user.uid)
   );
@@ -103,14 +91,14 @@ export default function ProfileUpdate() {
   const {
     handleSubmit,
     register,
-    formState: { errors },
-    reset,
-  } = useForm<IUpdateImg>({ mode: "onSubmit" });
+  } = useForm<{ profileImg: any }>({ mode: "onSubmit" });
 
   const onValid = async ({
     //수정 메소드
     profileImg,
-  }: IUpdateImg) => {
+  }: {
+    profileImg: any;
+  }) => {
     set_loading(true); //로딩 시작
     if (profileImg[0] && profile_userData) {
       const imageRef = ref(

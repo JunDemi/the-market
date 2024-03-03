@@ -7,15 +7,8 @@ import styled from "styled-components";
 import ContentsTotal from "./ContentsTotal";
 import { useQuery } from "react-query";
 import { getMyProfile } from "@/services/firebaseCRUD";
+import { IMyProfile } from "@/services/type";
 
-interface IMyProfile {
-  profileId: string;
-  profileInfo: {
-    userId: string,
-    userEmail: string,
-    profileImg: string,
-  }
-}
 //스타일 컴포넌트
 const ProfileInfoDiv = styled.div`
   display: flex;

@@ -13,34 +13,8 @@ import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { snsHeartState } from "@/app/atom";
 import { useState } from "react";
-interface ISNSList {
-  info: {
-    userId: string;
-    userEmail: string;
-    snsImageArray: string[];
-    snsText: string;
-    snsHeart: string[];
-    createAt: number;
-    updateAt: number;
-  };
-}
-interface IProps {
-  snsId: string;
-  userId: string;
-  userEmail: string;
-  writerData: ISNSList;
-  writerImg: string;
-}
-interface ICommentList {
-  commentId: string;
-  commentInfo: {
-    userId: string;
-    userEmail: string;
-    commentText: string;
-    createAt: number;
-    updateAt: number;
-  };
-}
+import { ICommentList, ICommentProps } from "@/services/type";
+
 //styled component
 const PostSection = styled.div`
   height: 490px;
@@ -100,7 +74,7 @@ const PostCommentMain = styled(PostDescription)`
   &:hover {
     background-color: #e7e7e7;
   }
-  svg{
+  svg {
     cursor: pointer;
     width: 1.2rem;
     height: 1.2rem;
@@ -164,11 +138,10 @@ export default function SNSComment({
   userEmail,
   writerData,
   writerImg,
-}: IProps) {
+}: ICommentProps) {
   const [profileImg, set_profileImg] = useState(false);
   const [, set_snsHeart] = useRecoilState(snsHeartState); //좋아요 클릭 시 리코일 이벤트 발생시켜 상위 컴포넌트에 신호 전달
   const {
-    isLoading,
     data: cData,
     refetch,
     fetchNextPage,
@@ -200,23 +173,20 @@ export default function SNSComment({
     set_snsHeart("clicked");
   };
   //댓글 작성 훅
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm<{ commentText: string }>({ mode: "onSubmit" });
+  const { handleSubmit, register, reset } = useForm<{ commentText: string }>({
+    mode: "onSubmit",
+  });
   //댓글 작성
   const onValid = async (value: { commentText: string }) => {
     await addSNSComment(snsId, value.commentText, userId, userEmail);
     reset();
-    set_profileImg(prev => !prev);
+    set_profileImg((prev) => !prev);
     refetch();
   };
   //댓글 삭제
   const commentDelete = async (commentId: string) => {
     await deleteSNSComment(commentId, undefined);
-    set_profileImg(prev => !prev);
+    set_profileImg((prev) => !prev);
     refetch();
   };
   return (
@@ -235,19 +205,22 @@ export default function SNSComment({
             }
           />
           <div>
-            <Link href={`/userinfo/${writerData.info.userId}`}>
-              <h5>{writerData.info.userEmail}</h5>
+            <Link href={`/userinfo/${writerData.snsInfo.userId}`}>
+              <h5>{writerData.snsInfo.userEmail}</h5>
             </Link>
-            <p>{writerData.info.snsText}</p>
+            <p>{writerData.snsInfo.snsText}</p>
           </div>
-          <h4>{getDateTimeFormat(Number(writerData.info.createAt))}</h4>
+          <h4>{getDateTimeFormat(Number(writerData.snsInfo.createAt))}</h4>
         </PostDescription>
         {cData ? (
           <>
             {cData.pages[cData.pages.length - 1].map(
               (data: ICommentList, number: number) => (
                 <PostCommentMain key={number}>
-                  <CommentProfileImg userId={data.commentInfo.userId} imgProp={profileImg}/>
+                  <CommentProfileImg
+                    userId={data.commentInfo.userId}
+                    imgProp={profileImg}
+                  />
                   <div>
                     <Link href={`/userinfo/${data.commentInfo.userId}`}>
                       <h5>{data.commentInfo.userEmail}</h5>
@@ -259,7 +232,7 @@ export default function SNSComment({
                   </h4>
                   {data.commentInfo.userId === userId && (
                     <svg
-                    onClick={() => commentDelete(data.commentId)}
+                      onClick={() => commentDelete(data.commentId)}
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -306,13 +279,13 @@ export default function SNSComment({
             onClick={() =>
               getHeart(
                 snsId,
-                writerData.info.userId,
+                writerData.snsInfo.userId,
                 userId,
-                writerData.info.snsHeart
+                writerData.snsInfo.snsHeart
               )
             }
             fill={
-              writerData.info.snsHeart.indexOf(userId) !== -1
+              writerData.snsInfo.snsHeart.indexOf(userId) !== -1
                 ? "#83c2f5"
                 : "none"
             }
@@ -328,7 +301,7 @@ export default function SNSComment({
             />
           </svg>
 
-          <h4>좋아요{writerData.info.snsHeart.length}개</h4>
+          <h4>좋아요{writerData.snsInfo.snsHeart.length}개</h4>
         </PostHeart>
         <form onSubmit={handleSubmit(onValid)}>
           <input

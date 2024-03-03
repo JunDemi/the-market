@@ -1,15 +1,8 @@
 import { signState } from "@/app/atom";
-import { ErrorOption } from "react-hook-form";
+import { InputType } from "@/services/type";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
-interface InputType {
-  type: string;
-  name: string;
-  placeholder: string;
-  register: any;
-  error: undefined | ErrorOption;
-}
 //스타일 컴포넌트
 const InputStyle = styled.input`
   width: 18rem;

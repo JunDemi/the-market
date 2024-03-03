@@ -11,19 +11,8 @@ import SNSCommentLength from "../sns-components/SNSCommentLength";
 import { useRecoilState } from "recoil";
 import { isDeleteSNS } from "@/app/atom";
 import { AuthContext } from "@/app/lib/AuthProvider";
+import { ISNSList } from "@/services/type";
 
-interface ISNSList {
-  snsId: string;
-  snsInfo: {
-    userId: string;
-    userEmail: string;
-    snsImageArray: string[];
-    snsText: string;
-    snsHeart: string[];
-    createAt: number;
-    updateAt: number;
-  };
-}
 //스타일 컴포넌트
 const Post = styled.div`
   width: 40rem;

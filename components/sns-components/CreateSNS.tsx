@@ -9,10 +9,8 @@ import { AuthContext } from "@/app/lib/AuthProvider";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-interface IFileArray {
-  filename: any;
-  filedata: string;
-}
+import { IFileArray } from "@/services/type";
+
 //스타일 컴포넌트
 const WriteTitle = styled.h1`
   margin: 3rem 0 1.5rem 0;

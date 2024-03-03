@@ -1,9 +1,6 @@
 import Link from "next/link";
 
-interface LinkType{
-    to: string;
-}
-export default function WriteButton({to}:LinkType) {
+export default function WriteButton({to}:{to: string}) {
   return (
     <>
       <Link href={`/${to}/writePage`} className="go-write-btn">

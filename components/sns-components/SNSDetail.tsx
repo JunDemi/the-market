@@ -5,35 +5,14 @@ import {
   getMyProfile,
   getSNSDetail,
 } from "@/services/firebaseCRUD";
-import { getDateTimeFormat } from "@/services/getDay";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import SNSComment from "./SNSComment";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { isDeleteSNS, snsHeartState } from "@/app/atom";
-interface IUserProfile {
-  profileId: string;
-  profileInfo: {
-    userId: string;
-    userEmail: string;
-    profileImg: string;
-  };
-}
-interface ISNSList {
-  info: {
-    userId: string;
-    userEmail: string;
-    snsImageArray: string[];
-    snsText: string;
-    snsHeart: string[];
-    createAt: number;
-    updateAt: number;
-  };
-}
+import { IMyProfile, ISNSList } from "@/services/type";
 //framer motomion variants
 const boxVar = {
   entry: (isBack: boolean) => ({
@@ -162,14 +141,13 @@ const DeleteSNS = styled.button`
 export default function SNSDetail({ snsId }: { snsId: string }) {
   const [snsHeart, set_snsHeart] = useRecoilState(snsHeartState); //전달된 좋아요 신호 리코일
   const [, set_close] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
-  const router = useRouter();
   const {
     isLoading,
     data: sdData,
     refetch,
   } = useQuery<ISNSList>(["sns_detail", snsId], () => getSNSDetail(snsId));
   const { user }: any = AuthContext();
-  const [userData, set_userData] = useState<IUserProfile[]>();
+  const [userData, set_userData] = useState<IMyProfile[]>();
   const [back, set_back] = useState(false); //현재 사진이 불러올 사진보다 뒤에 있는지 앞에 있는지 판가름
   const [currentPage, set_currentPage] = useState(0); //number형태의 state값. 각 사진의 위치를 숫자로 저장한다.
   const nextCard = (imgLength: number) => {
@@ -196,7 +174,7 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
 
   //프로필 사진이 디폴트인지 커스텀인지
   useEffect(() => {
-    getMyProfile(sdData?.info.userId)
+    getMyProfile(sdData?.snsInfo.userId)
       .then((response) => set_userData(response))
       .catch((error) => console.log(error.message));
   }, [sdData]);
@@ -217,7 +195,7 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
       {!isLoading && sdData && userData && user.isLogin ? (
         <DetailContainer>
           <PostSlide>
-            {user.user.uid === sdData.info.userId && (
+            {user.user.uid === sdData.snsInfo.userId && (
               <DeleteSNS
                 className="material-btn"
                 onClick={() => onDeleteSNS(snsId)}
@@ -227,7 +205,7 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
             )}
             <PostSlider>
               <AnimatePresence mode="sync" custom={back}>
-                {sdData.info.snsImageArray.map(
+                {sdData.snsInfo.snsImageArray.map(
                   (i, number) =>
                     number === currentPage && (
                       <PostSlideItems
@@ -261,11 +239,11 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
 
               <svg
                 style={
-                  currentPage === sdData.info.snsImageArray.length - 1
+                  currentPage === sdData.snsInfo.snsImageArray.length - 1
                     ? { opacity: 0 }
                     : {}
                 }
-                onClick={() => nextCard(sdData.info.snsImageArray.length)}
+                onClick={() => nextCard(sdData.snsInfo.snsImageArray.length)}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -279,7 +257,7 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
               </svg>
             </SliderButtons>
             <SliderRadios>
-              {sdData.info.snsImageArray.map((data, current) => (
+              {sdData.snsInfo.snsImageArray.map((data, current) => (
                 <button
                   key={current}
                   onClick={() => currentPageSet(current)}
@@ -305,7 +283,7 @@ export default function SNSDetail({ snsId }: { snsId: string }) {
                       }
                 }
               />
-              <h3>{sdData.info.userEmail}</h3>
+              <h3>{sdData.snsInfo.userEmail}</h3>
             </PostHead>
             <SNSComment
               snsId={snsId}

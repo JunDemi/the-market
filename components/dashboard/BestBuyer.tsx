@@ -1,11 +1,9 @@
 import { getBestBuyer } from "@/services/filebaseDashboard";
+import { IBuyer } from "@/services/type";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-interface IBuyer {
-  buyer: string;
-  count: number;
-}
+
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 //styled
 const Container = styled.div`

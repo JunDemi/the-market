@@ -7,15 +7,7 @@ import ContentsTotal from "./ContentsTotal";
 import { useQuery } from "react-query";
 import { getMyProfile } from "@/services/firebaseCRUD";
 import MySNSList from "./MySNSList";
-
-interface IMyProfile {
-  profileId: string;
-  profileInfo: {
-    userId: string;
-    userEmail: string;
-    profileImg: string;
-  };
-}
+import { IMyProfile } from "@/services/type";
 //스타일 컴포넌트
 const InfoContainer = styled.div`
   padding-bottom: 2rem;

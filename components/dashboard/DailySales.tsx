@@ -4,17 +4,7 @@ import dynamic from "next/dynamic";
 import { getDateTimeFormat, getPastTime } from "@/services/getDay";
 import { useEffect, useState } from "react";
 import { getSales } from "@/services/filebaseDashboard";
-interface ISale {
-  buyDate: string;
-  buyerId: string;
-  buyerEmail: string;
-  productName: string;
-  productPrice: number;
-  productDescription: string;
-  productImg: string;
-  sellerId: string;
-  sellerEmail: string;
-}
+import { ISale } from "@/services/type";
 //styled component
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const ChartContainer = styled.div`

@@ -2,6 +2,7 @@
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { db, storage } from "@/services/firebase";
 import { deleteProduct, productDetail, updateProduct } from "@/services/firebaseCRUD";
+import { IProduct, IProductCreate } from "@/services/type";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -10,26 +11,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
-
-interface IProductCreate {
-  productImg: any;
-  productName: string;
-  price: number;
-  description: string;
-}
-interface IProductDetail {
-  info: {
-    userId: string;
-    userEmail: string;
-    productName: string;
-    productImg: string;
-    productPrice: number;
-    productDescription: number;
-    createAt: number;
-    updateAt: number;
-    heart: string;
-  };
-}
 //스타일 컴포넌트
 const WriteTitle = styled.h1`
   margin: 3rem 0 1.5rem 0;
@@ -118,7 +99,7 @@ export default function UpdateProduct() {
   const [loading, set_loading] = useState<boolean>(false);
   const pathname = usePathname();
   const keyword = decodeURIComponent(pathname).split("/").pop();
-  const [detailData, set_detailData] = useState<IProductDetail>();
+  const [detailData, set_detailData] = useState<IProduct>();
 
   const router = useRouter();
   const {

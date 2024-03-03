@@ -8,30 +8,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { getDateTimeFormat } from "@/services/getDay";
-
-interface IProductDetail {
-  info: {
-    userId: string;
-    userEmail: string;
-    productName: string;
-    productImg: string;
-    productPrice: number;
-    productDescription: string;
-    createAt: number;
-    updateAt: number;
-    heart: string;
-  };
-}
-interface IBuyData {
-  pName: string;
-  pPrice: number;
-  pImg: string;
-  pDesc: string;
-  buyerId: string;
-  buyerEmail: string;
-  sellerId: string;
-  sellerEmail: string
-}
+import { IProduct, ISale } from "@/services/type";
 //스타일 컴포넌트
 const WriteTitle = styled.h1`
   margin: 2rem auto;
@@ -134,7 +111,7 @@ export default function ProductDetail() {
   const pathname = usePathname();
   const router = useRouter();
   const keyword = decodeURIComponent(pathname).split("/").pop();
-  const [detailData, set_detailData] = useState<IProductDetail>();
+  const [detailData, set_detailData] = useState<IProduct>();
   const [heart, setHeart] = useState(false);
   const [isLoading, set_isLoading] = useState(false);
 
@@ -157,7 +134,7 @@ export default function ProductDetail() {
     set_isLoading(false);
   };
 
-  const 구매하기 = async (buyData:IBuyData) => {
+  const 구매하기 = async (buyData:ISale) => {
     set_isLoading(true);
     await buyProduct(buyData);
     await deleteProduct(keyword); //구매를 하여 상품목록에 제거
@@ -254,10 +231,10 @@ export default function ProductDetail() {
                     disabled={isLoading}
                     onClick={() =>
                       구매하기({
-                        pName: detailData.info.productName,
-                        pPrice: detailData.info.productPrice,
-                        pImg: detailData.info.productImg,
-                        pDesc: detailData.info.productDescription,
+                        productName: detailData.info.productName,
+                        productPrice: detailData.info.productPrice,
+                        productImg: detailData.info.productImg,
+                        productDescription: detailData.info.productDescription,
                         buyerId: user.user.uid,
                         buyerEmail: user.user.email,
                         sellerId: detailData.info.userId,

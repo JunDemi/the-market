@@ -15,22 +15,7 @@ import { useRouter } from "next/navigation";
 import SNSCommentLength from "./SNSCommentLength";
 import { useRecoilState } from "recoil";
 import { isDeleteSNS } from "@/app/atom";
-
-interface ISNSList {
-  snsId: string;
-  snsInfo: {
-    userId: string;
-    userEmail: string;
-    snsImageArray: string[];
-    snsText: string;
-    snsHeart: string[];
-    createAt: number;
-    updateAt: number;
-  };
-}
-interface IKeyword {
-  keyword?: string;
-}
+import { ISNSList } from "@/services/type";
 //스타일 컴포넌트
 const SearchBar = styled.div`
   //검색 창
@@ -159,7 +144,7 @@ const CloseButton = styled.div`
   }
 `;
 //스타일 컴포넌트
-export default function SNSLists({ keyword }: IKeyword) {
+export default function SNSLists({ keyword }: {keyword?: string}) {
   const [close, set_close] = useRecoilState(isDeleteSNS); //sns삭제 시 리코일 신호를 전송하여 오버레이 닫기
   const { user }: any = AuthContext();
   const router = useRouter();

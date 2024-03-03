@@ -1,22 +1,9 @@
 import { buyDetail } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
+import { IBuyDetail } from "@/services/type";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-interface IBuyDetail {
-  info: {
-    buyDate: string;
-    buyerId: string;
-    buyerEmail: string;
-    productName: string;
-    productPrice: number;
-    productDescription: string;
-    productImg: string;
-    sellerId: string;
-    sellerEmail: string;
-  };
-}
 //스타일 컴포넌트
 const DetailContainer = styled.div`
   background-image: linear-gradient(

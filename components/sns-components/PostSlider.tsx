@@ -4,26 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { getMyProfile } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
 import Link from "next/link";
-interface IUserProfile {
-  profileId: string;
-  profileInfo: {
-    userId: string;
-    userEmail: string;
-    profileImg: string;
-  };
-}
-interface ISNSList {
-  snsId: string;
-  snsInfo: {
-    userId: string;
-    userEmail: string;
-    snsImageArray: string[];
-    snsText: string;
-    snsHeart: string[];
-    createAt: number;
-    updateAt: number;
-  };
-}
+import { IMyProfile, ISNSList } from "@/services/type";
 //framer motomion variants
 const boxVar = {
   //AnimatePresense에 custom을 boolean state값을 적용시켜 isBack이란 변수를 사용
@@ -124,7 +105,7 @@ const SliderRadios = styled.div`
   }
 `;
 export default function PostSlider({ data }: { data: ISNSList }) {
-  const [userData, set_userData] = useState<IUserProfile[]>();
+  const [userData, set_userData] = useState<IMyProfile[]>();
   const [back, set_back] = useState(false); //현재 사진이 불러올 사진보다 뒤에 있는지 앞에 있는지 판가름
   const [currentPage, set_currentPage] = useState(0); //number형태의 state값. 각 사진의 위치를 숫자로 저장한다.
   const nextCard = (imgLength: number) => {

@@ -1,11 +1,8 @@
 import { getBestBuyer } from "@/services/filebaseDashboard";
+import { IBuyer } from "@/services/type";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-interface IBuyer {
-  seller: string;
-  count: number;
-}
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 //styled
 const Container = styled.div`
@@ -43,9 +40,9 @@ export default function BestSeller() {
       (a, b) => wordCount[b] - wordCount[a]
     );
     // 정렬된 단어들과 각 단어의 등장 횟수를 포함한 객체 생성
-    const resultArray: IBuyer[] = sortedWords.map((seller) => ({
-      seller,
-      count: wordCount[seller],
+    const resultArray: IBuyer[] = sortedWords.map((buyer) => ({
+      buyer,
+      count: wordCount[buyer],
     }));
     return resultArray;
   };
@@ -79,7 +76,7 @@ export default function BestSeller() {
       show: false,
     },
     xaxis: {
-      categories: sellerList?.map((name) => [name.seller ?? ""]),
+      categories: sellerList?.map((name) => [name.buyer ?? ""]),
       labels: {
         formatter: function (val: number) {
           return Math.floor(val);

@@ -14,17 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./firebase";
-//types
-interface IBuyData {
-  pName: string;
-  pPrice: number;
-  pImg: string;
-  pDesc: string;
-  buyerId: string;
-  buyerEmail: string;
-  sellerId: string;
-  sellerEmail: string;
-}
+import { ISale } from "./type";
 //Firestore 테이블 불러오기
 const authRef = collection(db, "profiles");
 const productsRef = collection(db, "product");
@@ -170,12 +160,12 @@ export const deleteProduct = async (productId?: string) => {
   }
 };
 //상품 구매 & 판매내역을 DB에 저장
-export const buyProduct = async (buyData: IBuyData) => {
+export const buyProduct = async (buyData: ISale) => {
   await addDoc(collection(db, "buy"), {
-    productName: buyData.pName,
-    productPrice: buyData.pPrice,
-    productImg: buyData.pImg,
-    productDescription: buyData.pDesc,
+    productName: buyData.productName,
+    productPrice: buyData.productPrice,
+    productImg: buyData.productImg,
+    productDescription: buyData.productDescription,
     buyerId: buyData.buyerId,
     buyerEmail: buyData.buyerEmail,
     sellerId: buyData.sellerId,

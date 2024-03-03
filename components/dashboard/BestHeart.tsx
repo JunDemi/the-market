@@ -1,15 +1,8 @@
 import { getBestHeart } from "@/services/filebaseDashboard";
+import { EmailTotal, IHeart } from "@/services/type";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-interface IHeart {
-  email: string;
-  heartCount: number;
-}
-interface EmailTotal {
-  email: string;
-  total: number;
-}
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 //styled
 const Container = styled.div`

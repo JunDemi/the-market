@@ -1,6 +1,7 @@
 "use client";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { db, storage } from "@/services/firebase";
+import { IProductCreate } from "@/services/type";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { motion } from "framer-motion";
@@ -11,12 +12,6 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 
-interface IProductCreate {
-  productImg: any;
-  productName: string;
-  price: number;
-  description: string;
-}
 //스타일 컴포넌트
 const WriteTitle = styled.h1`
   margin: 3rem 0 1.5rem 0;

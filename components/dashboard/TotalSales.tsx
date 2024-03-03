@@ -3,17 +3,7 @@ import { getDateTimeFormat, getPastTime } from "@/services/getDay";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CountUp from "react-countup";
-interface ISale {
-  buyDate: string;
-  buyerId: string;
-  buyerEmail: string;
-  productName: string;
-  productPrice: number;
-  productDescription: string;
-  productImg: string;
-  sellerId: string;
-  sellerEmail: string;
-}
+import { ISale } from "@/services/type";
 //styled
 const Container = styled.div`
   background-color: white;

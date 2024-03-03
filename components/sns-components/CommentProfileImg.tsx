@@ -1,14 +1,8 @@
 import { getMyProfile } from "@/services/firebaseCRUD";
+import { IMyProfile } from "@/services/type";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-interface IUserProfile {
-  profileId: string;
-  profileInfo: {
-    userId: string;
-    userEmail: string;
-    profileImg: string;
-  };
-}
+
 const ProfileImg = styled.span`
   background-size: cover;
   background-repeat: no-repeat;
@@ -18,7 +12,7 @@ const ProfileImg = styled.span`
   margin-right: 1rem;
 `;
 export default function CommentProfileImg({ userId, imgProp }: { userId: string, imgProp: boolean }) {
-  const [userImg, set_userImg] = useState<IUserProfile[]>();
+  const [userImg, set_userImg] = useState<IMyProfile[]>();
   useEffect(() => {
     getMyProfile(userId)
       .then((response) => set_userImg(response))

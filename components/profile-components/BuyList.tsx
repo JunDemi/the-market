@@ -3,7 +3,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import BuySellLinks from "./BuySellLinks";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { readBuyList } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
@@ -11,21 +11,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import BuyDetail from "./BuyDetail";
 import { useInView } from "react-intersection-observer";
+import { IBuyDetail } from "@/services/type";
 
-interface IBuyData {
-  buyId: string;
-  buyInfo: {
-    buyDate: string;
-    buyerId: string;
-    buyerEmail: string;
-    productName: string;
-    productPrice: number;
-    productDescription: string;
-    productImg: string;
-    sellerId: string;
-    sellerEmail: string;
-  };
-}
 //스타일 컴포넌트
 const TableHead = styled.div`
   margin: 2rem auto;
@@ -126,11 +113,10 @@ export default function BuyList() {
   const {
     isLoading,
     data: bData,
-    refetch,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery<IBuyData[]>({
+  } = useInfiniteQuery<IBuyDetail[]>({
     queryKey: ["buyList"],
     queryFn: ({ pageParam = 1 }) =>
       readBuyList("buy", user?.user.uid, pageParam),
@@ -138,9 +124,11 @@ export default function BuyList() {
       return allPages.length + 1;
     },
   });
-  const goBuyDetail = (buyId: string) => {
-    set_buyDetail(true);
-    set_buyIdForDetail(buyId);
+  const goBuyDetail = (buyId?: string) => {
+    if (buyId) {
+      set_buyDetail(true);
+      set_buyIdForDetail(buyId);
+    }
   };
   useEffect(() => {
     //ref에 닿으면 무한 스크롤 1회 작동
@@ -175,18 +163,18 @@ export default function BuyList() {
                       <TableBody onClick={() => goBuyDetail(data.buyId)}>
                         <div>
                           {String(
-                            getDateTimeFormat(Number(data.buyInfo.buyDate))
+                            getDateTimeFormat(Number(data.info.buyDate))
                           ).substring(0, 10)}
                         </div>
-                        <div>{data.buyInfo.productName}</div>
-                        <div>{data.buyInfo.buyerEmail}</div>
-                        <div>{data.buyInfo.sellerEmail}</div>
+                        <div>{data.info.productName}</div>
+                        <div>{data.info.buyerEmail}</div>
+                        <div>{data.info.sellerEmail}</div>
                         <div>
-                          {Number(data.buyInfo.productPrice).toLocaleString()}
+                          {Number(data.info.productPrice).toLocaleString()}
                         </div>
                         <div>
                           <Image
-                            src={data.buyInfo.productImg}
+                            src={data.info.productImg}
                             alt=""
                             width={0}
                             height={0}

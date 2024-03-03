@@ -1,4 +1,5 @@
 import { readSNSComment } from "@/services/firebaseCRUD";
+import { ICommentData } from "@/services/type";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -10,7 +11,7 @@ interface IData{
     updateAt: number;
 }
 export default function SNSCommentLength({snsId, close}: {snsId: string, close: boolean}) {
-    const [data, set_data] = useState<IData[]>();
+    const [data, set_data] = useState<ICommentData[]>();
    useEffect(()=>{
     readSNSComment(snsId).then(response => set_data(response)).catch(error => console.log(error.message));
    },[snsId, close]);

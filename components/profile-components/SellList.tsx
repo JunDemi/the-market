@@ -3,7 +3,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import BuySellLinks from "./BuySellLinks";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import { readBuyList } from "@/services/firebaseCRUD";
 import { getDateTimeFormat } from "@/services/getDay";
@@ -11,22 +11,8 @@ import BuyDetail from "./BuyDetail";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-
-interface IBuyData {
-  sellId: string;
-  sellInfo: {
-    buyDate: string;
-    buyerId: string;
-    buyerEmail: string;
-    productName: string;
-    productPrice: number;
-    productDescription: string;
-    productImg: string;
-    sellerId: string;
-    sellerEmail: string;
-  };
-}
-
+import { IBuyDetail } from "@/services/type";
+//styled
 const TableHead = styled.div`
   margin: 2rem auto;
   background-color: white;
@@ -116,6 +102,7 @@ const InfiniteScrollDiv = styled.div`
   display: flex;
   justify-content: center;
 `;
+//styled
 export default function SellList() {
   const { user }: any = AuthContext();
   const [buyDetail, set_buyDetail] = useState(false); //상세 페이지 오버레이
@@ -124,11 +111,10 @@ export default function SellList() {
   const {
     isLoading,
     data: sData,
-    refetch,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery<IBuyData[]>({
+  } = useInfiniteQuery<IBuyDetail[]>({
     queryKey: ["sellList"],
     queryFn: ({ pageParam = 1 }) =>
       readBuyList("sell", user?.user.uid, pageParam),
@@ -136,9 +122,11 @@ export default function SellList() {
       return allPages.length + 1;
     },
   });
-  const goBuyDetail = (buyId: string) => {
-    set_buyDetail(true);
-    set_buyIdForDetail(buyId);
+  const goBuyDetail = (buyId?: string) => {
+    if (buyId) {
+      set_buyDetail(true);
+      set_buyIdForDetail(buyId);
+    }
   };
   useEffect(() => {
     //ref에 닿으면 무한 스크롤 1회 작동
@@ -168,23 +156,23 @@ export default function SellList() {
               ) : (
                 <TableBodyContainer>
                   {sData.pages[sData.pages.length - 1].map((data) => (
-                    <div key={data.sellId}>
+                    <div key={data.buyId}>
                       <hr />
-                      <TableBody onClick={() => goBuyDetail(data.sellId)}>
+                      <TableBody onClick={() => goBuyDetail(data.buyId)}>
                         <div>
                           {String(
-                            getDateTimeFormat(Number(data.sellInfo.buyDate))
+                            getDateTimeFormat(Number(data.info.buyDate))
                           ).substring(0, 10)}
                         </div>
-                        <div>{data.sellInfo.productName}</div>
-                        <div>{data.sellInfo.buyerEmail}</div>
-                        <div>{data.sellInfo.sellerEmail}</div>
+                        <div>{data.info.productName}</div>
+                        <div>{data.info.buyerEmail}</div>
+                        <div>{data.info.sellerEmail}</div>
                         <div>
-                          {Number(data.sellInfo.productPrice).toLocaleString()}
+                          {Number(data.info.productPrice).toLocaleString()}
                         </div>
                         <div>
                           <Image
-                            src={data.sellInfo.productImg}
+                            src={data.info.productImg}
                             alt=""
                             width={0}
                             height={0}

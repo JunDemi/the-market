@@ -8,21 +8,7 @@ import Image from "next/image";
 import { AuthContext } from "@/app/lib/AuthProvider";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-
-interface IProduct {
-  productId: string;
-  productInfo: {
-    userId: string;
-    userEmail: string;
-    productName: string;
-    productImg: string;
-    productPrice: number;
-    productDescription: number;
-    createAt: number;
-    updateAt: number;
-    heart: string;
-  };
-}
+import { IProduct } from "@/services/type";
 //스타일 컴포넌트
 const ProductList = styled.div`
   //검색 창 하단 리스트
@@ -128,13 +114,15 @@ export default function MyHeartList() {
     },
   });
   //찜하기
-  const 찜하기 = async (productId: string, noHeart: "0") => {
-    set_myHeart(true);
-    await productHeart(productId, noHeart);
-    refetch();
-    setInterval(() => {
-      set_myHeart(false);
-    }, 2500);
+  const 찜하기 = async (noHeart: "0", productId?: string) => {
+    if (productId) {
+      set_myHeart(true);
+      await productHeart(productId, noHeart);
+      refetch();
+      setInterval(() => {
+        set_myHeart(false);
+      }, 2500);
+    }
   };
   useEffect(() => {
     //ref에 닿으면 무한 스크롤 1회 작동
@@ -156,8 +144,10 @@ export default function MyHeartList() {
               </HeartPopup>
               <ProductList>
                 <h4>내가 찜한 상품</h4>
-                {pData.pages[pData.pages.length-1].length === 0 ? (
-                  <div className="no-sns" style={{gridColumn: 2}}>찜한 상품이 없습니다.</div>
+                {pData.pages[pData.pages.length - 1].length === 0 ? (
+                  <div className="no-sns" style={{ gridColumn: 2 }}>
+                    찜한 상품이 없습니다.
+                  </div>
                 ) : (
                   <>
                     {pData.pages[pData.pages.length - 1].map(
@@ -169,7 +159,7 @@ export default function MyHeartList() {
                         >
                           <div>
                             <Image
-                              src={data.productInfo.productImg}
+                              src={data.info.productImg}
                               alt=""
                               width={0}
                               height={0}
@@ -178,21 +168,18 @@ export default function MyHeartList() {
                           </div>
                           <div>
                             <h1>
-                              {data.productInfo.productName.replace(
-                                /\b\w/g,
-                                (match) => match.toUpperCase()
+                              {data.info.productName.replace(/\b\w/g, (match) =>
+                                match.toUpperCase()
                               )}
                             </h1>
-                            <p>{data.productInfo.userEmail}</p>
+                            <p>{data.info.userEmail}</p>
                             <h2>
-                              {Number(
-                                data.productInfo.productPrice
-                              ).toLocaleString()}
+                              {Number(data.info.productPrice).toLocaleString()}
                               원
                             </h2>
                             <span>
                               <button
-                                onClick={() => 찜하기(data.productId, "0")}
+                                onClick={() => 찜하기("0", data.productId)}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
