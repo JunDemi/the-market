@@ -47,6 +47,7 @@ export default function BestBuyer() {
     }));
     return resultArray;
   };
+
   const option: any = {
     chart: {
       offsetY: 0,
@@ -77,7 +78,7 @@ export default function BestBuyer() {
         show: false,
     },
     xaxis: {
-      categories: buyerList?.map((name) => [name.buyer ?? ""]),
+      categories: buyerList?.slice(0,7).map((name) => [name.buyer ?? ""]),
       labels: {
         formatter: function (val: number) {
           return Math.floor(val);
@@ -115,6 +116,8 @@ export default function BestBuyer() {
         buyerList[2]?.count ?? 0,
         buyerList[3]?.count ?? 0,
         buyerList[4]?.count ?? 0,
+        buyerList[5]?.count ?? 0,
+        buyerList[6]?.count ?? 0,
       ],
     },
   ];

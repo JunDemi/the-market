@@ -65,7 +65,7 @@ export default function BestSeller() {
         barHeight: "30%",
       },
     },
-    colors: ["#ffd500", "#06fa9d"],
+    colors: ["#ffd500", "#61f9bf"],
     dataLabels: {
       enabled: false,
     },
@@ -76,7 +76,7 @@ export default function BestSeller() {
       show: false,
     },
     xaxis: {
-      categories: sellerList?.map((name) => [name.buyer ?? ""]),
+      categories: sellerList?.slice(0,7).map((name) => [name.buyer ?? ""]),
       labels: {
         formatter: function (val: number) {
           return Math.floor(val);
@@ -114,6 +114,8 @@ export default function BestSeller() {
         sellerList[2]?.count ?? 0,
         sellerList[3]?.count ?? 0,
         sellerList[4]?.count ?? 0,
+        sellerList[5]?.count ?? 0,
+        sellerList[6]?.count ?? 0,
       ],
     },
   ];

@@ -81,7 +81,7 @@ export default function BestHeart() {
       show: false,
     },
     xaxis: {
-      categories: heartList?.slice(0,5).map((name) => [name.email ?? ""]),
+      categories: heartList?.slice(0,7).map((name) => [name.email ?? ""]),
       labels: {
         formatter: function (val: number) {
           return Math.floor(val);
@@ -119,6 +119,8 @@ export default function BestHeart() {
         heartList[2]?.total ?? 0,
         heartList[3]?.total ?? 0,
         heartList[4]?.total ?? 0,
+        heartList[5]?.total ?? 0,
+        heartList[6]?.total ?? 0
       ],
     },
   ];
