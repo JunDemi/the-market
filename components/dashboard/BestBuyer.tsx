@@ -47,7 +47,6 @@ export default function BestBuyer() {
     }));
     return resultArray;
   };
-
   const option: any = {
     chart: {
       offsetY: 0,
