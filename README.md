@@ -8,7 +8,7 @@ NextJS Argon / Material Dashboard
 - React Query, React Hook Form, Recoil
 - Firebase
 - Styled Component
-- <img src="https://img.shields.io/badge/Scss-#fbbebe?style=flat&logo=Sass&logoColor=CC6699"/>
+- <img src="https://img.shields.io/badge/Scss-pink?style=flat&logo=Sass&logoColor=CC6699"/>
 - Framer Motion
 - Apex Charts
 
