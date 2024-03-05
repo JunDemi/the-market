@@ -1,7 +1,6 @@
 ### `The Market`
-
+![그림1](https://github.com/JunDemi/the-market/assets/26836516/577bdcb8-0dd6-4d97-8853-ba344a8be58b)
 ApexChart 라이브러리를 이용한 대쉬보드, 당근마켓과 비슷한 거래 콘텐츠, 인스타그램과 비슷한 SNS 콘텐츠가 있는 사이트입니다.
-
 #### `프레임워크 & 언어`
 <img src="https://img.shields.io/badge/Next.js 14-000000?style=for-the-badge&logo=nextdotjs&logoColor=ffffff"/> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=ffffff"/>
 #### `사용 라이브러리`
