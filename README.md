@@ -3,7 +3,7 @@
 NextJS Argon / Material Dashboard
 
 ## `사용 라이브러리`
-- Next.js 14
+- <img src="https://img.shields.io/badge/Next.js 14-ffffff?style=flat&logo=nextdotjs&logoColor=000000"/>
 - <img src="https://img.shields.io/badge/typescript-003671?style=flat&logo=TypeScript&logoColor=3178C6"/>
 - React Query, React Hook Form, Recoil
 - Firebase
